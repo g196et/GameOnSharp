@@ -1,1 +1,0 @@
-c:\users\константин\documents\visual studio 2012\Projects\Game\Game\bin\Debug\Game.exe.config
