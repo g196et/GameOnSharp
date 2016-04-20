@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WindowsGame1
+namespace RotationTutorial
 {
 #if WINDOWS || XBOX
     static class Program

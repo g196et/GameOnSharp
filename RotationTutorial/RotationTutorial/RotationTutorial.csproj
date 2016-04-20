@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <ProjectGuid>{5EB4C7B7-0CB1-4CFE-A136-08CE54665702}</ProjectGuid>
+    <ProjectGuid>{FA2A9FD1-5403-4B0D-8BBC-2ABC3D3CFEE6}</ProjectGuid>
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsGame1</RootNamespace>
-    <AssemblyName>WindowsGame1</AssemblyName>
+    <RootNamespace>RotationTutorial</RootNamespace>
+    <AssemblyName>RotationTutorial</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
     <XnaPlatform>Windows</XnaPlatform>
     <XnaProfile>Reach</XnaProfile>
-    <XnaCrossPlatformGroupID>ede72ccc-5f33-41bd-90e3-07a580d1490a</XnaCrossPlatformGroupID>
+    <XnaCrossPlatformGroupID>a1e17845-2860-47a8-b5d6-7906b0b0dfcd</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
     <Thumbnail>GameThumbnail.png</Thumbnail>
@@ -72,9 +72,14 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Camera.cs" />
+    <Compile Include="Map.cs" />
+    <Compile Include="MapHero.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="RectangleHelper.cs" />
+    <Compile Include="Tiles.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
@@ -83,8 +88,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WindowsGame1Content\WindowsGame1Content.contentproj">
-      <Name>WindowsGame1Content</Name>
+    <ProjectReference Include="..\RotationTutorialContent\RotationTutorialContent.contentproj">
+      <Name>RotationTutorialContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>
