@@ -29,7 +29,11 @@ namespace RotationTutorial
         }
 
         public Map() { }
-
+        /// <summary>
+        /// Генерация карты
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="size">Размер ячеек</param>
         public void Generate(int[,] map, int size)
         {
             for (int x = 0; x < map.GetLength(1); x++)

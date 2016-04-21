@@ -15,11 +15,13 @@ namespace RotationTutorial
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
         //Vector2 origin;
         Vector2 velocity;
-
+        bool checkAtack; public bool CheckAtackField { get { return checkAtack; } set { checkAtack = value; } }
+        string text = "";
         public MapHero(Texture2D newTexture, Vector2 newPosition)
         {
             texture = newTexture;
             position = newPosition;
+            checkAtack = false;
         }
 
         public void Update(GameTime gameTime)
@@ -31,15 +33,31 @@ namespace RotationTutorial
 
         private void Input(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                velocity.X = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 3;
-            else if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                velocity.X = -(float)gameTime.ElapsedGameTime.TotalMilliseconds / 3;
-            else if (Keyboard.GetState().IsKeyDown(Keys.Up))
-                velocity.Y = -(float)gameTime.ElapsedGameTime.TotalMilliseconds / 3;
-            else if (Keyboard.GetState().IsKeyDown(Keys.Down))
-                velocity.Y = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 3;
+            //if (gameTime.ElapsedGameTime.TotalMilliseconds >=100)
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                velocity.X = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
+            else if (Keyboard.GetState().IsKeyDown(Keys.A))
+                velocity.X = -(float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
+            else if (Keyboard.GetState().IsKeyDown(Keys.W))
+                velocity.Y = -(float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
+            else if (Keyboard.GetState().IsKeyDown(Keys.S))
+                velocity.Y = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
             else velocity = Vector2.Zero;
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Q) &&
+                checkAtack)
+            {
+                text = "win";
+            }
+        }
+
+        public void CheckAtack(MapBot mapBot)
+        {
+            if (mapBot.Position.X - position.X > 75 &&
+                mapBot.Position.Y - position.Y < 75)
+            {
+                checkAtack = true;
+            }
         }
 
         public void Collision(Rectangle newRectangle, int xOffset, int yOffset)
@@ -79,6 +97,7 @@ namespace RotationTutorial
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, position, Color.White);
+            spriteBatch.DrawString(Game1.spriteFront, text, new Vector2(-50, -50), Color.White);
         }
     }
 }

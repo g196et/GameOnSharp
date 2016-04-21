@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MapBot.cs" />
     <Compile Include="MapHero.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
