@@ -13,11 +13,18 @@ namespace RotationTutorial
         Rectangle rectangle;
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
         Vector2 velocity;
+        public bool Alive { get; set; }
 
         public MapBot(Texture2D newTexture, Vector2 newPosition)
         {
             texture = newTexture;
             position = newPosition;
+            //Alive = true;
+        }
+
+        public void AddMobMap(Map map)
+        {
+            map.GetRectangle(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
         }
 
         public void Update()

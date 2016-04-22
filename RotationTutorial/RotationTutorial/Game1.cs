@@ -51,7 +51,7 @@ namespace RotationTutorial
         /// </summary>
         protected override void Initialize()
         {
-            mapHero = new MapHero(Content.Load<Texture2D>("man1"), new Vector2(0, 0));
+            mapHero = new MapHero(Content.Load<Texture2D>("man1"), new Vector2(75, 75));
             mapBot = new MapBot(Content.Load<Texture2D>("enemy"), new Vector2(150, 150));
             camera = new Camera(GraphicsDevice.Viewport);
             map = new Map();
@@ -69,13 +69,15 @@ namespace RotationTutorial
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Tiles.Content = Content;
             map.Generate(new int[,]{
-                {1,1,1,1,1,},
-                {1,1,1,2,1,},
-                {1,2,1,1,1,},
-                {1,2,1,1,1,},
-                {1,1,1,1,1,},
+                {2,2,2,2,2,2,2,},
+                {2,1,1,1,1,1,2,},
+                {2,1,1,1,2,1,2,},
+                {2,1,2,1,1,1,2,},
+                {2,1,2,1,1,1,2,},
+                {2,1,1,1,1,1,2,},
+                {2,2,2,2,2,2,2,},
             }, 75);
-
+            mapBot.AddMobMap(map);
             backgroundTexture = Content.Load<Texture2D>("Back1");
             spriteFront = Content.Load<SpriteFont>("SpriteFont1");
             backgroundPosition = new Vector2(-950, -500);
@@ -98,16 +100,16 @@ namespace RotationTutorial
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (mapHero.CheckAtackField)
-                this.Exit();
+            //if (mapHero.CheckAtackField)
+                //this.Exit();
 
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
             camera.Update(gameTime, this);
-            mapHero.Update(gameTime);
-            foreach (Tiles tile in map.MapTiles)
-                if (!tile.Passability)
-                    mapHero.Collision(tile.Rectangle, map.Width, map.Height);
+            //foreach (Tiles tile in map.MapTiles)
+            //    if (!tile.Passability)
+            //        mapHero.Collision(tile.Rectangle, map.Width, map.Height);
+            mapHero.Update(gameTime, map);
             mapHero.CheckAtack(mapBot);
             base.Update(gameTime);
         }
@@ -125,8 +127,10 @@ namespace RotationTutorial
                 camera.transform);
             //spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             map.Draw(spriteBatch);
-            mapBot.Draw(spriteBatch);
+            if (mapBot.Alive)
+                mapBot.Draw(spriteBatch);
             mapHero.Draw(spriteBatch);
+            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);
             spriteBatch.End();
             base.Draw(gameTime);
         }

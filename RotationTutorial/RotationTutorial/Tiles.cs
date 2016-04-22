@@ -8,20 +8,18 @@ using System.Text;
 
 namespace RotationTutorial
 {
-    class Tiles
+    public class Tiles
     {
         protected Texture2D texture;
         Rectangle rectangle;
         bool passability;
+        bool mob;
         public bool Passability
         {
             get { return passability; }
         }
-        public Rectangle Rectangle
-        {
-            get { return rectangle; }
-            set { rectangle = value; }
-        }
+        public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } }
+        public bool Mob { get { return mob; } set { mob = value; } }
 
         static ContentManager content;
 
@@ -31,11 +29,12 @@ namespace RotationTutorial
             set { content = value; }
         }
 
-        public Tiles(int i, Rectangle newRectangle, bool passability)
+        public Tiles(int i, Rectangle newRectangle, bool passability)//, bool mob)
         {
             texture = Content.Load<Texture2D>("Tile" + i);
             this.Rectangle = newRectangle;
             this.passability = passability;
+            this.mob = false;
         }
 
         public void Draw(SpriteBatch spriteBatch)

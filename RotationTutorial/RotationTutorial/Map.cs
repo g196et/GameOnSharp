@@ -7,10 +7,9 @@ using System.Text;
 
 namespace RotationTutorial
 {
-    class Map
+    public class Map
     {
         private List<Tiles> tiles = new List<Tiles>();
-
         public List<Tiles> MapTiles
         {
             get { return tiles; }
@@ -48,10 +47,20 @@ namespace RotationTutorial
                     height = (x + 1) * size;
                 }
         }
+
+        public Tiles GetRectangle(Point position)
+        {
+            int i = 0;
+            while ((tiles[i].Rectangle.Center != position) && (i< tiles.Count))
+                i++;
+            return tiles[i];
+        }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tiles tile in tiles)
                 tile.Draw(spriteBatch);
+            //spriteBatch.DrawString(Game1.spriteFront, i.ToString(), new Vector2(-50, -50), Color.White);
         }
     }
 }

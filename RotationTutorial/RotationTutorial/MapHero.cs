@@ -16,38 +16,75 @@ namespace RotationTutorial
         //Vector2 origin;
         Vector2 velocity;
         bool checkAtack; public bool CheckAtackField { get { return checkAtack; } set { checkAtack = value; } }
+        bool checkInput;
+        //private Keyboard oldState;
         string text = "";
+        double counter; public double Counter { get { return counter; } set { counter = value; } }
         public MapHero(Texture2D newTexture, Vector2 newPosition)
         {
             texture = newTexture;
             position = newPosition;
             checkAtack = false;
+            checkInput = true;
+            counter = 1001;
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Map map)
         { 
             rectangle = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
             position += velocity;
-            Input(gameTime);
+            //foreach (Tiles tile in map.MapTiles)
+            //    if (!tile.Passability)
+            //        Collision(tile.Rectangle, map.Width, map.Height);
+            if (counter < 500)
+            {
+                UpdateTime(gameTime);
+            }
+            else
+            {
+                Input(gameTime, map);
+            }
+
+            if (map.GetRectangle(rectangle.Center).Mob)
+            {
+                text = "WIN BLEAT'";
+                map.GetRectangle(rectangle.Center).Mob = false;
+            }
         }
 
-        private void Input(GameTime gameTime)
+        public void UpdateTime(GameTime gameTime)
         {
-            //if (gameTime.ElapsedGameTime.TotalMilliseconds >=100)
-            if (Keyboard.GetState().IsKeyDown(Keys.D))
-                velocity.X = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
-            else if (Keyboard.GetState().IsKeyDown(Keys.A))
-                velocity.X = -(float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
-            else if (Keyboard.GetState().IsKeyDown(Keys.W))
-                velocity.Y = -(float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
-            else if (Keyboard.GetState().IsKeyDown(Keys.S))
-                velocity.Y = (float)gameTime.ElapsedGameTime.TotalMilliseconds / 10;
-            else velocity = Vector2.Zero;
+            counter += gameTime.ElapsedGameTime.TotalMilliseconds;
+        }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Q) &&
-                checkAtack)
+        private void Input(GameTime gameTime, Map map)
+        {
             {
-                text = "win";
+                if ((Keyboard.GetState().IsKeyDown(Keys.D)) &&
+                    ((map.GetRectangle(new Point(rectangle.Center.X+75,rectangle.Center.Y))).Passability))
+                {
+                    position.X += (float)75;
+                    counter = 0;
+                }
+                else if ((Keyboard.GetState().IsKeyDown(Keys.A)) &&
+                    ((map.GetRectangle(new Point(rectangle.Center.X - 75, rectangle.Center.Y))).Passability))
+                {
+                    position.X -= (float)75;
+                    counter = 0;
+                }
+                else if ((Keyboard.GetState().IsKeyDown(Keys.W)) &&
+                    ((map.GetRectangle(new Point(rectangle.Center.X, rectangle.Center.Y - 75))).Passability))
+                {
+                    position.Y -= (float)75;
+                    counter = 0;
+                }
+                else if ((Keyboard.GetState().IsKeyDown(Keys.S)) &&
+                    ((map.GetRectangle(new Point(rectangle.Center.X, rectangle.Center.Y + 75))).Passability))
+                {
+                    position.Y += (float)75;
+                    counter = 0;
+                }
+                else velocity = Vector2.Zero;
             }
         }
 
@@ -89,7 +126,7 @@ namespace RotationTutorial
 
             if (position.X < 0) position.X = 0;
             if (position.X > xOffset - rectangle.Width) position.X = xOffset - rectangle.Width;
-            if (position.Y < 0) velocity.Y = 1f;
+            if (position.Y < 0) position.Y = 0;
             if (position.Y > yOffset - rectangle.Height) position.Y = yOffset - rectangle.Height;
 
         }
