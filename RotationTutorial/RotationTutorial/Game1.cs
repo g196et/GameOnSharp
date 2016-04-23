@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -74,23 +75,39 @@ namespace RotationTutorial
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Tiles.Content = Content;
-            mapArray = new int[,]{
-                {2,2,2,2,2,2,2,},
-                {2,1,1,1,1,1,2,},
-                {2,1,1,1,2,1,2,},
-                {2,1,2,1,1,1,2,},
-                {2,1,2,1,1,1,2,},
-                {2,1,1,1,1,1,2,},
-                {2,2,2,2,2,2,2,},
-            };
-            map.Generate(mapArray, 75);
-            List<Vector2> botPosition = new List<Vector2>();
-            botPosition.Add(new Vector2 (150,150));
-            botPosition.Add(new Vector2(225, 225));
-            foreach (Vector2 position in botPosition)
+            //Загрузка карты из файла
+            using (StreamReader streamReader = new StreamReader(@"c:/c#/Map.txt")) 
             {
-                mapBot.Add(new MapBot(Content.Load<Texture2D>("enemy"), position));
-                map.GetTile(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
+                string[] temp;
+                int x = Int32.Parse(streamReader.ReadLine());
+                int y = Int32.Parse(streamReader.ReadLine());
+                mapArray = new int[x,y];
+                for (int j = 0; j < y; j++ )
+                {
+                    temp = streamReader.ReadLine().Split((new char[] { ' ' }),
+                        StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < x; i++)
+                    {
+                        mapArray[j, i] = Int32.Parse(temp[i]);
+                    }
+                }
+            }
+            map.Generate(mapArray, 75);
+            using (StreamReader streamReader = new StreamReader(@"c:/c#/BotPosition.txt"))
+            {
+                string nameTexture = streamReader.ReadLine();
+                int countBot = Int32.Parse(streamReader.ReadLine());
+                string[] temp = streamReader.ReadLine().Split(new char[] { ',', ' ' },
+                    StringSplitOptions.RemoveEmptyEntries); 
+                Vector2 position;
+                Texture2D botTexture = Content.Load<Texture2D>(nameTexture);
+                for (int i = 0; i < countBot; i++)
+                {
+                    position = new Vector2(Int32.Parse(temp[i * 2]), Int32.Parse(temp[i * 2 + 1]));
+                    mapBot.Add(new MapBot(botTexture, position));
+                    map.GetTile(new Point((int)(position.X + mapBot[i].Rectangle.Width/2),
+                        (int)(position.Y + mapBot[i].Rectangle.Width/2))).Mob = true;
+                }
             }
             backgroundTexture = Content.Load<Texture2D>("Back1");
             spriteFront = Content.Load<SpriteFont>("SpriteFont1");
