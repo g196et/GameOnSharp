@@ -12,7 +12,9 @@ namespace RotationTutorial
     {
         protected Texture2D texture;
         Rectangle rectangle;
+        //Возможно ли ходить по плитке
         bool passability;
+        //Находится ли моб на плитке
         bool mob;
         public bool Passability
         {
@@ -29,7 +31,7 @@ namespace RotationTutorial
             set { content = value; }
         }
 
-        public Tiles(int i, Rectangle newRectangle, bool passability)//, bool mob)
+        public Tiles(int i, Rectangle newRectangle, bool passability)
         {
             texture = Content.Load<Texture2D>("Tile" + i);
             this.Rectangle = newRectangle;

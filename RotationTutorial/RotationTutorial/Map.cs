@@ -31,7 +31,7 @@ namespace RotationTutorial
         /// <summary>
         /// Генерация карты
         /// </summary>
-        /// <param name="map"></param>
+        /// <param name="map">Матрица ячеек</param>
         /// <param name="size">Размер ячеек</param>
         public void Generate(int[,] map, int size)
         {
@@ -47,8 +47,12 @@ namespace RotationTutorial
                     height = (x + 1) * size;
                 }
         }
-
-        public Tiles GetRectangle(Point position)
+        /// <summary>
+        /// Возвращает Tile по  поизиции
+        /// </summary>
+        /// <param name="position">Позиция для возврата</param>
+        /// <returns>Возвращает Tile по  поизиции</returns>
+        public Tiles GetTile(Point position)
         {
             int i = 0;
             while ((tiles[i].Rectangle.Center != position) && (i< tiles.Count))

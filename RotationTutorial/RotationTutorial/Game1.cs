@@ -23,8 +23,9 @@ namespace RotationTutorial
         public Vector2 spritePosition;
         public Rectangle spriteRectangle;
         MapHero mapHero;
-        MapBot mapBot; public MapBot mapBot1 { get { return mapBot; } set { mapBot = value; } }
+        List <MapBot> mapBot; public List<MapBot> mapBot1 { get { return mapBot; } }
         Camera camera;
+        int[,] mapArray; public int[,] MapArray { get{ return mapArray;} }
 
         //Background
         Texture2D backgroundTexture;
@@ -43,6 +44,11 @@ namespace RotationTutorial
             graphics.PreferredBackBufferHeight = 600;
         }
 
+        public void AddMapBot(MapBot mapBot)
+        {
+            this.mapBot.Add(mapBot);
+        }
+
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
         /// This is where it can query for any required services and load any non-graphic
@@ -52,7 +58,7 @@ namespace RotationTutorial
         protected override void Initialize()
         {
             mapHero = new MapHero(Content.Load<Texture2D>("man1"), new Vector2(75, 75));
-            mapBot = new MapBot(Content.Load<Texture2D>("enemy"), new Vector2(150, 150));
+            mapBot = new List<MapBot>();
             camera = new Camera(GraphicsDevice.Viewport);
             map = new Map();
 
@@ -68,7 +74,7 @@ namespace RotationTutorial
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Tiles.Content = Content;
-            map.Generate(new int[,]{
+            mapArray = new int[,]{
                 {2,2,2,2,2,2,2,},
                 {2,1,1,1,1,1,2,},
                 {2,1,1,1,2,1,2,},
@@ -76,8 +82,16 @@ namespace RotationTutorial
                 {2,1,2,1,1,1,2,},
                 {2,1,1,1,1,1,2,},
                 {2,2,2,2,2,2,2,},
-            }, 75);
-            mapBot.AddMobMap(map);
+            };
+            map.Generate(mapArray, 75);
+            List<Vector2> botPosition = new List<Vector2>();
+            botPosition.Add(new Vector2 (150,150));
+            botPosition.Add(new Vector2(225, 225));
+            foreach (Vector2 position in botPosition)
+            {
+                mapBot.Add(new MapBot(Content.Load<Texture2D>("enemy"), position));
+                map.GetTile(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
+            }
             backgroundTexture = Content.Load<Texture2D>("Back1");
             spriteFront = Content.Load<SpriteFont>("SpriteFont1");
             backgroundPosition = new Vector2(-950, -500);
@@ -106,11 +120,9 @@ namespace RotationTutorial
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
             camera.Update(gameTime, this);
-            //foreach (Tiles tile in map.MapTiles)
-            //    if (!tile.Passability)
-            //        mapHero.Collision(tile.Rectangle, map.Width, map.Height);
             mapHero.Update(gameTime, map);
-            mapHero.CheckAtack(mapBot);
+            //Переделать
+            mapHero.CheckAtack(mapBot[0]);
             base.Update(gameTime);
         }
 
@@ -121,14 +133,15 @@ namespace RotationTutorial
         protected override void Draw(GameTime gameTime) 
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null,
                 camera.transform);
             //spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             map.Draw(spriteBatch);
-            if (map.GetRectangle(mapBot.Rectangle.Center).Mob)
-                mapBot.Draw(spriteBatch);
+            foreach (MapBot bot in mapBot)
+                if (map.GetTile(bot.Rectangle.Center).Mob)
+                    bot.Draw(spriteBatch);
             mapHero.Draw(spriteBatch);
             spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);
             spriteBatch.End();
