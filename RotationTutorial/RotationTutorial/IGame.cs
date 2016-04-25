@@ -13,8 +13,6 @@ namespace RotationTutorial
 {
     public interface IGame
     {
-        Vector2 SpritePosition { get; }
-        Rectangle SpriteRectangle { get; }
         void Initialize(Game game);
         void LoadContent(ContentManager content);
         void UnloadContent();

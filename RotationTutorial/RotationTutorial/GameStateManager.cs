@@ -25,17 +25,17 @@ namespace RotationTutorial
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 600;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight =800;
             mapState = new Game1();
-            fightState = new Game2(Content);
+            fightState = new Game2(Content, graphics);
             CurrentState = mapState;
             
         }
         protected override void Initialize()
         {
             CurrentState.Initialize(this);
-            //camera = new Camera(this.GraphicsDevice.Viewport);
+            camera = new Camera(this.GraphicsDevice.Viewport);
             base.Initialize();
         }
 
@@ -44,6 +44,7 @@ namespace RotationTutorial
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);           
             CurrentState.LoadContent(Content);
+            fightState.LoadContent(Content);
         }
         protected override void UnloadContent()
         {
