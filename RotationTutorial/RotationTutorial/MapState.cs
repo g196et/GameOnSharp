@@ -11,20 +11,15 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class Game1 : IGame
+    class MapState
     {
+        GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
-        public Rectangle SpriteRectangle { get { return spriteRectangle; } }
-        public Vector2 SpritePosition { get { return spritePosition; } }
 
-        Vector2 spritePosition;
-        Rectangle spriteRectangle;
+        public Vector2 spritePosition;
+        public Rectangle spriteRectangle;
         MapHero mapHero;
-        MapBot mapBot; public MapBot mapBot1 { get { return mapBot; } set { mapBot = value; } }
+        MapBot mapBot; public MapBot MapBot1 { get { return mapBot; } set { mapBot = value; } }
         Camera camera;
 
         //Background
@@ -36,9 +31,12 @@ namespace RotationTutorial
         Map map;
         //Vector2 distance;
 
-        public Game1()
+        public MapState()
         {
-
+            graphics = new GraphicsDeviceManager(this);
+            Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
         }
 
         /// <summary>
@@ -47,23 +45,24 @@ namespace RotationTutorial
         /// related content.  Calling base.Initialize will enumerate through any components
         /// and initialize them as well.
         /// </summary>
-        public void Initialize(Game game)
+        protected override void Initialize()
         {
-            mapHero = new MapHero(game.Content.Load<Texture2D>("man1"), new Vector2(75, 75));
-            mapBot = new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(150, 150));
-            camera = new Camera(game.GraphicsDevice.Viewport);
+            mapHero = new MapHero(Content.Load<Texture2D>("man1"), new Vector2(75, 75));
+            mapBot = new MapBot(Content.Load<Texture2D>("enemy"), new Vector2(150, 150));
+            camera = new Camera(GraphicsDevice.Viewport);
             map = new Map();
 
-            
+            base.Initialize();
         }
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
         /// </summary>
-        public void LoadContent(ContentManager Content)
+        protected override void LoadContent()
         {
-           
+            // Create a new SpriteBatch, which can be used to draw textures.
+            spriteBatch = new SpriteBatch(GraphicsDevice);
             Tiles.Content = Content;
             map.Generate(new int[,]{
                 {2,2,2,2,2,2,2,},
@@ -84,7 +83,7 @@ namespace RotationTutorial
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
         /// </summary>
-        public void UnloadContent()
+        protected override void UnloadContent()
         {
             // TODO: Unload any non ContentManager content here
         }
@@ -94,41 +93,41 @@ namespace RotationTutorial
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public bool Update(GameTime gameTime)
+        protected override void Update(GameTime gameTime)
         {
+            // Allows the game to exit
+            //if (mapHero.CheckAtackField)
+                //this.Exit();
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
             camera.Update(gameTime, this);
+            //foreach (Tiles tile in map.MapTiles)
+            //    if (!tile.Passability)
+            //        mapHero.Collision(tile.Rectangle, map.Width, map.Height);
             mapHero.Update(gameTime, map);
             mapHero.CheckAtack(mapBot);
-            if (mapHero.CheckAtackField)
-            {
-                mapHero.CheckAtackField = false;
-                map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X, 
-                    (int)mapHero.Rectangle1.Center.Y)).Mob = false;
-                mapBot.Position = new Vector2(-75, -75);
-                return true;
-            }
-            else
-                return false;
-           
+            base.Update(gameTime);
         }
 
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime,SpriteBatch spriteBatch) 
+        protected override void Draw(GameTime gameTime) 
         {
-            
-            //SpriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
+            GraphicsDevice.Clear(Color.CornflowerBlue);
+
+            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
+                null, null, null, null,
+                camera.transform);
+            //spriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             map.Draw(spriteBatch);
             if (map.GetRectangle(mapBot.Rectangle.Center).Mob)
                 mapBot.Draw(spriteBatch);
             mapHero.Draw(spriteBatch);
             spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);
-            //spriteBatch.End();
-            
+            spriteBatch.End();
+            base.Draw(gameTime);
         }
     }
 }

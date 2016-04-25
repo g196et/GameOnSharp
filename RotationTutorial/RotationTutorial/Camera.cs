@@ -20,9 +20,16 @@ namespace RotationTutorial
 
         public void Update(GameTime gameTime, Game1 game)
         {
-            centre = new Vector2(game.spritePosition.X + (game.spriteRectangle.Width / 2) - 400,
-                game.spritePosition.Y + (game.spriteRectangle.Height / 2) - 200);
+            centre = new Vector2(game.SpritePosition.X + (game.SpriteRectangle.Width / 2) - 400,
+                game.SpritePosition.Y + (game.SpriteRectangle.Height / 2) - 200);
             transform = Matrix.CreateScale(new Vector3(1,1,0)) *
+                Matrix.CreateTranslation(new Vector3(-centre.X, -centre.Y, 0));
+        }
+        public void Update(GameTime gameTime, IGame game)
+        {
+            centre = new Vector2(game.SpritePosition.X + (game.SpriteRectangle.Width / 2) - 400,
+                game.SpritePosition.Y + (game.SpriteRectangle.Height / 2) - 200);
+            transform = Matrix.CreateScale(new Vector3(1, 1, 0)) *
                 Matrix.CreateTranslation(new Vector3(-centre.X, -centre.Y, 0));
         }
     }

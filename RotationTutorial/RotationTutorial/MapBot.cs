@@ -20,19 +20,10 @@ namespace RotationTutorial
             rectangle = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
 
-        public void Generate(int positionX, int positionY, int size)
+        public void AddMobMap(Map map)
         {
-
+            map.GetRectangle(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
         }
-
-        ///// <summary>
-        ///// Добавлем моба на карту
-        ///// </summary>
-        ///// <param name="map"></param>
-        //public void AddMobMap(Map map)
-        //{
-        //    map.GetTile(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
-        //}
 
         public void Update()
         {

@@ -73,6 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="Game2.cs" />
+    <Compile Include="GameStateManager.cs" />
+    <Compile Include="IGame.cs" />
     <Compile Include="Map.cs" />
     <Compile Include="MapBot.cs" />
     <Compile Include="MapHero.cs" />

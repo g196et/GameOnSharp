@@ -11,21 +11,16 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class Game1 : IGame
+    class Game2:IGame
     {
         SpriteBatch spriteBatch;
         public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
         public Rectangle SpriteRectangle { get { return spriteRectangle; } }
         public Vector2 SpritePosition { get { return spritePosition; } }
-
+        ContentManager Content;
         Vector2 spritePosition;
         Rectangle spriteRectangle;
-        MapHero mapHero;
         MapBot mapBot; public MapBot mapBot1 { get { return mapBot; } set { mapBot = value; } }
-        Camera camera;
 
         //Background
         Texture2D backgroundTexture;
@@ -33,12 +28,11 @@ namespace RotationTutorial
 
         public static SpriteFont spriteFront;
 
-        Map map;
         //Vector2 distance;
-
-        public Game1()
+        Texture2D texture;
+        public Game2(ContentManager Content)
         {
-
+            this.Content = Content;
         }
 
         /// <summary>
@@ -49,10 +43,7 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            mapHero = new MapHero(game.Content.Load<Texture2D>("man1"), new Vector2(75, 75));
-            mapBot = new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(150, 150));
-            camera = new Camera(game.GraphicsDevice.Viewport);
-            map = new Map();
+
 
             
         }
@@ -63,21 +54,8 @@ namespace RotationTutorial
         /// </summary>
         public void LoadContent(ContentManager Content)
         {
-           
-            Tiles.Content = Content;
-            map.Generate(new int[,]{
-                {2,2,2,2,2,2,2,},
-                {2,1,1,1,1,1,2,},
-                {2,1,1,1,2,1,2,},
-                {2,1,2,1,1,1,2,},
-                {2,1,2,1,1,1,2,},
-                {2,1,1,1,1,1,2,},
-                {2,2,2,2,2,2,2,},
-            }, 75);
-            mapBot.AddMobMap(map);
-            backgroundTexture = Content.Load<Texture2D>("Back1");
-            spriteFront = Content.Load<SpriteFont>("SpriteFont1");
-            backgroundPosition = new Vector2(-950, -500);
+           texture = Content.Load<Texture2D>("Back1");
+
         }
 
         /// <summary>
@@ -96,22 +74,11 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public bool Update(GameTime gameTime)
         {
-            spritePosition = mapHero.Position;
-            spriteRectangle = mapHero.Rectangle1;
-            camera.Update(gameTime, this);
-            mapHero.Update(gameTime, map);
-            mapHero.CheckAtack(mapBot);
-            if (mapHero.CheckAtackField)
-            {
-                mapHero.CheckAtackField = false;
-                map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X, 
-                    (int)mapHero.Rectangle1.Center.Y)).Mob = false;
-                mapBot.Position = new Vector2(-75, -75);
+            spriteRectangle = new Rectangle(0, 0, texture.Width, texture.Height);
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
                 return true;
-            }
             else
                 return false;
-           
         }
 
         /// <summary>
@@ -120,14 +87,8 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw(GameTime gameTime,SpriteBatch spriteBatch) 
         {
-            
-            //SpriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
-            map.Draw(spriteBatch);
-            if (map.GetRectangle(mapBot.Rectangle.Center).Mob)
-                mapBot.Draw(spriteBatch);
-            mapHero.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);
-            //spriteBatch.End();
+            texture = Content.Load<Texture2D>("Back1");
+            spriteBatch.Draw(texture, spriteRectangle, Color.AliceBlue);
             
         }
     }
