@@ -40,8 +40,9 @@ namespace RotationTutorial
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferWidth = 725;
             graphics.PreferredBackBufferHeight = 600;
         }
 
@@ -150,7 +151,6 @@ namespace RotationTutorial
         protected override void Draw(GameTime gameTime) 
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null,
                 camera.transform);

@@ -15,7 +15,6 @@ namespace RotationTutorial
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
         Vector2 velocity;
         bool checkAtack; public bool CheckAtackField { get { return checkAtack; } set { checkAtack = value; } }
-        //bool checkInput;
         string text = "";
         double counter; public double Counter { get { return counter; } set { counter = value; } }
 

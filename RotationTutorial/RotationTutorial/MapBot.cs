@@ -25,15 +25,6 @@ namespace RotationTutorial
 
         }
 
-        ///// <summary>
-        ///// Добавлем моба на карту
-        ///// </summary>
-        ///// <param name="map"></param>
-        //public void AddMobMap(Map map)
-        //{
-        //    map.GetTile(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
-        //}
-
         public void Update()
         {
 
