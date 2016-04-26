@@ -120,15 +120,11 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw(GameTime gameTime,SpriteBatch spriteBatch) 
         {
-            
-            //SpriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             map.Draw(spriteBatch);
             if (map.GetRectangle(mapBot.Rectangle.Center).Mob)
                 mapBot.Draw(spriteBatch);
             mapHero.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);
-            //spriteBatch.End();
-            
+            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);           
         }
     }
 }

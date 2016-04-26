@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RotationTutorial", "RotationTutorial\RotationTutorial\RotationTutorial.csproj", "{FA2A9FD1-5403-4B0D-8BBC-2ABC3D3CFEE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "RotationTutorial\RotationTutorial\Game.csproj", "{FA2A9FD1-5403-4B0D-8BBC-2ABC3D3CFEE6}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "RotationTutorialContent", "RotationTutorial\RotationTutorialContent\RotationTutorialContent.contentproj", "{3F98AEE5-AF54-4D7D-ACB7-87EA699D9F31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameContent", "RotationTutorial\RotationTutorialContent\GameContent.contentproj", "{3F98AEE5-AF54-4D7D-ACB7-87EA699D9F31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

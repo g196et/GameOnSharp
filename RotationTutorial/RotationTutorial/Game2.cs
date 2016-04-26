@@ -17,6 +17,8 @@ namespace RotationTutorial
         ContentManager Content;
         GraphicsDeviceManager graphics;
         public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
+        Hero hero;
+        Enemy enemy;
         
         Rectangle backgroundRectangle1;
         Rectangle backgroundRectangle2;
@@ -51,6 +53,8 @@ namespace RotationTutorial
         {
             this.Content = Content;
             this.graphics = graphics;
+            hero = new Hero();
+            enemy = new Enemy();
         }
 
         /// <summary>
@@ -61,9 +65,7 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-
-
-            
+   
         }
 
         /// <summary>
@@ -72,35 +74,46 @@ namespace RotationTutorial
         /// </summary>
         public void LoadContent(ContentManager Content)
         {
+            //Background
             backgroundTexture1 = Content.Load<Texture2D>("FightBackground");
             backgroundTexture2 = Content.Load<Texture2D>("FightBackground1");
-            
-            backgroundRectangle1 = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, 3 * graphics.PreferredBackBufferHeight / 4);
-            backgroundRectangle2 = new Rectangle(0, backgroundTexture1.Height, graphics.PreferredBackBufferWidth, backgroundTexture2.Height);
+            backgroundRectangle1 = new Rectangle(0, 0, graphics.PreferredBackBufferWidth,
+                3 * graphics.PreferredBackBufferHeight / 4);
+            backgroundRectangle2 = new Rectangle(0, backgroundTexture1.Height,
+                graphics.PreferredBackBufferWidth, backgroundTexture2.Height);
 
-            healthBarTexture = Content.Load<Texture2D>("healthBarTexture");
-            heroHealthRectangle = new Rectangle(10, 10, healthBarTexture.Width, healthBarTexture.Height);
-            enemyHealthRectangle = new Rectangle(graphics.PreferredBackBufferWidth - healthBarTexture.Width - 10,
-                10, healthBarTexture.Width, healthBarTexture.Height);
+            //Health
+            healthBarTexture = Content.Load<Texture2D>("healthBarTexture1");
+            heroHealthRectangle = new Rectangle(10, 10, healthBarTexture.Width*hero.Health.Current,
+                healthBarTexture.Height);
+            enemyHealthRectangle = new Rectangle(900, 10, healthBarTexture.Width*enemy.Health.Current,
+                healthBarTexture.Height);
 
-            heroTexture = Content.Load<Texture2D>("OqA8ijUI60w");
-            heroRectangle = new Rectangle(200, 200, heroTexture.Width, heroTexture.Height);
-
-            enemyTexture = Content.Load<Texture2D>("fightEnemy");
-            enemyRectangle = new Rectangle(900, 200, heroTexture.Width, heroTexture.Height);
-
+            //Mana
             manaBarTexture = Content.Load<Texture2D>("manaBarTexture");
-            manaRectangle = new Rectangle(heroHealthRectangle.X, heroHealthRectangle.Y + heroHealthRectangle.Height + 10,
+            manaRectangle = new Rectangle(heroHealthRectangle.X, heroHealthRectangle.Y
+                + heroHealthRectangle.Height + 10,
                 manaBarTexture.Width, manaBarTexture.Height);
             enemyManaBar = new Rectangle(enemyHealthRectangle.X,
-                enemyHealthRectangle.Y + enemyHealthRectangle.Height + 10, manaBarTexture.Width, manaBarTexture.Height);
+                enemyHealthRectangle.Y + enemyHealthRectangle.Height + 10, manaBarTexture.Width,
+                manaBarTexture.Height);
 
+            //Stamina
             energyBarTexture = Content.Load<Texture2D>("energyBarTexture");
-            heroEnergyRectangle = new Rectangle(manaRectangle.X, manaRectangle.Y + manaRectangle.Height + 10,
+            heroEnergyRectangle = new Rectangle(manaRectangle.X, manaRectangle.Y
+                + manaRectangle.Height + 10,
                 energyBarTexture.Width, energyBarTexture.Height);
-            enemyEnergyRectangle = new Rectangle(enemyManaBar.X, enemyManaBar.Y + enemyManaBar.Height+10,
+            enemyEnergyRectangle = new Rectangle(enemyManaBar.X, enemyManaBar.Y
+                + enemyManaBar.Height + 10,
                 enemyHealthRectangle.Width, enemyHealthRectangle.Height);
 
+            //Hero
+            heroTexture = Content.Load<Texture2D>("fightMan");
+            heroRectangle = new Rectangle(200, 200, heroTexture.Width, heroTexture.Height);
+
+            //Enemy
+            enemyTexture = Content.Load<Texture2D>("fightEnemy");
+            enemyRectangle = new Rectangle(900, 200, heroTexture.Width, heroTexture.Height);
         }
 
         /// <summary>
@@ -121,14 +134,15 @@ namespace RotationTutorial
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
-                enemyHealthRectangle.Width -= 10;
-                enemyHealthRectangle.X += 10;
+                enemy.Health.Current -=1;
+                enemyHealthRectangle.Width = healthBarTexture.Width*enemy.Health.Current;
             }
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                heroHealthRectangle.Width -= 10;
+                hero.Health.Current -= 1;
+                heroHealthRectangle.Width = healthBarTexture.Width * hero.Health.Current;
             }
-            if ((enemyHealthRectangle.Width <= 0) || (heroHealthRectangle.Width <= 0))
+            if ((enemy.Health.Current <= 0) || (hero.Health.Current <= 0))
             {
                 return true;
             }
