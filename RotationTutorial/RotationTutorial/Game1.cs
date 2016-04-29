@@ -24,7 +24,8 @@ namespace RotationTutorial
         Vector2 spritePosition;
         Rectangle spriteRectangle;
         MapHero mapHero;
-        MapBot mapBot; public MapBot mapBot1 { get { return mapBot; } set { mapBot = value; } }
+        IList<MapBot> listBot;
+        public IList<MapBot> ListBot { get { return listBot; } set { listBot = value; } }
         Camera camera;
 
         //Background
@@ -36,9 +37,10 @@ namespace RotationTutorial
         Map map;
         //Vector2 distance;
 
-        public Game1()
+        public Game1(SpriteBatch spriteBatch)
         {
-
+            listBot = new List<MapBot>();
+            this.spriteBatch = spriteBatch;
         }
 
         /// <summary>
@@ -50,7 +52,8 @@ namespace RotationTutorial
         public void Initialize(Game game)
         {
             mapHero = new MapHero(game.Content.Load<Texture2D>("man1"), new Vector2(75, 75));
-            mapBot = new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(150, 150));
+            listBot.Add(new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(150, 150)));
+            listBot.Add(new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(225, 225)));
             camera = new Camera(game.GraphicsDevice.Viewport);
             map = new Map();
 
@@ -74,7 +77,10 @@ namespace RotationTutorial
                 {2,1,1,1,1,1,2,},
                 {2,2,2,2,2,2,2,},
             }, 75);
-            mapBot.AddMobMap(map);
+            foreach(MapBot bot in listBot)
+            {
+                bot.AddMobMap(map);
+            }
             backgroundTexture = Content.Load<Texture2D>("Back1");
             spriteFront = Content.Load<SpriteFont>("SpriteFont1");
             backgroundPosition = new Vector2(-950, -500);
@@ -96,21 +102,25 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public bool Update(GameTime gameTime)
         {
+            bool smth=false;
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
             camera.Update(gameTime, this);
             mapHero.Update(gameTime, map);
-            mapHero.CheckAtack(mapBot);
-            if (mapHero.CheckAtackField)
+            foreach(MapBot bot in listBot)
             {
+                mapHero.CheckAtack(bot);
+                       
+                if (mapHero.CheckAtackField)
+                {
                 mapHero.CheckAtackField = false;
                 map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X, 
                     (int)mapHero.Rectangle1.Center.Y)).Mob = false;
-                mapBot.Position = new Vector2(-75, -75);
-                return true;
+                bot.Position = new Vector2(-75, -75);
+                smth= true;
+                }
             }
-            else
-                return false;
+            return smth;
            
         }
 
@@ -120,15 +130,14 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public void Draw(GameTime gameTime,SpriteBatch spriteBatch) 
         {
-            
-            //SpriteBatch.Draw(backgroundTexture, backgroundPosition, Color.White);
             map.Draw(spriteBatch);
-            if (map.GetRectangle(mapBot.Rectangle.Center).Mob)
-                mapBot.Draw(spriteBatch);
+            foreach (MapBot bot in listBot)
+            {
+                if (map.GetRectangle(bot.Rectangle.Center).Mob)
+                    bot.Draw(spriteBatch);
+            }
             mapHero.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);
-            //spriteBatch.End();
-            
+            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);           
         }
     }
 }

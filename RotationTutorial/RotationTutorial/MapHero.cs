@@ -10,9 +10,7 @@ namespace RotationTutorial
 {
     class MapHero
     {
-        Texture2D texture;
-        
-        
+        Texture2D texture;        
         
         Rectangle rectangle; public Rectangle Rectangle1 { get { return rectangle; } set { rectangle = value; } }
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
