@@ -27,7 +27,7 @@ namespace RotationTutorial
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight =800;
-            mapState = new Game1();
+            mapState = new Game1(spriteBatch);
             fightState = new Game2(Content, graphics);
             CurrentState = mapState;
             
@@ -57,11 +57,15 @@ namespace RotationTutorial
 
             if (CurrentState.Update(gameTime))
                 if (CurrentState == mapState)
+                {
                     CurrentState = fightState;
+                    fightState.Initialize(this);
+                }
                 else
                     CurrentState = mapState;
             base.Update(gameTime);
         }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
