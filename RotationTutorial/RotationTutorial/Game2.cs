@@ -19,6 +19,7 @@ namespace RotationTutorial
         public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
         Hero hero;
         Enemy enemy;
+        bool atackHero;
         
         Rectangle backgroundRectangle1;
         Rectangle backgroundRectangle2;
@@ -55,6 +56,7 @@ namespace RotationTutorial
             this.graphics = graphics;
             hero = new Hero();
             enemy = new Enemy();
+            atackHero = true;
         }
 
         /// <summary>
@@ -132,16 +134,19 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public bool Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Q))
+            if ((Keyboard.GetState().IsKeyDown(Keys.Q)) && (atackHero == true))
             {
-                enemy.Health.Current -=1;
+                enemy.Health.Current -=5;
                 enemyHealthRectangle.Width = healthBarTexture.Width*enemy.Health.Current;
+                atackHero = false;
             }
-            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            else if ((Keyboard.GetState().IsKeyDown(Keys.E)) && (atackHero == false))
             {
                 hero.Health.Current -= 1;
                 heroHealthRectangle.Width = healthBarTexture.Width * hero.Health.Current;
+                atackHero = true;
             }
+
             if ((enemy.Health.Current <= 0) || (hero.Health.Current <= 0))
             {
                 return true;
