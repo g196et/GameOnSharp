@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="HeroInfo.cs" />
     <Compile Include="SkillFireBall.cs" />
     <Compile Include="SkillRegenHealth.cs" />
     <Compile Include="Enemy.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="RectangleHelper.cs" />
     <Compile Include="Tiles.cs" />
+    <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

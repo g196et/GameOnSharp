@@ -100,9 +100,9 @@ namespace RotationTutorial
         /// checking for collisions, gathering input, and playing audio.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public bool Update(GameTime gameTime)
+        public int Update(GameTime gameTime)
         {
-            bool smth=false;
+            int smth=1;
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
             camera.Update(gameTime, this);
@@ -113,12 +113,18 @@ namespace RotationTutorial
                        
                 if (mapHero.CheckAtackField)
                 {
-                mapHero.CheckAtackField = false;
-                map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X, 
-                    (int)mapHero.Rectangle1.Center.Y)).Mob = false;
-                bot.Position = new Vector2(-75, -75);
-                smth= true;
+                    mapHero.CheckAtackField = false;
+                    map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X, 
+                        (int)mapHero.Rectangle1.Center.Y)).Mob = false;
+                    bot.Position = new Vector2(-75, -75);
+                    smth = 2;
+                    return smth;
                 }
+            }
+            //Заход в инвентарь
+            if (Keyboard.GetState().IsKeyDown(Keys.I))
+            {
+                smth = 3;
             }
             return smth;
            

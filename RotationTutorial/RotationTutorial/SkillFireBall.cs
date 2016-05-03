@@ -9,11 +9,13 @@ namespace RotationTutorial
     {
         int mana = 10;
         int damage = 35;
+        int energy = 75;
         public bool Effect(IPerson user,IPerson victim)
         {
-            if (user.Mana.Current >= mana)
+            if ((user.Mana.Current >= mana)&&(user.Energy.Current >= energy))
             {
                 user.Mana.Current -= mana;
+                user.Energy.Current -= energy;
                 victim.Health.Current -= damage;
                 return true;
             }

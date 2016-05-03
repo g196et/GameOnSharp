@@ -15,9 +15,10 @@ namespace RotationTutorial
     {
         PointClass Health{get;set;}
         PointClass Mana{get;set;}
-        PointClass Stamina { get; set; }
-        int Damage { get; set; }
-        int Defense { get; set; }
+        PointClass Energy { get; set; }
+        int Strength { get; set; }
+        int Stamina { get; set; }
+        int Intellect { get; set; }
         void Attack(IPerson person);
         void Update();
         bool Input(IPerson enemy);

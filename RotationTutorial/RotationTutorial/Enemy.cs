@@ -14,9 +14,8 @@ namespace RotationTutorial
     class Enemy:IPerson
     {
         IList<ISkill> listSkill;
-        PointClass health, mana, stamina;
-        int damage = 30;
-        int defense = 10;
+        PointClass health, mana, energy;
+        int strength, stamina, intellect;
 
         Texture2D texture;
         Rectangle rectangle;
@@ -39,39 +38,47 @@ namespace RotationTutorial
             get { return mana; }
             set { mana = value; }
         }
-        public PointClass Stamina
+        public PointClass Energy
+        {
+            get { return energy; }
+            set { energy = value; }
+        }
+        public int Strength
+        {
+            get { return strength; }
+            set { strength = value; }
+        }
+        public int Stamina
         {
             get { return stamina; }
             set { stamina = value; }
         }
-        public int Damage
+        public int Intellect
         {
-            get { return damage; }
-            set { damage = value; }
-        }
-        public int Defense
-        {
-            get { return defense; }
-            set { defense = value; }
+            get { return intellect; }
+            set { intellect = value; }
         }
 
         public Enemy(Texture2D enemyTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
         {
-            health = new PointClass(100, 100);
-            mana = new PointClass(100, 100);
-            stamina = new PointClass(100, 100);
+            strength = 5;
+            stamina = 5;
+            intellect = 5;
+            health = new PointClass(10 * strength, 10 * strength);
+            mana = new PointClass(10 * intellect, 10 * intellect);
+            energy = new PointClass(10 * stamina, 10 * stamina);
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;
             this.energyBarTexture = energyBarTexture;
-            healthRectangle = new Rectangle(900, 10, healthBarTexture.Width,
-                healthBarTexture.Height);
+            healthRectangle = new Rectangle(900, 10, 300,
+                25);
             manaRectangle = new Rectangle(healthRectangle.X,
-                healthRectangle.Y + healthRectangle.Height + 10, manaBarTexture.Width,
-                manaBarTexture.Height);
+                healthRectangle.Y + healthRectangle.Height + 10, 300,
+                25);
             energyRectangle = new Rectangle(manaRectangle.X, manaRectangle.Y
                 + manaRectangle.Height + 10,
-                healthRectangle.Width, healthRectangle.Height);
-            rectangle = new Rectangle(900, 200, enemyTexture.Width, enemyTexture.Height);
+                300, 25);
+            rectangle = new Rectangle(900, 200, 250, 200);
             texture = enemyTexture;
             listSkill = new List<ISkill>();
             listSkill.Add(new SkillRegenHealth());
@@ -79,29 +86,36 @@ namespace RotationTutorial
         }
         public void Attack(IPerson person)
         {
-            person.Health.Current = person.Health.Current - (damage - person.Defense);
+            person.Health.Current = person.Health.Current - strength;
+            energy.Current -= 20;
         }
 
         public void Update()
         {
             healthRectangle.Width = healthBarTexture.Width * this.Health.Current / this.Health.Max;
             manaRectangle.Width = manaBarTexture.Width * this.Mana.Current / this.Mana.Max;
+            energyRectangle.Width = energyBarTexture.Width * this.Energy.Current / this.Energy.Max;
         }
 
         public bool Input(IPerson person)
         {
+            if (energy.Current <= 19)
+            {
+                energy.Current = energy.Max;
+                return true;
+            }
+            //Регенерация жизни
             if ((health.Current <= 35) && (mana.Current >= 30))
             {
                 listSkill[0].Effect(this, person);
-                return true;
             }
+            //Fire ball
             if (((mana.Current / mana.Max >= 0.6) || (person.Health.Current <= 35))&&(Mana.Current>=10))
             {
                 listSkill[1].Effect(this, person);
-                return true;
             }
             Attack(person);
-            return true;
+            return false;
         }
 
         public void Draw(SpriteBatch spriteBatch)

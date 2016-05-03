@@ -21,6 +21,7 @@ namespace RotationTutorial
         IGame CurrentState;
         Game1 mapState;
         Game2 fightState;
+        HeroInfo heroInfo;
         public GameStateManager()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -34,8 +35,9 @@ namespace RotationTutorial
         }
         protected override void Initialize()
         {
-            CurrentState.Initialize(this);
+            mapState.Initialize(this);
             camera = new Camera(this.GraphicsDevice.Viewport);
+            fightState.Initialize(this);
             base.Initialize();
         }
 
@@ -43,7 +45,7 @@ namespace RotationTutorial
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);           
-            CurrentState.LoadContent(Content);
+            mapState.LoadContent(Content);
             fightState.LoadContent(Content);
         }
         protected override void UnloadContent()
@@ -54,15 +56,17 @@ namespace RotationTutorial
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
-
-            if (CurrentState.Update(gameTime))
-                if (CurrentState == mapState)
-                {
-                    CurrentState = fightState;
-                    fightState.Initialize(this);
-                }
-                else
-                    CurrentState = mapState;
+            int state = CurrentState.Update(gameTime);
+            if (state == 1)
+                CurrentState = mapState;
+            else if (state == 2)
+                CurrentState = fightState;
+            else if (state == 3)
+            {
+                heroInfo = new HeroInfo(fightState.Hero);
+                CurrentState = heroInfo;
+            }
+                
             base.Update(gameTime);
         }
 
