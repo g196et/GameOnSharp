@@ -19,7 +19,7 @@ namespace RotationTutorial
         int Strength { get; set; }
         int Stamina { get; set; }
         int Intellect { get; set; }
-        void Attack(IPerson person);
+        bool Attack(IPerson person);
         void Update();
         bool Input(IPerson enemy);
         void Draw(SpriteBatch spriteBatch);

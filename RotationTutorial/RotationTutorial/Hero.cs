@@ -15,7 +15,7 @@ namespace RotationTutorial
     {
         IList<ISkill> listSkill = new List<ISkill>();
         PointClass health, mana, energy;
-        int strength, stamina, intellect;
+        int strength, stamina, intellect, vitality;
         Weapon weapon;
 
         Texture2D texture;
@@ -62,10 +62,11 @@ namespace RotationTutorial
 
         public Hero(Texture2D heroTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
         {
-            strength = 10;
+            strength = 20;
             stamina = 10;
             intellect = 10;
-            health = new PointClass(10*strength, 10*strength);
+            vitality = 10;
+            health = new PointClass(10 * vitality, 10 * vitality);
             mana = new PointClass(10 * intellect, 10 * intellect);
             energy = new PointClass(10 * stamina, 10 * stamina);
             weapon = new Weapon(5);
@@ -86,22 +87,15 @@ namespace RotationTutorial
             listSkill.Add(new SkillFireBall());
         }
 
-        public void Attack(IPerson person)
+        public bool Attack(IPerson person)
         {
-            person.Health.Current = person.Health.Current-(strength + weapon.Damage);
-            energy.Current -= 20;
-        }
-        public bool RegenHealth ()
-        {
-            if (mana.Current >= 30)
+            if (energy.Current >= 50)
             {
-                health.Current += 70;
-                mana.Current -= 30;
-                if (health.Current > health.Max)
-                    health.Current = health.Max;
+                person.Health.Current = person.Health.Current - (strength + weapon.Damage);
+                energy.Current -= 50;
                 return true;
             }
-            return false;
+            else return false;
         }
 
         public void Update()
@@ -113,7 +107,7 @@ namespace RotationTutorial
 
         public bool Input(IPerson enemy)
         {
-            if (energy.Current <= 0 || Keyboard.GetState().IsKeyDown(Keys.F))
+            if ((energy.Current == 0) || (Keyboard.GetState().IsKeyDown(Keys.F)))
             {
                 energy.Current = energy.Max;
                 return false;
@@ -121,17 +115,20 @@ namespace RotationTutorial
             //Обычная атака
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
-                Attack(enemy);
+                if (Attack(enemy))
+                return true;
             }
             //Регенерация здоровья
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                listSkill[0].Effect(this, enemy);
+                if(listSkill[0].Effect(this, enemy))
+                return true;
             }
             //Fire ball
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                listSkill[1].Effect(this, enemy);
+                if(listSkill[1].Effect(this, enemy))
+                    return true;
             }
             return true;
         }
@@ -142,6 +139,9 @@ namespace RotationTutorial
             spriteBatch.Draw(texture, rectangle, Color.White);
             spriteBatch.Draw(manaBarTexture, manaRectangle, Color.White);
             spriteBatch.Draw(energyBarTexture, energyRectangle, Color.White);
+            spriteBatch.DrawString(Game1.spriteFront, health.Current + "/" + health.Max, new Vector2(healthRectangle.Center.X - 25, healthRectangle.Y), Color.Black);
+            spriteBatch.DrawString(Game1.spriteFront, mana.Current + "/" + mana.Max, new Vector2(manaRectangle.Center.X - 25, manaRectangle.Y), Color.Black);
+            spriteBatch.DrawString(Game1.spriteFront, energy.Current + "/" + energy.Max, new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
         }
 
     }

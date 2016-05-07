@@ -51,9 +51,9 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            mapHero = new MapHero(game.Content.Load<Texture2D>("man1"), new Vector2(75, 75));
-            listBot.Add(new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(150, 150)));
-            listBot.Add(new MapBot(game.Content.Load<Texture2D>("enemy"), new Vector2(225, 225)));
+            mapHero = new MapHero(game.Content.Load<Texture2D>("гг3"), new Vector2(75, 75));
+            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай1"), new Vector2(150, 150)));
+            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай2"), new Vector2(225, 225)));
             camera = new Camera(game.GraphicsDevice.Viewport);
             map = new Map();
 

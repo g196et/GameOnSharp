@@ -17,7 +17,7 @@ namespace RotationTutorial
         {
             texture = newTexture;
             position = newPosition;
-            rectangle = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            rectangle = new Rectangle((int)position.X, (int)position.Y, 75, 75);
         }
 
         public void AddMobMap(Map map)
@@ -32,7 +32,7 @@ namespace RotationTutorial
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, Color.White);
+            spriteBatch.Draw(texture, rectangle, Color.White);
         }
     }
 }

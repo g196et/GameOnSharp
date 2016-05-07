@@ -15,7 +15,7 @@ namespace RotationTutorial
     {
         IList<ISkill> listSkill;
         PointClass health, mana, energy;
-        int strength, stamina, intellect;
+        int strength, stamina, intellect, vitality;
 
         Texture2D texture;
         Rectangle rectangle;
@@ -59,14 +59,8 @@ namespace RotationTutorial
             set { intellect = value; }
         }
 
-        public Enemy(Texture2D enemyTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
+        public void LoadContent (Texture2D enemyTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
         {
-            strength = 5;
-            stamina = 5;
-            intellect = 5;
-            health = new PointClass(10 * strength, 10 * strength);
-            mana = new PointClass(10 * intellect, 10 * intellect);
-            energy = new PointClass(10 * stamina, 10 * stamina);
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;
             this.energyBarTexture = energyBarTexture;
@@ -80,14 +74,26 @@ namespace RotationTutorial
                 300, 25);
             rectangle = new Rectangle(900, 200, 250, 200);
             texture = enemyTexture;
+        }
+
+        public Enemy()
+        {
+            strength = 20;
+            stamina = 10;
+            intellect = 10;
+            vitality = 10;
+            health = new PointClass(10 * vitality, 10 * vitality);
+            mana = new PointClass(10 * intellect, 10 * intellect);
+            energy = new PointClass(10 * stamina, 10 * stamina);
             listSkill = new List<ISkill>();
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
         }
-        public void Attack(IPerson person)
+        public bool Attack(IPerson person)
         {
             person.Health.Current = person.Health.Current - strength;
-            energy.Current -= 20;
+            energy.Current -= 50;
+            return true;
         }
 
         public void Update()
@@ -105,14 +111,16 @@ namespace RotationTutorial
                 return true;
             }
             //Регенерация жизни
-            if ((health.Current <= 35) && (mana.Current >= 30))
+            if ((health.Current <= 35) && (mana.Current >= 30)&& (energy.Current>=50))
             {
                 listSkill[0].Effect(this, person);
+                return false;
             }
             //Fire ball
-            if (((mana.Current / mana.Max >= 0.6) || (person.Health.Current <= 35))&&(Mana.Current>=10))
+            if (((mana.Current / mana.Max >= 0.6) || (person.Health.Current <= 35))&&(Mana.Current>=10)&&(energy.Current>=75))
             {
                 listSkill[1].Effect(this, person);
+                return false;
             }
             Attack(person);
             return false;
@@ -125,6 +133,9 @@ namespace RotationTutorial
             spriteBatch.Draw(texture, rectangle, Color.White); 
             spriteBatch.Draw(manaBarTexture, manaRectangle, Color.White);
             spriteBatch.Draw(energyBarTexture, energyRectangle, Color.White);
+            spriteBatch.DrawString(Game1.spriteFront, health.Current + "/" + health.Max, new Vector2(healthRectangle.Center.X-25, healthRectangle.Y),Color.Black);
+            spriteBatch.DrawString(Game1.spriteFront, mana.Current + "/" + mana.Max, new Vector2(manaRectangle.Center.X - 25, manaRectangle.Y), Color.Black);
+            spriteBatch.DrawString(Game1.spriteFront, energy.Current + "/" + energy.Max, new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
         }
     }
 }

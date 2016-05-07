@@ -28,7 +28,7 @@ namespace RotationTutorial
 
         public void Update(GameTime gameTime, Map map)
         { 
-            rectangle = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
+            rectangle = new Rectangle((int)position.X, (int)position.Y, 75, 75);
             position += velocity;
             //foreach (Tiles tile in map.MapTiles)
             //    if (!tile.Passability)
@@ -130,7 +130,7 @@ namespace RotationTutorial
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, position, Color.White);
+            spriteBatch.Draw(texture, rectangle, Color.White);
             spriteBatch.DrawString(Game1.spriteFront, text, new Vector2(-50, -50), Color.White);
         }
     }

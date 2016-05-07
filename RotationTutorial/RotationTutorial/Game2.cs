@@ -63,7 +63,7 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            enemy = new Enemy(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            enemy = new Enemy();
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace RotationTutorial
             enemyTexture = Content.Load<Texture2D>("fightEnemy");
             heroTexture = Content.Load<Texture2D>("fightMan");
             hero = new Hero(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
-            
+            enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
         }
 
         /// <summary>
@@ -119,24 +119,20 @@ namespace RotationTutorial
         {
             if (turn)
             {
-                if (counter < 500)
+                if (counter < 100)
                 {
                     counter += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
                 else
                 {
-                    if (turn)
-                    {
-                        turn = hero.Input(enemy);
-                    }
-                    else
-                        counter = 0;
+                    counter = 0;
+                    turn = hero.Input(enemy);
+                    txt = "Hero";
                 }
-                txt = "Hero";
             }
             else
             {
-                if (counter < 500)
+                if (counter < 300)
                 {
                     counter += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
@@ -144,13 +140,19 @@ namespace RotationTutorial
                 {
                     counter = 0;
                     turn = enemy.Input(hero);
+                    txt = "Bot";
                 }
-                txt = "Bot";
             }
             hero.Update();
             enemy.Update();
             if ((enemy.Health.Current <= 0) || (hero.Health.Current <= 0))
             {
+                counter = 0;
+                while (counter < 10000)
+                {
+                    counter += gameTime.ElapsedGameTime.TotalMilliseconds;
+                }
+                turn = true;
                 return 1;
             }
             return 2;
