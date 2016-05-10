@@ -45,7 +45,6 @@ namespace RotationTutorial
 
             if (map.GetRectangle(rectangle.Center).Mob)
             {
-                text = "WIN!!!111!!11!!11!!)0)))))9()090909ARGJKE ISHUBYDOF94NEBPHVOJIT6V2";
                 map.GetRectangle(rectangle.Center).Mob = false;
             }
         }

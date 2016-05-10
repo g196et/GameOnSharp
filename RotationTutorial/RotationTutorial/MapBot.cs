@@ -12,12 +12,14 @@ namespace RotationTutorial
         Texture2D texture;
         Rectangle rectangle; public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } } 
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
+        Enemy enemy; public Enemy Enemy { get { return enemy; } }
 
-        public MapBot(Texture2D newTexture, Vector2 newPosition)
+        public MapBot(Texture2D newTexture, Vector2 newPosition, Enemy enemy)
         {
             texture = newTexture;
             position = newPosition;
             rectangle = new Rectangle((int)position.X, (int)position.Y, 75, 75);
+            this.enemy = enemy;
         }
 
         public void AddMobMap(Map map)

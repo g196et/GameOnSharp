@@ -26,6 +26,8 @@ namespace RotationTutorial
         MapHero mapHero;
         IList<MapBot> listBot;
         public IList<MapBot> ListBot { get { return listBot; } set { listBot = value; } }
+        MapBot currentBot;
+        public MapBot CurrentBot { get { return currentBot; } }
         Camera camera;
 
         //Background
@@ -52,8 +54,8 @@ namespace RotationTutorial
         public void Initialize(Game game)
         {
             mapHero = new MapHero(game.Content.Load<Texture2D>("гг3"), new Vector2(75, 75));
-            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай1"), new Vector2(150, 150)));
-            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай2"), new Vector2(225, 225)));
+            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай1"), new Vector2(150, 150), new Enemy()));
+            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай2"), new Vector2(225, 225), new Enemy()));
             camera = new Camera(game.GraphicsDevice.Viewport);
             map = new Map();
 
@@ -117,6 +119,7 @@ namespace RotationTutorial
                     map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X, 
                         (int)mapHero.Rectangle1.Center.Y)).Mob = false;
                     bot.Position = new Vector2(-75, -75);
+                    currentBot = bot;
                     smth = 2;
                     return smth;
                 }

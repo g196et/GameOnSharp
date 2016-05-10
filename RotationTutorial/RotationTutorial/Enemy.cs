@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    class Enemy:IPerson
+    public class Enemy:IPerson
     {
         IList<ISkill> listSkill;
         PointClass health, mana, energy;
@@ -59,7 +59,8 @@ namespace RotationTutorial
             set { intellect = value; }
         }
 
-        public void LoadContent (Texture2D enemyTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
+        public void LoadContent (Texture2D enemyTexture,Texture2D healthBarTexture,
+            Texture2D manaBarTexture, Texture2D energyBarTexture)
         {
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;

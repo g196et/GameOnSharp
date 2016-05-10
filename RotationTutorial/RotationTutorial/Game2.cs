@@ -21,13 +21,8 @@ namespace RotationTutorial
         ContentManager Content;
         GraphicsDeviceManager graphics;
         public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
-        Hero hero;
-        Enemy enemy;
-
-        public Hero Hero
-        {
-            get { return hero; }
-        }
+        Hero hero; public Hero Hero { get { return hero; } }
+        Enemy enemy; public Enemy Enemy { get { return enemy; } set { enemy = value; } }
         
         Rectangle backgroundRectangle1;
         Rectangle backgroundRectangle2;
@@ -91,9 +86,6 @@ namespace RotationTutorial
             //Stamina
             energyBarTexture = Content.Load<Texture2D>("energyBarTexture");
             
-
-            
-
             //Enemy
             enemyTexture = Content.Load<Texture2D>("fightEnemy");
             heroTexture = Content.Load<Texture2D>("fightMan");
@@ -145,7 +137,8 @@ namespace RotationTutorial
             }
             hero.Update();
             enemy.Update();
-            if ((enemy.Health.Current <= 0) || (hero.Health.Current <= 0))
+            //Если выйграл Герой
+            if (enemy.Health.Current <= 0)
             {
                 counter = 0;
                 while (counter < 10000)
@@ -155,6 +148,9 @@ namespace RotationTutorial
                 turn = true;
                 return 1;
             }
+            //Если выйграл Моб
+            if (hero.Health.Current <= 0)
+                return 4;
             return 2;
         }
 

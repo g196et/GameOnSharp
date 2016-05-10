@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    interface IPerson
+    public interface IPerson
     {
         PointClass Health{get;set;}
         PointClass Mana{get;set;}

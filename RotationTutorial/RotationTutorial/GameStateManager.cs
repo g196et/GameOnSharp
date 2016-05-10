@@ -15,6 +15,7 @@ namespace RotationTutorial
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        //ContentManager contentHelp;
 
         Camera camera;
 
@@ -22,6 +23,8 @@ namespace RotationTutorial
         Game1 mapState;
         Game2 fightState;
         HeroInfo heroInfo;
+        MenuState menuState;
+
         public GameStateManager()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -31,6 +34,7 @@ namespace RotationTutorial
             mapState = new Game1(spriteBatch);
             fightState = new Game2(Content, graphics);
             CurrentState = mapState;
+            //contentHelp = Content;
             
         }
         protected override void Initialize()
@@ -60,11 +64,24 @@ namespace RotationTutorial
             if (state == 1)
                 CurrentState = mapState;
             else if (state == 2)
+            {
+                if (fightState.Enemy != mapState.CurrentBot.Enemy)
+                {
+                    fightState.Enemy = mapState.CurrentBot.Enemy;
+                    fightState.LoadContent(Content);
+                }
                 CurrentState = fightState;
+
+            }
             else if (state == 3)
             {
                 heroInfo = new HeroInfo(fightState.Hero);
                 CurrentState = heroInfo;
+            }
+            else if (state == 4)
+            {
+                menuState = new MenuState();
+                CurrentState = menuState;
             }
                 
             base.Update(gameTime);
