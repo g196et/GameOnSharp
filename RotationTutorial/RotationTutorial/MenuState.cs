@@ -13,6 +13,8 @@ namespace RotationTutorial
 {
     class MenuState : IGame
     {
+        const int size1 = 100;
+        const int size2 = 30;
         Button newGame;
         Button saveGame;
         Button loadGame;
@@ -21,11 +23,11 @@ namespace RotationTutorial
         Texture2D buttonTexture;
         public MenuState()
         {
-            newGame = new Button(new Rectangle(100,100,100,30), "New Game");
-            saveGame = new Button(new Rectangle(100, 200, 100, 30), "Save Game");
-            loadGame = new Button(new Rectangle(100, 300, 100, 30), "Load Game");
-            settings = new Button(new Rectangle(100, 400, 100, 30), "Settings");
-            quitGame = new Button(new Rectangle(100, 500, 100, 30), "Quit Game");
+            newGame = new Button(new Rectangle(size1,size1,size1,size2), "New Game");
+            saveGame = new Button(new Rectangle(size1,2*size1, size1, size2), "Save Game");
+            loadGame = new Button(new Rectangle(size1, 3*size1, size1, size2), "Load Game");
+            settings = new Button(new Rectangle(size1, 4*size1, size1, size2), "Settings");
+            quitGame = new Button(new Rectangle(size1, 5*size1, size1, size2), "Quit Game");
             
         }
         public void Initialize(Game game)

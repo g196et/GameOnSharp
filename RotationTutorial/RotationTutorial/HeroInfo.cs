@@ -13,6 +13,11 @@ namespace RotationTutorial
 {
     class HeroInfo: IGame
     {
+        enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
+        State state = new State();
+        const int x = 50;
+        const int y = 25;
+        const int x2 = 225;
         Hero hero;
         public Hero Hero { get { return hero; } set { hero = value; } }
         Button addStrength;
@@ -21,7 +26,7 @@ namespace RotationTutorial
         Texture2D buttonTexture;
         public HeroInfo()
         {
-            addIntellect = new Button(new Rectangle(225, 125, 20, 20), "+");
+            addIntellect = new Button(new Rectangle(x2, y*5, 20, 20), "+");
             addIntellect.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -30,7 +35,7 @@ namespace RotationTutorial
                     hero.Intellect += 1;
                 }
             };
-            addStamina = new Button(new Rectangle(225, 75, 20, 20), "+");
+            addStamina = new Button(new Rectangle(x2, y*3, 20, 20), "+");
             addStamina.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -39,7 +44,7 @@ namespace RotationTutorial
                     hero.Stamina += 1;
                 }
             };
-            addStrength = new Button(new Rectangle(225, 25, 20, 20), "+");
+            addStrength = new Button(new Rectangle(x2, y, 20, 20), "+");
             addStrength.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -63,25 +68,29 @@ namespace RotationTutorial
             addStamina.Update(gameTime);
             addStrength.Update(gameTime);
             if (Keyboard.GetState().IsKeyDown(Keys.Back))
-                return 1;
-            return 3;
+            {
+                state = State.MapState;
+                return (int)state;
+            }
+            state = State.HeroInfo;
+            return (int)state;
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(MapState.spriteFont, "Strength = " + hero.Strength,
-                new Vector2(50, 25), Color.White);
+                new Vector2(x, y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "Stamina = " + hero.Stamina,
-                new Vector2(50, 75), Color.White);
+                new Vector2(x, 3*y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "Intellect = " + hero.Intellect,
-                new Vector2(50, 125), Color.White);
+                new Vector2(x, 5*y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "StatPoints = " + hero.StatPoints,
-                new Vector2(50, 175), Color.White);
+                new Vector2(x, 7*y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "curEXP = " + hero.Level.CurrentExperience,
-                new Vector2(50, 225), Color.White);
+                new Vector2(x, 9*y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "HP = " + hero.Health.Current+"/"+
-                hero.Health.Max, new Vector2(50, 275), Color.White);
+                hero.Health.Max, new Vector2(x, 11*y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "MP = " + hero.Mana.Current + "/"
-                + hero.Mana.Max, new Vector2(50, 325), Color.White);
+                + hero.Mana.Max, new Vector2(x, 13*y), Color.White);
             spriteBatch.Draw(buttonTexture, addStrength.Rectangle, Color.White);
             spriteBatch.Draw(buttonTexture, addStamina.Rectangle, Color.White);
             spriteBatch.Draw(buttonTexture, addIntellect.Rectangle, Color.White);

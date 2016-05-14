@@ -10,6 +10,8 @@ namespace RotationTutorial
 {
     class MapHero
     {
+        const int tileSize = 75;
+        const int timeDelay = 500;
         Texture2D texture;        
         
         Rectangle rectangle; public Rectangle Rectangle1 { get { return rectangle; } set { rectangle = value; } }
@@ -28,13 +30,13 @@ namespace RotationTutorial
 
         public void Update(GameTime gameTime, Map map)
         { 
-            rectangle = new Rectangle((int)position.X, (int)position.Y, 75, 75);
+            rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
             position += velocity;
             //foreach (Tiles tile in map.MapTiles)
             //    if (!tile.Passability)
             //        Collision(tile.Rectangle, map.Width, map.Height);
             //enguerhguisre
-            if (counter < 500)
+            if (counter < timeDelay)
             {
                 UpdateTime(gameTime);
             }
@@ -59,27 +61,27 @@ namespace RotationTutorial
         {
             {
                 if ((Keyboard.GetState().IsKeyDown(Keys.D)) &&
-                    ((map.GetRectangle(new Point(rectangle.Center.X+75,rectangle.Center.Y))).Passability))
+                    ((map.GetRectangle(new Point(rectangle.Center.X+tileSize,rectangle.Center.Y))).Passability))
                 {
-                    position.X += (float)75;
+                    position.X += (float)tileSize;
                     counter = 0;
                 }
                 else if ((Keyboard.GetState().IsKeyDown(Keys.A)) &&
-                    ((map.GetRectangle(new Point(rectangle.Center.X - 75, rectangle.Center.Y))).Passability))
+                    ((map.GetRectangle(new Point(rectangle.Center.X - tileSize, rectangle.Center.Y))).Passability))
                 {
-                    position.X -= (float)75;
+                    position.X -= (float)tileSize;
                     counter = 0;
                 }
                 else if ((Keyboard.GetState().IsKeyDown(Keys.W)) &&
-                    ((map.GetRectangle(new Point(rectangle.Center.X, rectangle.Center.Y - 75))).Passability))
+                    ((map.GetRectangle(new Point(rectangle.Center.X, rectangle.Center.Y - tileSize))).Passability))
                 {
-                    position.Y -= (float)75;
+                    position.Y -= (float)tileSize;
                     counter = 0;
                 }
                 else if ((Keyboard.GetState().IsKeyDown(Keys.S)) &&
-                    ((map.GetRectangle(new Point(rectangle.Center.X, rectangle.Center.Y + 75))).Passability))
+                    ((map.GetRectangle(new Point(rectangle.Center.X, rectangle.Center.Y + tileSize))).Passability))
                 {
-                    position.Y += (float)75;
+                    position.Y += (float)tileSize;
                     counter = 0;
                 }
                 else velocity = Vector2.Zero;

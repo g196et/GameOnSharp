@@ -9,6 +9,8 @@ namespace RotationTutorial
 {
     public class MapBot
     {
+        const int tileSize = 75;
+        const int halfTileSize = 37;
         Texture2D texture;
         Rectangle rectangle; public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } } 
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
@@ -18,13 +20,13 @@ namespace RotationTutorial
         {
             texture = newTexture;
             position = newPosition;
-            rectangle = new Rectangle((int)position.X, (int)position.Y, 75, 75);
+            rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
             this.enemy = enemy;
         }
 
         public void AddMobMap(Map map)
         {
-            map.GetRectangle(new Point((int)position.X + 37, (int)position.Y + 37)).Mob = true;
+            map.GetRectangle(new Point((int)position.X + halfTileSize, (int)position.Y + halfTileSize)).Mob = true;
         }
 
         public void Update()
