@@ -131,7 +131,7 @@ namespace RotationTutorial
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, rectangle, Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, text, new Vector2(-50, -50), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, text, new Vector2(-50, -50), Color.White);
         }
     }
 }

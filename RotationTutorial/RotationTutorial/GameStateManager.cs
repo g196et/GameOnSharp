@@ -20,8 +20,8 @@ namespace RotationTutorial
         Camera camera;
 
         IGame CurrentState;
-        Game1 mapState;
-        Game2 fightState;
+        MapState mapState;
+        FightState fightState;
         HeroInfo heroInfo;
         MenuState menuState;
 
@@ -31,8 +31,8 @@ namespace RotationTutorial
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = 1280;
             graphics.PreferredBackBufferHeight =800;
-            mapState = new Game1(spriteBatch);
-            fightState = new Game2(Content, graphics);
+            mapState = new MapState(spriteBatch);
+            fightState = new FightState(Content, graphics);
             CurrentState = mapState;
             menuState = new MenuState();
             heroInfo = new HeroInfo();

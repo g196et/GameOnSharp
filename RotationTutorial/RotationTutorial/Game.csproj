@@ -80,7 +80,7 @@
     <Compile Include="SkillFireBall.cs" />
     <Compile Include="SkillRegenHealth.cs" />
     <Compile Include="Enemy.cs" />
-    <Compile Include="Game2.cs" />
+    <Compile Include="FightState.cs" />
     <Compile Include="GameStateManager.cs" />
     <Compile Include="Hero.cs" />
     <Compile Include="IGame.cs" />
@@ -92,7 +92,7 @@
     <Compile Include="PointClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="MapState.cs" />
     <Compile Include="RectangleHelper.cs" />
     <Compile Include="Tiles.cs" />
     <Compile Include="Weapon.cs" />

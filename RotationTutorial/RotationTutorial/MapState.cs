@@ -8,13 +8,14 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class Game1 : IGame
+    public class MapState : IGame
     {
         SpriteBatch spriteBatch;
         public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
@@ -34,15 +35,16 @@ namespace RotationTutorial
         Texture2D backgroundTexture;
         Vector2 backgroundPosition;
 
-        public static SpriteFont spriteFront;
+        public static SpriteFont spriteFont;
+        public static string mapFileName;
 
         Map map;
-        //Vector2 distance;
 
-        public Game1(SpriteBatch spriteBatch)
+        public MapState(SpriteBatch spriteBatch)
         {
             listBot = new List<MapBot>();
             this.spriteBatch = spriteBatch;
+            mapFileName = "map.txt";
         }
 
         /// <summary>
@@ -70,21 +72,16 @@ namespace RotationTutorial
         {
            
             Tiles.Content = Content;
-            map.Generate(new int[,]{
-                {2,2,2,2,2,2,2,},
-                {2,1,1,1,1,1,2,},
-                {2,1,1,1,2,1,2,},
-                {2,1,2,1,1,1,2,},
-                {2,1,2,1,1,1,2,},
-                {2,1,1,1,1,1,2,},
-                {2,2,2,2,2,2,2,},
-            }, 75);
+            using (StreamReader stream = new StreamReader(mapFileName))
+            {
+                map.LoadMap(stream, 75);
+            }
             foreach(MapBot bot in listBot)
             {
                 bot.AddMobMap(map);
             }
             backgroundTexture = Content.Load<Texture2D>("Back1");
-            spriteFront = Content.Load<SpriteFont>("SpriteFont1");
+            spriteFont = Content.Load<SpriteFont>("SpriteFont1");
             backgroundPosition = new Vector2(-950, -500);
         }
 
@@ -105,7 +102,7 @@ namespace RotationTutorial
         public int Update(GameTime gameTime)
         {
             
-            int smth=1;
+            int returnState=1;
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
             camera.Update(gameTime, this);
@@ -121,16 +118,16 @@ namespace RotationTutorial
                         (int)mapHero.Rectangle1.Center.Y)).Mob = false;
                     bot.Position = new Vector2(-75, -75);
                     currentBot = bot;
-                    smth = 2;
-                    return smth;
+                    returnState = 2;
+                    return returnState;
                 }
             }
             //Заход в инвентарь
             if (Keyboard.GetState().IsKeyDown(Keys.I))
             {
-                smth = 3;
+                returnState = 3;
             }
-            return smth;
+            return returnState;
            
         }
 
@@ -147,7 +144,7 @@ namespace RotationTutorial
                     bot.Draw(spriteBatch);
             }
             mapHero.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFront, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);           
+            spriteBatch.DrawString(spriteFont, mapHero.Counter.ToString(), new Vector2(0, -150), Color.White);           
         }
     }
 }

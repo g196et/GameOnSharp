@@ -17,7 +17,8 @@ namespace RotationTutorial
         PointClass health, mana, energy;
         int strength, stamina, intellect, vitality;
         Weapon weapon;
-        bool check = false; public bool Check { get { return check; } set { check = value; } }
+        bool check = false;
+        public bool Check { get { return check; } set { check = value; } }
 
         Texture2D texture;
         Rectangle rectangle;
@@ -162,9 +163,9 @@ namespace RotationTutorial
             spriteBatch.Draw(texture, rectangle, Color.White);
             spriteBatch.Draw(manaBarTexture, manaRectangle, Color.White);
             spriteBatch.Draw(energyBarTexture, energyRectangle, Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, health.Current + "/" + health.Max, new Vector2(healthRectangle.Center.X - 25, healthRectangle.Y), Color.Black);
-            spriteBatch.DrawString(Game1.spriteFront, mana.Current + "/" + mana.Max, new Vector2(manaRectangle.Center.X - 25, manaRectangle.Y), Color.Black);
-            spriteBatch.DrawString(Game1.spriteFront, energy.Current + "/" + energy.Max, new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
+            spriteBatch.DrawString(MapState.spriteFont, health.Current + "/" + health.Max, new Vector2(healthRectangle.Center.X - 25, healthRectangle.Y), Color.Black);
+            spriteBatch.DrawString(MapState.spriteFont, mana.Current + "/" + mana.Max, new Vector2(manaRectangle.Center.X - 25, manaRectangle.Y), Color.Black);
+            spriteBatch.DrawString(MapState.spriteFont, energy.Current + "/" + energy.Max, new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
         }
 
     }

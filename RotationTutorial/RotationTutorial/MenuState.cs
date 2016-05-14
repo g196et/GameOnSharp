@@ -26,13 +26,19 @@ namespace RotationTutorial
             loadGame = new Button(new Rectangle(100, 300, 100, 30), "Load Game");
             settings = new Button(new Rectangle(100, 400, 100, 30), "Settings");
             quitGame = new Button(new Rectangle(100, 500, 100, 30), "Quit Game");
+            
+        }
+        public void Initialize(Game game)
+        {
             quitGame.Action += () =>
             {
                 Environment.Exit(0);
             };
+            newGame.Action += () =>
+            {
+                
+            };
         }
-        public void Initialize(Game game)
-        { }
         public void LoadContent(ContentManager content)
         {
             buttonTexture = content.Load<Texture2D>("ButtonTexture1");
@@ -50,7 +56,7 @@ namespace RotationTutorial
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(Game1.spriteFront, "You lose!", new Vector2(0, 0), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, "You lose!", new Vector2(0, 0), Color.White);
             spriteBatch.Draw(buttonTexture, newGame.Rectangle, Color.White);
             spriteBatch.Draw(buttonTexture, saveGame.Rectangle, Color.White);
             spriteBatch.Draw(buttonTexture, loadGame.Rectangle, Color.White);

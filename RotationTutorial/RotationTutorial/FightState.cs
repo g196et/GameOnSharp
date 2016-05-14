@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    class Game2:IGame
+    class FightState:IGame
     {
         bool turn = true;
         double counter = 0;
@@ -35,7 +35,6 @@ namespace RotationTutorial
         Texture2D energyBarTexture;
         Texture2D healthBarTexture;
 
-        Button button;
         //public static SpriteFont spriteFront;
 
         Texture2D backgroundTexture1;
@@ -44,7 +43,7 @@ namespace RotationTutorial
         public Vector2 SpritePosition { get { return new Vector2(0,0); } }
         public Rectangle SpriteRectangle { get { return new Rectangle(0, 0, 0, 0); } }
 
-        public Game2(ContentManager Content,GraphicsDeviceManager graphics)
+        public FightState(ContentManager Content,GraphicsDeviceManager graphics)
         {
             this.Content = Content;
             this.graphics = graphics;
@@ -58,11 +57,6 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            button = new Button(new Rectangle(100,100,100,20),"?");
-            button.Action += () =>
-            {
-                button.Text = "!";
-            };
             enemy = new Enemy();
             hero = new Hero();
         }
@@ -97,7 +91,6 @@ namespace RotationTutorial
             heroTexture = Content.Load<Texture2D>("fightMan");
             hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
             enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
-            button.LoadContent(Content);
         }
 
         /// <summary>
@@ -116,7 +109,6 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public int Update(GameTime gameTime)
         {
-            button.Update(gameTime);
             if (turn)
             {
                 if (counter < 300)
@@ -185,11 +177,10 @@ namespace RotationTutorial
         {
             spriteBatch.Draw(backgroundTexture1, backgroundRectangle1, Color.AliceBlue);
             spriteBatch.Draw(backgroundTexture2, backgroundRectangle2, Color.AliceBlue);
-            spriteBatch.DrawString(Game1.spriteFront, txt, new Vector2(450, 20), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, counter.ToString(), new Vector2(450, 70), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, txt, new Vector2(450, 20), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, counter.ToString(), new Vector2(450, 70), Color.White);
             hero.Draw(spriteBatch);
             enemy.Draw(spriteBatch);
-            button.Draw(spriteBatch);
         }
     }
 }

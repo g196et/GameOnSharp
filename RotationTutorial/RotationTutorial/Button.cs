@@ -70,7 +70,7 @@ namespace RotationTutorial
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(curTexture,rectangle,Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, text, new Vector2(rectangle.Location.X, rectangle.Location.Y), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, text, new Vector2(rectangle.Location.X, rectangle.Location.Y), Color.White);
         }
     }
 }

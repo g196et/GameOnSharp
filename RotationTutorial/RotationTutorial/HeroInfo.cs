@@ -68,28 +68,28 @@ namespace RotationTutorial
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(Game1.spriteFront, "Strength = " + hero.Strength,
+            spriteBatch.DrawString(MapState.spriteFont, "Strength = " + hero.Strength,
                 new Vector2(50, 25), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "Stamina = " + hero.Stamina,
+            spriteBatch.DrawString(MapState.spriteFont, "Stamina = " + hero.Stamina,
                 new Vector2(50, 75), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "Intellect = " + hero.Intellect,
+            spriteBatch.DrawString(MapState.spriteFont, "Intellect = " + hero.Intellect,
                 new Vector2(50, 125), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "StatPoints = " + hero.StatPoints,
+            spriteBatch.DrawString(MapState.spriteFont, "StatPoints = " + hero.StatPoints,
                 new Vector2(50, 175), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "curEXP = " + hero.Level.CurrentExperience,
+            spriteBatch.DrawString(MapState.spriteFont, "curEXP = " + hero.Level.CurrentExperience,
                 new Vector2(50, 225), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "HP = " + hero.Health.Current+"/"+
+            spriteBatch.DrawString(MapState.spriteFont, "HP = " + hero.Health.Current+"/"+
                 hero.Health.Max, new Vector2(50, 275), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "MP = " + hero.Mana.Current + "/"
+            spriteBatch.DrawString(MapState.spriteFont, "MP = " + hero.Mana.Current + "/"
                 + hero.Mana.Max, new Vector2(50, 325), Color.White);
             spriteBatch.Draw(buttonTexture, addStrength.Rectangle, Color.White);
             spriteBatch.Draw(buttonTexture, addStamina.Rectangle, Color.White);
             spriteBatch.Draw(buttonTexture, addIntellect.Rectangle, Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "+", 
+            spriteBatch.DrawString(MapState.spriteFont, "+", 
                 new Vector2(addStrength.Rectangle.X,addStrength.Rectangle.Y), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "+",
+            spriteBatch.DrawString(MapState.spriteFont, "+",
                 new Vector2(addStamina.Rectangle.X, addStamina.Rectangle.Y), Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, "+",
+            spriteBatch.DrawString(MapState.spriteFont, "+",
                 new Vector2(addIntellect.Rectangle.X, addIntellect.Rectangle.Y), Color.White);
         }
     }
