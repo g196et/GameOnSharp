@@ -13,19 +13,49 @@ namespace RotationTutorial
 {
     class MenuState : IGame
     {
+        Button newGame;
+        Button saveGame;
+        Button loadGame;
+        Button settings;
+        Button quitGame;
+        Texture2D buttonTexture;
         public MenuState()
-        { }
+        {
+            newGame = new Button(new Rectangle(100,100,100,30), "New Game");
+            saveGame = new Button(new Rectangle(100, 200, 100, 30), "Save Game");
+            loadGame = new Button(new Rectangle(100, 300, 100, 30), "Load Game");
+            settings = new Button(new Rectangle(100, 400, 100, 30), "Settings");
+            quitGame = new Button(new Rectangle(100, 500, 100, 30), "Quit Game");
+            quitGame.Action += () =>
+            {
+                Environment.Exit(0);
+            };
+        }
         public void Initialize(Game game)
         { }
         public void LoadContent(ContentManager content)
-        { }
+        {
+            buttonTexture = content.Load<Texture2D>("ButtonTexture1");
+        }
         public void UnloadContent()
         { }
         public int Update(GameTime gameTime)
-        { return 0; }
+        {
+            newGame.Update(gameTime);
+            saveGame.Update(gameTime);
+            loadGame.Update(gameTime);
+            settings.Update(gameTime);
+            quitGame.Update(gameTime);
+            return 0;
+        }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(Game1.spriteFront, "You lose!", new Vector2(0, 0), Color.White);
+            spriteBatch.Draw(buttonTexture, newGame.Rectangle, Color.White);
+            spriteBatch.Draw(buttonTexture, saveGame.Rectangle, Color.White);
+            spriteBatch.Draw(buttonTexture, loadGame.Rectangle, Color.White);
+            spriteBatch.Draw(buttonTexture, settings.Rectangle, Color.White);
+            spriteBatch.Draw(buttonTexture, quitGame.Rectangle, Color.White);
         }
     }
 }

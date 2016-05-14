@@ -34,7 +34,9 @@ namespace RotationTutorial
             mapState = new Game1(spriteBatch);
             fightState = new Game2(Content, graphics);
             CurrentState = mapState;
-            //contentHelp = Content;
+            menuState = new MenuState();
+            heroInfo = new HeroInfo();
+            IsMouseVisible = true;
             
         }
         protected override void Initialize()
@@ -50,7 +52,9 @@ namespace RotationTutorial
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);           
             mapState.LoadContent(Content);
-            fightState.LoadContent(Content);
+            heroInfo.LoadContent(Content);
+            menuState.LoadContent(Content);
+
         }
         protected override void UnloadContent()
         {
@@ -75,12 +79,11 @@ namespace RotationTutorial
             }
             else if (state == 3)
             {
-                heroInfo = new HeroInfo(fightState.Hero);
+                heroInfo.Hero = fightState.Hero;
                 CurrentState = heroInfo;
             }
             else if (state == 4)
             {
-                menuState = new MenuState();
                 CurrentState = menuState;
             }
                 
@@ -93,7 +96,7 @@ namespace RotationTutorial
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null/*,
-                camera.transform*/);
+                camera.transform*/); 
             CurrentState.Draw(gameTime,spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);

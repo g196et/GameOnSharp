@@ -34,8 +34,8 @@ namespace RotationTutorial
         Texture2D manaBarTexture;
         Texture2D energyBarTexture;
         Texture2D healthBarTexture;
-        
 
+        Button button;
         //public static SpriteFont spriteFront;
 
         Texture2D backgroundTexture1;
@@ -58,7 +58,13 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
+            button = new Button(new Rectangle(100,100,100,20),"?");
+            button.Action += () =>
+            {
+                button.Text = "!";
+            };
             enemy = new Enemy();
+            hero = new Hero();
         }
 
         /// <summary>
@@ -89,8 +95,9 @@ namespace RotationTutorial
             //Enemy
             enemyTexture = Content.Load<Texture2D>("fightEnemy");
             heroTexture = Content.Load<Texture2D>("fightMan");
-            hero = new Hero(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
             enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            button.LoadContent(Content);
         }
 
         /// <summary>
@@ -109,17 +116,24 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public int Update(GameTime gameTime)
         {
+            button.Update(gameTime);
             if (turn)
             {
-                if (counter < 100)
+                if (counter < 300)
                 {
                     counter += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
                 else
                 {
-                    counter = 0;
                     turn = hero.Input(enemy);
-                    txt = "Hero";
+                    if (hero.Check)
+                    {
+                        counter = 0;
+                        hero.Check = false;
+                    }
+
+                    //turn = hero.Input(enemy);
+                    txt = "Hero' turn";
                 }
             }
             else
@@ -132,7 +146,7 @@ namespace RotationTutorial
                 {
                     counter = 0;
                     turn = enemy.Input(hero);
-                    txt = "Bot";
+                    txt = "Bot's turn";
                 }
             }
             hero.Update();
@@ -140,12 +154,21 @@ namespace RotationTutorial
             //Если выйграл Герой
             if (enemy.Health.Current <= 0)
             {
+                hero.Level.CurrentExperience += 100;
+                if (hero.Level.CheckLevel())
+                {
+                    hero.StatPoints += 1;
+                    hero.Health.Current = hero.Health.Max;
+                    hero.Mana.Current = hero.Mana.Max;
+                }
                 counter = 0;
                 while (counter < 10000)
                 {
                     counter += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
                 turn = true;
+                hero.Energy.Current = hero.Energy.Max;
+
                 return 1;
             }
             //Если выйграл Моб
@@ -163,9 +186,10 @@ namespace RotationTutorial
             spriteBatch.Draw(backgroundTexture1, backgroundRectangle1, Color.AliceBlue);
             spriteBatch.Draw(backgroundTexture2, backgroundRectangle2, Color.AliceBlue);
             spriteBatch.DrawString(Game1.spriteFront, txt, new Vector2(450, 20), Color.White);
+            spriteBatch.DrawString(Game1.spriteFront, counter.ToString(), new Vector2(450, 70), Color.White);
             hero.Draw(spriteBatch);
             enemy.Draw(spriteBatch);
-            
+            button.Draw(spriteBatch);
         }
     }
 }

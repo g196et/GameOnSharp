@@ -17,6 +17,7 @@ namespace RotationTutorial
         PointClass health, mana, energy;
         int strength, stamina, intellect, vitality;
         Weapon weapon;
+        bool check = false; public bool Check { get { return check; } set { check = value; } }
 
         Texture2D texture;
         Rectangle rectangle;
@@ -28,6 +29,9 @@ namespace RotationTutorial
         Texture2D healthBarTexture;
         Texture2D manaBarTexture;
         Texture2D energyBarTexture;
+
+        Level level;
+        public Level Level { get { return level; } set { level = value; } }
 
         public PointClass Health
         {
@@ -60,8 +64,12 @@ namespace RotationTutorial
             set { intellect = value; }
         }
 
-        public Hero(Texture2D heroTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
+        int statPoints;
+        public int StatPoints { get { return statPoints; } set { statPoints = value; } }
+
+        public Hero()
         {
+            level = new Level(new int[] { 50,150 });
             strength = 20;
             stamina = 10;
             intellect = 10;
@@ -70,6 +78,12 @@ namespace RotationTutorial
             mana = new PointClass(10 * intellect, 10 * intellect);
             energy = new PointClass(10 * stamina, 10 * stamina);
             weapon = new Weapon(5);
+            listSkill.Add(new SkillRegenHealth());
+            listSkill.Add(new SkillFireBall());
+        }
+
+        public void LoadContent(Texture2D heroTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
+        {
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;
             this.energyBarTexture = energyBarTexture;
@@ -83,8 +97,6 @@ namespace RotationTutorial
                 300, 25);
             texture = heroTexture;
             rectangle = new Rectangle(200, 200, 250, 200);
-            listSkill.Add(new SkillRegenHealth());
-            listSkill.Add(new SkillFireBall());
         }
 
         public bool Attack(IPerson person)
@@ -103,6 +115,7 @@ namespace RotationTutorial
             healthRectangle.Width = healthBarTexture.Width * this.Health.Current / this.Health.Max;
             manaRectangle.Width = manaBarTexture.Width * this.Mana.Current / this.Mana.Max;
             energyRectangle.Width = energyBarTexture.Width * this.Energy.Current / this.Energy.Max;
+            
         }
 
         public bool Input(IPerson enemy)
@@ -116,19 +129,29 @@ namespace RotationTutorial
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 if (Attack(enemy))
-                return true;
+                {
+                    check = true;
+                    return true;
+                }
             }
             //Регенерация здоровья
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
                 if(listSkill[0].Effect(this, enemy))
-                return true;
+                {
+                    check = true;
+                    return true;
+                }
             }
             //Fire ball
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
                 if(listSkill[1].Effect(this, enemy))
+                {
+                    check = true;
                     return true;
+                }
+                    
             }
             return true;
         }

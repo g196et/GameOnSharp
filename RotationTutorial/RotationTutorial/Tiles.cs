@@ -11,6 +11,7 @@ namespace RotationTutorial
     public class Tiles
     {
         protected Texture2D texture;
+        protected Texture2D backTexture;
         Rectangle rectangle;
         bool passability;
         bool mob;
@@ -40,6 +41,7 @@ namespace RotationTutorial
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, rectangle, Color.White);
+            
         }
     }
 

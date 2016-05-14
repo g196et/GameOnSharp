@@ -47,6 +47,7 @@ namespace RotationTutorial
             {
                 map.GetRectangle(rectangle.Center).Mob = false;
             }
+
         }
 
         public void UpdateTime(GameTime gameTime)

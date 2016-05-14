@@ -104,6 +104,7 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public int Update(GameTime gameTime)
         {
+            
             int smth=1;
             spritePosition = mapHero.Position;
             spriteRectangle = mapHero.Rectangle1;
