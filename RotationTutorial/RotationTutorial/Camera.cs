@@ -7,6 +7,9 @@ using System.Text;
 
 namespace RotationTutorial
 {
+    /// <summary>
+    /// Камера
+    /// </summary>
     class Camera
     {
         public Matrix transform;
