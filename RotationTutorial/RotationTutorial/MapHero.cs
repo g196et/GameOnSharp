@@ -18,6 +18,7 @@ namespace RotationTutorial
         bool checkAtack; public bool CheckAtackField { get { return checkAtack; } set { checkAtack = value; } }
         string text = "";
         double counter; public double Counter { get { return counter; } set { counter = value; } }
+
         public MapHero(Texture2D newTexture, Vector2 newPosition)
         {
             texture = newTexture;

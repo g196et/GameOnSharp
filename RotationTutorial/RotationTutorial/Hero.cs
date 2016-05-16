@@ -17,6 +17,8 @@ namespace RotationTutorial
         PointClass health, mana, energy;
         int strength, stamina, intellect, vitality;
         Weapon weapon;
+        int level; public int Level { set { level = value; } }
+        int experience; public int Experience { get { return experience; } set { experience = value; } }
 
         Texture2D texture;
         Rectangle rectangle;
@@ -85,6 +87,8 @@ namespace RotationTutorial
             rectangle = new Rectangle(200, 200, 250, 200);
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
+            level = 1;
+            experience = 0;
         }
 
         public bool Attack(IPerson person)
@@ -103,6 +107,7 @@ namespace RotationTutorial
             healthRectangle.Width = healthBarTexture.Width * this.Health.Current / this.Health.Max;
             manaRectangle.Width = manaBarTexture.Width * this.Mana.Current / this.Mana.Max;
             energyRectangle.Width = energyBarTexture.Width * this.Energy.Current / this.Energy.Max;
+            
         }
 
         public bool Input(IPerson enemy)

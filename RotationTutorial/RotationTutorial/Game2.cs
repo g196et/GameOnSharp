@@ -141,6 +141,7 @@ namespace RotationTutorial
             if (enemy.Health.Current <= 0)
             {
                 counter = 0;
+                hero.Experience += 100;
                 while (counter < 10000)
                 {
                     counter += gameTime.ElapsedGameTime.TotalMilliseconds;
