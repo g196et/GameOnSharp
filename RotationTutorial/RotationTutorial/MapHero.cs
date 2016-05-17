@@ -1,10 +1,14 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -20,12 +24,16 @@ namespace RotationTutorial
         bool checkAtack; public bool CheckAtackField { get { return checkAtack; } set { checkAtack = value; } }
         string text = "";
         double counter; public double Counter { get { return counter; } set { counter = value; } }
-        public MapHero(Texture2D newTexture, Vector2 newPosition)
+        public MapHero(Vector2 newPosition)
         {
-            texture = newTexture;
             position = newPosition;
             checkAtack = false;
             counter = 1001;
+        }
+
+        public void LoadContent(ContentManager Content,string textureName)
+        {
+            texture = Content.Load<Texture2D>(textureName);
         }
 
         public void Update(GameTime gameTime, Map map)
@@ -135,5 +143,21 @@ namespace RotationTutorial
             spriteBatch.Draw(texture, rectangle, Color.White);
             spriteBatch.DrawString(MapState.spriteFont, text, new Vector2(-50, -50), Color.White);
         }
+
+        public void Save(StreamWriter writer)
+        {
+            writer.WriteLine(this.position.X + "#" + this.position.Y + "#" + this.rectangle);
+        }
+        public void Load(StreamReader reader)
+        {
+            string[] line = reader.ReadLine().Split(new string[] { "#","{","}",":","X","Y","Width","Height" }, StringSplitOptions.RemoveEmptyEntries);
+            this.position = new Vector2(float.Parse(line[0]), float.Parse(line[1]));
+            this.rectangle.X = int.Parse(line[2]);
+            this.rectangle.Y = int.Parse(line[3]);
+            this.rectangle.Width = int.Parse(line[4]);
+            this.rectangle.Height = int.Parse(line[5]);
+
+        }
+
     }
 }

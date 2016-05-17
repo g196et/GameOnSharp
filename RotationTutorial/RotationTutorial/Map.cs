@@ -26,8 +26,7 @@ namespace RotationTutorial
         {
             int num = 0;
             while(!reader.EndOfStream)
-            {
-                
+            {               
                 string[] str = reader.ReadLine().Split(' ');
                 for (int i = 0; i < str.Length;i++ )
                 {
@@ -38,19 +37,7 @@ namespace RotationTutorial
                         tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true));
                 }
                 num += 1;
-
             }
-            /*for (int x = 0; x < map.GetLength(1); x++)
-                for (int y = 0; y < map.GetLength(0); y++)
-                {
-                    int number = map[y,x];
-                    if (number > 1)
-                        tiles.Add(new Tiles(number, new Rectangle(x * size, y * size, size, size), false));
-                    else
-                        tiles.Add(new Tiles(number, new Rectangle(x * size, y * size, size, size), true));
-                    width = (x + 1) * size;
-                    height = (x + 1) * size;
-                }*/
         }
 
         public Tiles GetRectangle(Point position)

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -20,27 +21,52 @@ namespace RotationTutorial
         Button loadGame;
         Button settings;
         Button quitGame;
+        int state = 0;
         Texture2D buttonTexture;
-        public MenuState()
+        GameStateManager manager;
+        public MenuState(GameStateManager manager)
         {
+            this.manager = manager;
             newGame = new Button(new Rectangle(size1,size1,size1,size2), "New Game");
             saveGame = new Button(new Rectangle(size1,2*size1, size1, size2), "Save Game");
             loadGame = new Button(new Rectangle(size1, 3*size1, size1, size2), "Load Game");
             settings = new Button(new Rectangle(size1, 4*size1, size1, size2), "Settings");
             quitGame = new Button(new Rectangle(size1, 5*size1, size1, size2), "Quit Game");
-            
-        }
-        public void Initialize(Game game)
-        {
             quitGame.Action += () =>
             {
                 Environment.Exit(0);
             };
-            newGame.Action += () =>
+            saveGame.Action += () =>
             {
-                
+                FileInfo file = new FileInfo("SaveFile1.txt");
+                if (!file.Exists)
+                {
+                    file.Create();
+                }
+                file.OpenWrite().Close();
+                using (StreamWriter writer = new StreamWriter("SaveFile1.txt"))
+                {
+                    manager.Save(writer);                    
+                }
             };
+            loadGame.Action += () =>
+            {
+                FileInfo file = new FileInfo("SaveFile1.txt");
+                if (!file.Exists)
+                {
+                    return;
+                }
+                file.OpenWrite().Close();
+                using (StreamReader reader = new StreamReader("SaveFile1.txt"))
+                {
+                    manager.Load(reader);
+                    state = 1;
+                }
+            };
+            
         }
+        public void Initialize(Game game)
+        { }
         public void LoadContent(ContentManager content)
         {
             buttonTexture = content.Load<Texture2D>("ButtonTexture1");
@@ -54,7 +80,7 @@ namespace RotationTutorial
             loadGame.Update(gameTime);
             settings.Update(gameTime);
             quitGame.Update(gameTime);
-            return 0;
+            return state;
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {

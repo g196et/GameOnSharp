@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -20,7 +21,7 @@ namespace RotationTutorial
         //ContentManager contentHelp;
 
         Camera camera;
-
+        enum State : int { MapState = 1, FightState, HeroInfoState, MenuState };
         public IGame CurrentState { get; set; }
         public MapState MapState { get; set; }
         public FightState FightState { get; set; }
@@ -36,7 +37,7 @@ namespace RotationTutorial
             MapState = new MapState(spriteBatch);
             FightState = new FightState(Content, graphics);
             CurrentState = MapState;
-            MenuState = new MenuState();
+            MenuState = new MenuState(this);
             HeroInfo = new HeroInfo();
             IsMouseVisible = true;
             
@@ -67,9 +68,9 @@ namespace RotationTutorial
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             int state = CurrentState.Update(gameTime);
-            if (state == 1)
+            if (state == (int)State.MapState)
                 CurrentState = MapState;
-            else if (state == 2)
+            else if (state == (int)State.FightState)
             {
                 if (FightState.Enemy != MapState.CurrentBot.Enemy)
                 {
@@ -79,12 +80,12 @@ namespace RotationTutorial
                 CurrentState = FightState;
 
             }
-            else if (state == 3)
+            else if (state == (int)State.HeroInfoState)
             {
                 HeroInfo.Hero = FightState.Hero;
                 CurrentState = HeroInfo;
             }
-            else if (state == 4)
+            else if (state == (int)State.MenuState)
             {
                 CurrentState = MenuState;
             }
@@ -102,6 +103,16 @@ namespace RotationTutorial
             CurrentState.Draw(gameTime,spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+        public void Save(StreamWriter writer)
+        {
+            MapState.Save(writer);
+            HeroInfo.Save(writer);
+        }
+        public void Load(StreamReader reader)
+        {
+            MapState.Load(reader);
+            HeroInfo.Load(reader);
         }
 
     }

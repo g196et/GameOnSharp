@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -100,6 +101,14 @@ namespace RotationTutorial
                 new Vector2(addStamina.Rectangle.X, addStamina.Rectangle.Y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "+",
                 new Vector2(addIntellect.Rectangle.X, addIntellect.Rectangle.Y), Color.White);
+        }
+        public void Save(StreamWriter writer)
+        {
+            hero.Save(writer);
+        }
+        public void Load(StreamReader reader)
+        {
+            hero.Load(reader);
         }
     }
 }

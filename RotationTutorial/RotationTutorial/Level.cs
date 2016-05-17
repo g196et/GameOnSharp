@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -33,6 +34,27 @@ namespace RotationTutorial
                 return true;
             }
             return false;
+        }
+        public void Save(StreamWriter writer)
+        {
+            writer.WriteLine(this.curLevel + "#" + this.curExperience + "#");
+            foreach(int border in levels)
+            {
+                writer.Write(border + "#");
+            }
+            writer.WriteLine();
+        }
+        public void Load(StreamReader reader)
+        {
+            string[] line = reader.ReadLine().Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+            this.curLevel = int.Parse(line[0]);
+            this.curExperience = int.Parse(line[1]);
+            line = reader.ReadLine().Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+            levels = new int[line.Length];
+            for(int i=0;i<line.Length;i++)
+            {
+                levels[i] = int.Parse(line[i]);
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -26,6 +27,13 @@ namespace RotationTutorial
         Rectangle manaRectangle;
         Rectangle energyRectangle;
         Rectangle healthRectangle;
+
+        const int barWidth = 300;
+        const int barHeight = 25;
+        const int heroPositionX = 200;
+        const int heroPositionY = 200;
+        const int heroWidth = 250;
+        const int heroHeight=400;
 
         Texture2D healthBarTexture;
         Texture2D manaBarTexture;
@@ -81,7 +89,7 @@ namespace RotationTutorial
         }
 
         /// <summary>
-        /// НЕ ЗНАЮ ЧТО ЗНАЧЯТ ВСЕ ЭТИ КОНСТАНТЫ, САМИ ИХ ВЫНОСИТЕ
+        /// 
         /// </summary>
         /// <param name="enemyTexture"></param>
         /// <param name="healthBarTexture"></param>
@@ -92,16 +100,16 @@ namespace RotationTutorial
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;
             this.energyBarTexture = energyBarTexture;
-            healthRectangle = new Rectangle(position, position, 300,
-                25);
+            healthRectangle = new Rectangle(position, position, barWidth,
+                barHeight);
             manaRectangle = new Rectangle(healthRectangle.X,
-                healthRectangle.Y + healthRectangle.Height + position, 300,
-                25);
+                healthRectangle.Y + healthRectangle.Height + position, barWidth,
+                barHeight);
             energyRectangle = new Rectangle(manaRectangle.X, manaRectangle.Y
                 + manaRectangle.Height + position,
-                300, 25);
+                barWidth, barHeight);
             texture = heroTexture;
-            rectangle = new Rectangle(200, 200, 250, 200);
+            rectangle = new Rectangle(heroPositionX, heroPositionY, heroWidth, heroHeight);
         }
 
         /// <summary>
@@ -187,5 +195,30 @@ namespace RotationTutorial
             spriteBatch.DrawString(MapState.spriteFont, Energy.Current + "/" + Energy.Max, new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
         }
 
+        public void Save(StreamWriter writer)
+        {
+            writer.WriteLine(this.Health + "#" + this.Mana + "#");
+            writer.WriteLine(this.Strength+"#"+this.Stamina+"#"+this.Intellect+"#"+this.Vitality+"#"+
+                this.StatPoints);
+            this.Level.Save(writer);
+            writer.WriteLine(listSkill.Count);
+
+        }
+        public void Load(StreamReader reader)
+        {
+            string[] line=reader.ReadLine().Split(new char[]{'#','/'},
+                StringSplitOptions.RemoveEmptyEntries);
+            this.Health.Current=int.Parse(line[0]);
+            this.Health.Max = int.Parse(line[1]);
+            this.Mana.Current = int.Parse(line[2]);
+            this.Mana.Max = int.Parse(line[3]);
+            line=reader.ReadLine().Split(new char[]{'#'},StringSplitOptions.RemoveEmptyEntries);
+            this.Strength=int.Parse(line[0]);
+            this.Stamina=int.Parse(line[1]);
+            this.Intellect=int.Parse(line[2]);
+            this.Vitality=int.Parse(line[3]);
+            this.StatPoints = int.Parse(line[4]);
+            this.Level.Load(reader);
+        }
     }
 }

@@ -42,6 +42,7 @@ namespace RotationTutorial
         public static string mapFileName;
 
         Map map;
+        Game game;
 
         public MapState(SpriteBatch spriteBatch)
         {
@@ -58,9 +59,10 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            mapHero = new MapHero(game.Content.Load<Texture2D>("гг3"), new Vector2(tileSize, tileSize));
-            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай1"), new Vector2(2* tileSize, 2* tileSize), new Enemy()));
-            listBot.Add(new MapBot(game.Content.Load<Texture2D>("зай2"), new Vector2(3* tileSize, 3* tileSize), new Enemy()));
+            this.game = game;
+            mapHero = new MapHero(new Vector2(tileSize, tileSize));
+            listBot.Add(new MapBot(new Vector2(2* tileSize, 2* tileSize)));
+            listBot.Add(new MapBot(new Vector2(3* tileSize, 3* tileSize)));
             camera = new Camera(game.GraphicsDevice.Viewport);
             map = new Map();
 
@@ -73,7 +75,9 @@ namespace RotationTutorial
         /// </summary>
         public void LoadContent(ContentManager Content)
         {
-           
+            mapHero.LoadContent(Content, "гг3");
+            listBot[0].LoadContent(Content, "зай1");
+            listBot[1].LoadContent(Content, "зай2");
             Tiles.Content = Content;
             using (StreamReader stream = new StreamReader(mapFileName))
             {
@@ -129,6 +133,11 @@ namespace RotationTutorial
                 state = State.HeroInfo;
                 return (int)state;
             }
+            if(Keyboard.GetState().IsKeyDown(Keys.M))
+            {
+                state = State.MenuState;
+                return (int)state;
+            }
             state = State.MapState;
             return (int)state;
            
@@ -147,7 +156,45 @@ namespace RotationTutorial
                     bot.Draw(spriteBatch);
             }
             mapHero.Draw(spriteBatch);
-            spriteBatch.DrawString(spriteFont, mapHero.Counter.ToString(), new Vector2(0, -2*tileSize), Color.White);           
+            spriteBatch.DrawString(spriteFont, mapHero.Counter.ToString(), 
+                new Vector2(0, -2*tileSize), Color.White);           
+        }
+
+        public void Save(StreamWriter writer)
+        {
+            writer.WriteLine(mapFileName);
+            mapHero.Save(writer);
+            writer.WriteLine(listBot.Count.ToString());
+            foreach(MapBot bot in listBot)
+            {
+                bot.Save(writer);
+                writer.WriteLine(bot.Texture.Name);
+            }
+            writer.WriteLine(this.spritePosition.X + "#" + this.spritePosition.Y + "#" + 
+                this.spriteRectangle);
+        }
+
+        public void Load(StreamReader reader)
+        {
+            mapFileName = reader.ReadLine();
+            mapHero.Load(reader);
+            int botNum = int.Parse(reader.ReadLine());
+            listBot = new List<MapBot>();
+            for(int i=0;i<botNum;i++)
+            {
+                MapBot bot = new MapBot(new Vector2(0, 0));
+                bot.Load(reader);
+                bot.LoadContent(game.Content, reader.ReadLine());
+                listBot.Add(bot);
+                bot.AddMobMap(map);
+                map.GetRectangle(bot.Rectangle.Center).Mob = true;
+            }
+            string[] line=reader.ReadLine().Split(new string[]{"#",":","{","}","X","Y","Width","Height"},StringSplitOptions.RemoveEmptyEntries);
+            this.spritePosition.X = int.Parse(line[0]);
+            this.spritePosition.Y = int.Parse(line[1]);
+            this.spriteRectangle.X = int.Parse(line[3]);
+            this.spriteRectangle.Width = int.Parse(line[4]);
+            this.spriteRectangle.Height = int.Parse(line[5]);
         }
     }
 }
