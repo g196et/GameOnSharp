@@ -11,18 +11,28 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    class Game2:IGame
+    class FightState:IGame
     {
-        bool turn = true;
+        enum State : int{ MapState=1, FightState, HeroInfo, MenuState}
+        enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
+        State state = new State();
+        const double coefficient34 = 0.75;
+        const int forLog = 15;
+        const int timeDelay = 300;
+        const int skip = 150;
+        
+        int? turn = 0;
         double counter = 0;
-        string txt = "";
+        string txt = "Hero";
+        List<string> log;
 
-        SpriteBatch spriteBatch;
         ContentManager Content;
         GraphicsDeviceManager graphics;
-        public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
+        public SpriteBatch SpriteBatch { get; set; }
         Hero hero; public Hero Hero { get { return hero; } }
-        Enemy enemy; public Enemy Enemy { get { return enemy; } set { enemy = value; } }
+        public Enemy Enemy { get; set; }
+        IPerson currentPerson;
+        IPerson notCurrentPerson;
         
         Rectangle backgroundRectangle1;
         Rectangle backgroundRectangle2;
@@ -34,7 +44,6 @@ namespace RotationTutorial
         Texture2D manaBarTexture;
         Texture2D energyBarTexture;
         Texture2D healthBarTexture;
-        
 
         //public static SpriteFont spriteFront;
 
@@ -44,7 +53,7 @@ namespace RotationTutorial
         public Vector2 SpritePosition { get { return new Vector2(0,0); } }
         public Rectangle SpriteRectangle { get { return new Rectangle(0, 0, 0, 0); } }
 
-        public Game2(ContentManager Content,GraphicsDeviceManager graphics)
+        public FightState(ContentManager Content, GraphicsDeviceManager graphics)
         {
             this.Content = Content;
             this.graphics = graphics;
@@ -58,7 +67,11 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            enemy = new Enemy();
+            Enemy = new Enemy();
+            hero = new Hero();
+            log = new List<string>();
+            currentPerson = hero;
+            notCurrentPerson = Enemy;
         }
 
         /// <summary>
@@ -71,7 +84,7 @@ namespace RotationTutorial
             backgroundTexture1 = Content.Load<Texture2D>("FightBackground");
             backgroundTexture2 = Content.Load<Texture2D>("FightBackground1");
             backgroundRectangle1 = new Rectangle(0, 0, graphics.PreferredBackBufferWidth,
-                3 * graphics.PreferredBackBufferHeight / 4);
+                 (int)(graphics.PreferredBackBufferHeight *coefficient34));
             backgroundRectangle2 = new Rectangle(0, backgroundTexture1.Height,
                 graphics.PreferredBackBufferWidth, backgroundTexture2.Height);
 
@@ -89,8 +102,9 @@ namespace RotationTutorial
             //Enemy
             enemyTexture = Content.Load<Texture2D>("fightEnemy");
             heroTexture = Content.Load<Texture2D>("fightMan");
-            hero = new Hero(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
-            enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            Enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            log = new List<string>();
         }
 
         /// <summary>
@@ -109,50 +123,67 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public int Update(GameTime gameTime)
         {
-            if (turn)
+            if (turn != null)
             {
-                if (counter < 100)
+                if (counter < timeDelay)
                 {
                     counter += gameTime.ElapsedGameTime.TotalMilliseconds;
                 }
                 else
                 {
-                    counter = 0;
-                    turn = hero.Input(enemy);
-                    txt = "Hero";
+                    turn = currentPerson.Input(notCurrentPerson);
+                    if (((turn != null) && ((int)turn != skip)))
+                    {
+                        counter = 0;
+                        if (turn == (int)Skill.Punch)
+                            log.Add(txt + " : Punch");
+                        else
+                            log.Add(txt + " : " + currentPerson.ListSkill[(int)turn].Name);
+                    }
                 }
             }
             else
             {
-                if (counter < 300)
+                if (currentPerson == hero)
                 {
-                    counter += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    txt = "Enemy";
+                    currentPerson = Enemy;
+                    notCurrentPerson = hero;
                 }
                 else
                 {
-                    counter = 0;
-                    turn = enemy.Input(hero);
-                    txt = "Bot";
+                    txt = "Hero";
+                    currentPerson = hero;
+                    notCurrentPerson = Enemy;
                 }
+                turn = 0;
             }
             hero.Update();
-            enemy.Update();
+            Enemy.Update();
             //Если выйграл Герой
-            if (enemy.Health.Current <= 0)
+            if (Enemy.Health.Current <= 0)
             {
-                counter = 0;
-                hero.Experience += 100;
-                while (counter < 10000)
+                hero.Level.CurrentExperience += 100;
+                if (hero.Level.CheckLevel())
                 {
-                    counter += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    hero.StatPoints += 1;
+                    hero.Health.Current = hero.Health.Max;
+                    hero.Mana.Current = hero.Mana.Max;
                 }
-                turn = true;
-                return 1;
+                counter = 0;
+                turn = 0;
+                hero.Energy.Current = hero.Energy.Max;
+                state = State.MapState;
+                return (int)state;
             }
             //Если выйграл Моб
             if (hero.Health.Current <= 0)
-                return 4;
-            return 2;
+            {
+                state = State.MenuState;
+                return (int)state;
+            }
+            state = State.FightState;
+            return (int)state;
         }
 
         /// <summary>
@@ -163,10 +194,15 @@ namespace RotationTutorial
         {
             spriteBatch.Draw(backgroundTexture1, backgroundRectangle1, Color.AliceBlue);
             spriteBatch.Draw(backgroundTexture2, backgroundRectangle2, Color.AliceBlue);
-            spriteBatch.DrawString(Game1.spriteFront, txt, new Vector2(450, 20), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, txt, new Vector2(450, 20), Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, counter.ToString(), new Vector2(450, 70), Color.White);
             hero.Draw(spriteBatch);
-            enemy.Draw(spriteBatch);
-            
+            Enemy.Draw(spriteBatch);
+            for (int i = log.Count - 1; i >= 0; i--)
+            {
+                spriteBatch.DrawString(MapState.spriteFont, log[i], new Vector2(graphics.PreferredBackBufferWidth / 3,
+                    graphics.PreferredBackBufferHeight / 4 * 3 + forLog * (log.Count-i)), Color.White);
+            }
         }
     }
 }

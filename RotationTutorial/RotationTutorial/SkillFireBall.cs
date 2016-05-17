@@ -5,11 +5,29 @@ using System.Text;
 
 namespace RotationTutorial
 {
+    /// <summary>
+    /// Навык, позволяющий нанести урон, затратив на это ману
+    /// </summary>
     class SkillFireBall:ISkill
     {
-        int mana = 10;
-        int damage = 35;
-        int energy = 75;
+        const int mana = 10;
+        const int damage = 35;
+        const int energy = 50;
+        public string Name { get { return "FireBall"; } }
+        /// <summary>
+        /// возвращает число затрачиваемых очков маны
+        /// </summary>
+        public int MP { get { return mana; } }
+        /// <summary>
+        /// возвращает число затрачиваемых очков стамины
+        /// </summary>
+        public int SP { get { return energy; } }
+        /// <summary>
+        /// Проявляет эффект навыка
+        /// </summary>
+        /// <param name="user">тот, кто использует навык</param>
+        /// <param name="victim">тот, на кого воздействует навык</param>
+        /// <returns>true, если получилось применить, false, если не получилось</returns>
         public bool Effect(IPerson user,IPerson victim)
         {
             if ((user.Mana.Current >= mana)&&(user.Energy.Current >= energy))

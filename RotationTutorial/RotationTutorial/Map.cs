@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace RotationTutorial
 {
@@ -15,37 +16,28 @@ namespace RotationTutorial
             get { return tiles; }
         }
 
-        int width, height;
-
-        public int Width
-        {
-            get { return width; }
-        }
-
-        public int Height
-        {
-            get { return height; }
-        }
-
         public Map() { }
         /// <summary>
         /// Генерация карты
         /// </summary>
         /// <param name="map"></param>
         /// <param name="size">Размер ячеек</param>
-        public void Generate(int[,] map, int size)
+        public void LoadMap(StreamReader reader, int size)
         {
-            for (int x = 0; x < map.GetLength(1); x++)
-                for (int y = 0; y < map.GetLength(0); y++)
+            int num = 0;
+            while(!reader.EndOfStream)
+            {               
+                string[] str = reader.ReadLine().Split(' ');
+                for (int i = 0; i < str.Length;i++ )
                 {
-                    int number = map[y,x];
+                    int number = int.Parse(str[i]);
                     if (number > 1)
-                        tiles.Add(new Tiles(number, new Rectangle(x * size, y * size, size, size), false));
+                        tiles.Add(new Tiles(number, new Rectangle(i * size, num*size, size, size), false));
                     else
-                        tiles.Add(new Tiles(number, new Rectangle(x * size, y * size, size, size), true));
-                    width = (x + 1) * size;
-                    height = (x + 1) * size;
+                        tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true));
                 }
+                num += 1;
+            }
         }
 
         public Tiles GetRectangle(Point position)
@@ -60,7 +52,6 @@ namespace RotationTutorial
         {
             foreach (Tiles tile in tiles)
                 tile.Draw(spriteBatch);
-            //spriteBatch.DrawString(Game1.spriteFront, i.ToString(), new Vector2(-50, -50), Color.White);
         }
     }
 }

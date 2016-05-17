@@ -8,40 +8,45 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
     class GameStateManager:Game
     {
+        const int width = 1280;
+        const int height = 800;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         //ContentManager contentHelp;
 
         Camera camera;
-
-        IGame CurrentState;
-        Game1 mapState;
-        Game2 fightState;
-        HeroInfo heroInfo;
-        MenuState menuState;
+        enum State : int { MapState = 1, FightState, HeroInfoState, MenuState };
+        public IGame CurrentState { get; set; }
+        public MapState MapState { get; set; }
+        public FightState FightState { get; set; }
+        public HeroInfo HeroInfo { get; set; }
+        public MenuState MenuState { get; set; }
 
         public GameStateManager()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight =800;
-            mapState = new Game1(spriteBatch);
-            fightState = new Game2(Content, graphics);
-            CurrentState = mapState;
-            //contentHelp = Content;
+            graphics.PreferredBackBufferWidth = width;
+            graphics.PreferredBackBufferHeight = height;
+            MapState = new MapState(spriteBatch);
+            FightState = new FightState(Content, graphics);
+            CurrentState = MapState;
+            MenuState = new MenuState(this);
+            HeroInfo = new HeroInfo();
+            IsMouseVisible = true;
             
         }
         protected override void Initialize()
         {
-            mapState.Initialize(this);
+            MapState.Initialize(this);
             camera = new Camera(this.GraphicsDevice.Viewport);
-            fightState.Initialize(this);
+            FightState.Initialize(this);
             base.Initialize();
         }
 
@@ -49,8 +54,10 @@ namespace RotationTutorial
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);           
-            mapState.LoadContent(Content);
-            fightState.LoadContent(Content);
+            MapState.LoadContent(Content);
+            HeroInfo.LoadContent(Content);
+            MenuState.LoadContent(Content);
+
         }
         protected override void UnloadContent()
         {
@@ -61,27 +68,26 @@ namespace RotationTutorial
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
                 this.Exit();
             int state = CurrentState.Update(gameTime);
-            if (state == 1)
-                CurrentState = mapState;
-            else if (state == 2)
+            if (state == (int)State.MapState)
+                CurrentState = MapState;
+            else if (state == (int)State.FightState)
             {
-                if (fightState.Enemy != mapState.CurrentBot.Enemy)
+                if (FightState.Enemy != MapState.CurrentBot.Enemy)
                 {
-                    fightState.Enemy = mapState.CurrentBot.Enemy;
-                    fightState.LoadContent(Content);
+                    FightState.Enemy = MapState.CurrentBot.Enemy;
+                    FightState.LoadContent(Content);
                 }
-                CurrentState = fightState;
+                CurrentState = FightState;
 
             }
-            else if (state == 3)
+            else if (state == (int)State.HeroInfoState)
             {
-                heroInfo = new HeroInfo(fightState.Hero);
-                CurrentState = heroInfo;
+                HeroInfo.Hero = FightState.Hero;
+                CurrentState = HeroInfo;
             }
-            else if (state == 4)
+            else if (state == (int)State.MenuState)
             {
-                menuState = new MenuState();
-                CurrentState = menuState;
+                CurrentState = MenuState;
             }
                 
             base.Update(gameTime);
@@ -93,10 +99,20 @@ namespace RotationTutorial
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null/*,
-                camera.transform*/);
+                camera.transform*/); 
             CurrentState.Draw(gameTime,spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+        public void Save(StreamWriter writer)
+        {
+            MapState.Save(writer);
+            HeroInfo.Save(writer);
+        }
+        public void Load(StreamReader reader)
+        {
+            MapState.Load(reader);
+            HeroInfo.Load(reader);
         }
 
     }

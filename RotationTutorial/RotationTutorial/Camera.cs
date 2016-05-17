@@ -18,7 +18,7 @@ namespace RotationTutorial
             view = newView;
         }
 
-        public void Update(GameTime gameTime, Game1 game)
+        public void Update(GameTime gameTime, MapState game)
         {
             centre = new Vector2(game.SpritePosition.X + (game.SpriteRectangle.Width / 2) - 400,
                 game.SpritePosition.Y + (game.SpriteRectangle.Height / 2) - 200);

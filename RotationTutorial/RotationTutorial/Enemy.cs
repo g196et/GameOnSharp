@@ -8,15 +8,58 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.IO;
 
 namespace RotationTutorial
 {
     public class Enemy:IPerson
     {
-        IList<ISkill> listSkill;
-        PointClass health, mana, energy;
-        int strength, stamina, intellect, vitality;
+        enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
+        const int consumptionEnergy = 50;
+        const int minMyHelth = 40;
+        const int minHisHelth = 35;
+        const int constStats = 10;
+        const int positionX = 900;
+        const int positionY = 10;
+        const int barWidth = 300;
+        const int barHeight = 25;
+        const int enemyPositionX = 800;
+        const int enemyPositionY = 200;
+        const int enemyWidth = 250;
+        const int enemyHeight = 400;
+        const int skip = 150;
 
+
+        IList<ISkill> listSkill;
+        public IList<ISkill> ListSkill { get { return listSkill; } }
+        /// <summary>
+        /// отвечает за очки жизней
+        /// </summary>
+        public PointClass Health { get; set; }
+        /// <summary>
+        /// отвечает за очки маны
+        /// </summary>
+        public PointClass Mana { get; set; }
+        /// <summary>
+        /// отвечает за очки энергии
+        /// </summary>
+        public PointClass Energy { get; set; }
+        /// <summary>
+        /// стат силы
+        /// </summary>
+        public int Strength { get; set; }
+        /// <summary>
+        /// стат выносливости
+        /// </summary>
+        public int Stamina { get; set; }
+        /// <summary>
+        /// стат интелекта
+        /// </summary>
+        public int Intellect { get; set; }
+        /// <summary>
+        /// стат живучести
+        /// </summary>
+        public int Vitality { get; set; }
         Texture2D texture;
         Rectangle rectangle;
 
@@ -27,76 +70,59 @@ namespace RotationTutorial
         Texture2D healthBarTexture;
         Texture2D manaBarTexture;
         Texture2D energyBarTexture;
-
-        public PointClass Health
+        public Enemy()
         {
-            get { return health; }
-            set { health = value; }
-        }
-        public PointClass Mana
-        {
-            get { return mana; }
-            set { mana = value; }
-        }
-        public PointClass Energy
-        {
-            get { return energy; }
-            set { energy = value; }
-        }
-        public int Strength
-        {
-            get { return strength; }
-            set { strength = value; }
-        }
-        public int Stamina
-        {
-            get { return stamina; }
-            set { stamina = value; }
-        }
-        public int Intellect
-        {
-            get { return intellect; }
-            set { intellect = value; }
+            Strength = 2 * constStats;
+            Stamina = constStats;
+            Intellect = constStats;
+            Vitality = constStats;
+            Health = new PointClass(constStats * Vitality, constStats * Vitality);
+            Mana = new PointClass(constStats * Intellect, constStats * Intellect);
+            Energy = new PointClass(constStats * Stamina, constStats * Stamina);
+            listSkill = new List<ISkill>();
+            listSkill.Add(new SkillRegenHealth());
+            listSkill.Add(new SkillFireBall());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enemyTexture"></param>
+        /// <param name="healthBarTexture"></param>
+        /// <param name="manaBarTexture"></param>
+        /// <param name="energyBarTexture"></param>
         public void LoadContent (Texture2D enemyTexture,Texture2D healthBarTexture,
             Texture2D manaBarTexture, Texture2D energyBarTexture)
         {
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;
             this.energyBarTexture = energyBarTexture;
-            healthRectangle = new Rectangle(900, 10, 300,
-                25);
-            manaRectangle = new Rectangle(healthRectangle.X,
-                healthRectangle.Y + healthRectangle.Height + 10, 300,
-                25);
-            energyRectangle = new Rectangle(manaRectangle.X, manaRectangle.Y
-                + manaRectangle.Height + 10,
-                300, 25);
-            rectangle = new Rectangle(900, 200, 250, 200);
+            healthRectangle = new Rectangle(positionX, positionY, barWidth,
+                barHeight);
+            manaRectangle = new Rectangle(positionX,
+                healthRectangle.Y + healthRectangle.Height + positionY, barWidth,
+                barHeight);
+            energyRectangle = new Rectangle(positionX, manaRectangle.Y
+                + manaRectangle.Height + positionY,
+                barWidth, barHeight);
+            rectangle = new Rectangle(enemyPositionX, enemyPositionY, enemyWidth, enemyHeight);
             texture = enemyTexture;
         }
 
-        public Enemy()
-        {
-            strength = 20;
-            stamina = 10;
-            intellect = 10;
-            vitality = 10;
-            health = new PointClass(10 * vitality, 10 * vitality);
-            mana = new PointClass(10 * intellect, 10 * intellect);
-            energy = new PointClass(10 * stamina, 10 * stamina);
-            listSkill = new List<ISkill>();
-            listSkill.Add(new SkillRegenHealth());
-            listSkill.Add(new SkillFireBall());
-        }
+        
+        /// <summary>
+        /// Выполняет дефолтную атаку
+        /// </summary>
+        /// <param name="person">противник</param>
         public bool Attack(IPerson person)
         {
-            person.Health.Current = person.Health.Current - strength;
-            energy.Current -= 50;
+            person.Health.Current -= Strength;
+            Energy.Current -= consumptionEnergy;
             return true;
         }
-
+        /// <summary>
+        /// Обновляет длину баров
+        /// </summary>
         public void Update()
         {
             healthRectangle.Width = healthBarTexture.Width * this.Health.Current / this.Health.Max;
@@ -104,29 +130,42 @@ namespace RotationTutorial
             energyRectangle.Width = energyBarTexture.Width * this.Energy.Current / this.Energy.Max;
         }
 
-        public bool Input(IPerson person)
+        /// <summary>
+        /// ИИ
+        /// </summary>
+        /// <param name="person">противник</param>
+        /// <returns>true, если энергия закончилась, false в противном случае</returns>
+        public int? Input(IPerson person)
         {
-            if (energy.Current <= 19)
+            if (Energy.Current <= 0)
             {
-                energy.Current = energy.Max;
-                return true;
+                Energy.Current = Energy.Max;
+                return null;
             }
             //Регенерация жизни
-            if ((health.Current <= 35) && (mana.Current >= 30)&& (energy.Current>=50))
+            if ((Health.Current <= minMyHelth) &&
+                (Mana.Current >= listSkill[(int)Skill.Regeneration].MP) &&
+                (Energy.Current >= listSkill[(int)Skill.Regeneration].SP))
             {
-                listSkill[0].Effect(this, person);
-                return false;
+                listSkill[(int)Skill.Regeneration].Effect(this, person);
+                return (int)Skill.Regeneration;
             }
             //Fire ball
-            if (((mana.Current / mana.Max >= 0.6) || (person.Health.Current <= 35))&&(Mana.Current>=10)&&(energy.Current>=75))
+            if (((Mana.Current / Mana.Max >= 0.6) || (person.Health.Current <= minHisHelth))
+                && (Mana.Current >= listSkill[(int)Skill.FireBall].MP)
+                && (Energy.Current >= listSkill[(int)Skill.FireBall].SP))
             {
-                listSkill[1].Effect(this, person);
-                return false;
+                listSkill[(int)Skill.FireBall].Effect(this, person);
+                return (int)Skill.FireBall;
             }
             Attack(person);
-            return false;
+            return skip;
         }
 
+        /// <summary>
+        /// отрисовывка
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             
@@ -134,9 +173,35 @@ namespace RotationTutorial
             spriteBatch.Draw(texture, rectangle, Color.White); 
             spriteBatch.Draw(manaBarTexture, manaRectangle, Color.White);
             spriteBatch.Draw(energyBarTexture, energyRectangle, Color.White);
-            spriteBatch.DrawString(Game1.spriteFront, health.Current + "/" + health.Max, new Vector2(healthRectangle.Center.X-25, healthRectangle.Y),Color.Black);
-            spriteBatch.DrawString(Game1.spriteFront, mana.Current + "/" + mana.Max, new Vector2(manaRectangle.Center.X - 25, manaRectangle.Y), Color.Black);
-            spriteBatch.DrawString(Game1.spriteFront, energy.Current + "/" + energy.Max, new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
+            spriteBatch.DrawString(MapState.spriteFont, Health.ToString(),
+                new Vector2(healthRectangle.Center.X-25, healthRectangle.Y),Color.Black);
+            spriteBatch.DrawString(MapState.spriteFont, Mana.ToString(), 
+                new Vector2(manaRectangle.Center.X - 25, manaRectangle.Y), Color.Black);
+            spriteBatch.DrawString(MapState.spriteFont, Energy.ToString(),
+                new Vector2(energyRectangle.Center.X - 25, energyRectangle.Y), Color.Black);
+        }
+
+        public void Save(StreamWriter writer)
+        {
+            writer.WriteLine(this.Health + "#" + this.Mana + "#");
+            writer.WriteLine(this.Strength + "#" + this.Stamina + "#" + this.Intellect + "#" + 
+                this.Vitality);
+            //writer.WriteLine(listSkill.Count);
+
+        }
+        public void Load(StreamReader reader)
+        {
+            string[] line = reader.ReadLine().Split(new char[] { '#', '/' },
+                StringSplitOptions.RemoveEmptyEntries);
+            this.Health.Current = int.Parse(line[0]);
+            this.Health.Max = int.Parse(line[1]);
+            this.Mana.Current = int.Parse(line[2]);
+            this.Mana.Max = int.Parse(line[3]);
+            line = reader.ReadLine().Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
+            this.Strength = int.Parse(line[0]);
+            this.Stamina = int.Parse(line[1]);
+            this.Intellect = int.Parse(line[2]);
+            this.Vitality = int.Parse(line[3]);
         }
     }
 }

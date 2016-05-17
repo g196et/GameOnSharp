@@ -17,5 +17,9 @@ namespace RotationTutorial
         }
         int max; public int Max { get { return max; } set { max = value; } }
         int current; public int Current { get { return current; } set { current = value; } }
+        public override string ToString()
+        {
+            return current.ToString() + "/" + max.ToString();
+        }
     }
 }
