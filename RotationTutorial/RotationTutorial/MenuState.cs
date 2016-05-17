@@ -39,15 +39,18 @@ namespace RotationTutorial
             saveGame.Action += () =>
             {
                 FileInfo file = new FileInfo("SaveFile1.txt");
+                StreamWriter writer;
                 if (!file.Exists)
                 {
-                    file.Create();
+                    writer = file.CreateText();
                 }
-                file.OpenWrite().Close();
-                using (StreamWriter writer = new StreamWriter("SaveFile1.txt"))
+                else
                 {
-                    manager.Save(writer);                    
+                    writer = new StreamWriter("SaveFile1.txt");
                 }
+                
+                manager.Save(writer);   
+                writer.Close(); 
             };
             loadGame.Action += () =>
             {
@@ -75,6 +78,7 @@ namespace RotationTutorial
         { }
         public int Update(GameTime gameTime)
         {
+            state = 0;
             newGame.Update(gameTime);
             saveGame.Update(gameTime);
             loadGame.Update(gameTime);

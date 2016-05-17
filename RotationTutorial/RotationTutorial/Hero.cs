@@ -134,8 +134,7 @@ namespace RotationTutorial
         {
             healthRectangle.Width = healthBarTexture.Width * this.Health.Current / this.Health.Max;
             manaRectangle.Width = manaBarTexture.Width * this.Mana.Current / this.Mana.Max;
-            energyRectangle.Width = energyBarTexture.Width * this.Energy.Current / this.Energy.Max;
-            
+            energyRectangle.Width = energyBarTexture.Width * this.Energy.Current / this.Energy.Max;    
         }
 
         /// <summary>
