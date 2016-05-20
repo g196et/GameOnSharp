@@ -8,8 +8,9 @@ namespace RotationTutorial
     /// <summary>
     /// Отвечает за навыки персонажа и мобов
     /// </summary>
-    interface ISkill
+    public interface ISkill
     {
+        string Name { get; }
         /// <summary>
         /// возвращает число затрачиваемых очков маны
         /// </summary>

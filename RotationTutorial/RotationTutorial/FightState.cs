@@ -14,19 +14,25 @@ namespace RotationTutorial
     class FightState:IGame
     {
         enum State : int{ MapState=1, FightState, HeroInfo, MenuState}
+        enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
         State state = new State();
         const double coefficient34 = 0.75;
+        const int forLog = 15;
         const int timeDelay = 300;
+        const int skip = 150;
         
-        bool turn = true;
+        int? turn = 0;
         double counter = 0;
-        string txt = "";
+        string txt = "Hero";
+        List<string> log;
 
         ContentManager Content;
         GraphicsDeviceManager graphics;
         public SpriteBatch SpriteBatch { get; set; }
         Hero hero; public Hero Hero { get { return hero; } }
         public Enemy Enemy { get; set; }
+        IPerson currentPerson;
+        IPerson notCurrentPerson;
         
         Rectangle backgroundRectangle1;
         Rectangle backgroundRectangle2;
@@ -63,6 +69,9 @@ namespace RotationTutorial
         {
             Enemy = new Enemy();
             hero = new Hero();
+            log = new List<string>();
+            currentPerson = hero;
+            notCurrentPerson = Enemy;
         }
 
         /// <summary>
@@ -95,6 +104,7 @@ namespace RotationTutorial
             heroTexture = Content.Load<Texture2D>("fightMan");
             hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
             Enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            log = new List<string>();
         }
 
         /// <summary>
@@ -113,7 +123,7 @@ namespace RotationTutorial
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public int Update(GameTime gameTime)
         {
-            if (turn)
+            if (turn != null)
             {
                 if (counter < timeDelay)
                 {
@@ -121,29 +131,32 @@ namespace RotationTutorial
                 }
                 else
                 {
-                    turn = hero.Input(Enemy);
-                    if (hero.Check)
+                    turn = currentPerson.Input(notCurrentPerson);
+                    if (((turn != null) && ((int)turn != skip)))
                     {
                         counter = 0;
-                        hero.Check = false;
+                        if (turn == (int)Skill.Punch)
+                            log.Add(txt + " : Punch");
+                        else
+                            log.Add(txt + " : " + currentPerson.ListSkill[(int)turn].Name);
                     }
-
-                    //turn = hero.Input(enemy);
-                    txt = "Hero' turn";
                 }
             }
             else
             {
-                if (counter < timeDelay)
+                if (currentPerson == hero)
                 {
-                    counter += gameTime.ElapsedGameTime.TotalMilliseconds;
+                    txt = "Enemy";
+                    currentPerson = Enemy;
+                    notCurrentPerson = hero;
                 }
                 else
                 {
-                    counter = 0;
-                    turn = Enemy.Input(hero);
-                    txt = "Bot's turn";
+                    txt = "Hero";
+                    currentPerson = hero;
+                    notCurrentPerson = Enemy;
                 }
+                turn = 0;
             }
             hero.Update();
             Enemy.Update();
@@ -158,7 +171,7 @@ namespace RotationTutorial
                     hero.Mana.Current = hero.Mana.Max;
                 }
                 counter = 0;
-                turn = true;
+                turn = 0;
                 hero.Energy.Current = hero.Energy.Max;
                 state = State.MapState;
                 return (int)state;
@@ -185,6 +198,11 @@ namespace RotationTutorial
             spriteBatch.DrawString(MapState.spriteFont, counter.ToString(), new Vector2(450, 70), Color.White);
             hero.Draw(spriteBatch);
             Enemy.Draw(spriteBatch);
+            for (int i = log.Count - 1; i >= 0; i--)
+            {
+                spriteBatch.DrawString(MapState.spriteFont, log[i], new Vector2(graphics.PreferredBackBufferWidth / 3,
+                    graphics.PreferredBackBufferHeight / 4 * 3 + forLog * (log.Count-i)), Color.White);
+            }
         }
     }
 }

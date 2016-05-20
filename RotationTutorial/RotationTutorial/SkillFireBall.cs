@@ -13,6 +13,7 @@ namespace RotationTutorial
         const int mana = 10;
         const int damage = 35;
         const int energy = 50;
+        public string Name { get { return "FireBall"; } }
         /// <summary>
         /// возвращает число затрачиваемых очков маны
         /// </summary>

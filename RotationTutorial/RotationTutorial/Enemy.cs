@@ -14,6 +14,7 @@ namespace RotationTutorial
 {
     public class Enemy:IPerson
     {
+        enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
         const int consumptionEnergy = 50;
         const int minMyHelth = 40;
         const int minHisHelth = 35;
@@ -26,9 +27,11 @@ namespace RotationTutorial
         const int enemyPositionY = 200;
         const int enemyWidth = 250;
         const int enemyHeight = 400;
+        const int skip = 150;
 
 
         IList<ISkill> listSkill;
+        public IList<ISkill> ListSkill { get { return listSkill; } }
         /// <summary>
         /// отвечает за очки жизней
         /// </summary>
@@ -132,30 +135,31 @@ namespace RotationTutorial
         /// </summary>
         /// <param name="person">противник</param>
         /// <returns>true, если энергия закончилась, false в противном случае</returns>
-        public bool Input(IPerson person)
+        public int? Input(IPerson person)
         {
             if (Energy.Current <= 0)
             {
                 Energy.Current = Energy.Max;
-                return true;
+                return null;
             }
             //Регенерация жизни
-            if ((Health.Current <= minMyHelth) && 
-                (Mana.Current >= listSkill[0].MP) && 
-                (Energy.Current >= listSkill[0].SP))
+            if ((Health.Current <= minMyHelth) &&
+                (Mana.Current >= listSkill[(int)Skill.Regeneration].MP) &&
+                (Energy.Current >= listSkill[(int)Skill.Regeneration].SP))
             {
-                listSkill[0].Effect(this, person);
-                return false;
+                listSkill[(int)Skill.Regeneration].Effect(this, person);
+                return (int)Skill.Regeneration;
             }
             //Fire ball
             if (((Mana.Current / Mana.Max >= 0.6) || (person.Health.Current <= minHisHelth))
-                && (Mana.Current >= listSkill[1].MP) && (Energy.Current >= listSkill[1].SP))
+                && (Mana.Current >= listSkill[(int)Skill.FireBall].MP)
+                && (Energy.Current >= listSkill[(int)Skill.FireBall].SP))
             {
-                listSkill[1].Effect(this, person);
-                return false;
+                listSkill[(int)Skill.FireBall].Effect(this, person);
+                return (int)Skill.FireBall;
             }
             Attack(person);
-            return false;
+            return skip;
         }
 
         /// <summary>

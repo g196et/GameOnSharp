@@ -14,12 +14,14 @@ namespace RotationTutorial
 {
     class Hero:IPerson
     {
+        enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
         const int consumptionEnergy = 50;
         const int position = 10;
         const int constStats = 10;
+        const int skip = 150;
         IList<ISkill> listSkill = new List<ISkill>();
+        public IList<ISkill> ListSkill { get { return listSkill; } }
         Weapon weapon;
-        public bool Check { get; set; }
 
         Texture2D texture;
         Rectangle rectangle;
@@ -142,41 +144,38 @@ namespace RotationTutorial
         /// </summary>
         /// <param name="enemy">враг</param>
         /// <returns>true, если энергия осталась,false - иначе</returns>
-        public bool Input(IPerson enemy)
+        public int? Input(IPerson enemy)
         {
             if ((Energy.Current == 0) || (Keyboard.GetState().IsKeyDown(Keys.F)))
             {
                 Energy.Current = Energy.Max;
-                return false;
+                return null;
             }
             //Обычная атака
             if (Keyboard.GetState().IsKeyDown(Keys.Q))
             {
                 if (Attack(enemy))
                 {
-                    Check = true;
-                    return true;
+                    return (int)Skill.Punch;
                 }
             }
             //Регенерация здоровья
             if (Keyboard.GetState().IsKeyDown(Keys.W))
             {
-                if(listSkill[0].Effect(this, enemy))
+                if (listSkill[(int)Skill.Regeneration].Effect(this, enemy))
                 {
-                    Check = true;
-                    return true;
+                    return (int)Skill.Regeneration;
                 }
             }
             //Fire ball
             if (Keyboard.GetState().IsKeyDown(Keys.E))
             {
-                if(listSkill[1].Effect(this, enemy))
+                if (listSkill[(int)Skill.FireBall].Effect(this, enemy))
                 {
-                    Check = true;
-                    return true;
+                    return (int)Skill.FireBall;
                 }
             }
-            return true;
+            return skip;
         }
 
         /// <summary>

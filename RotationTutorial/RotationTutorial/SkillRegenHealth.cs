@@ -12,6 +12,7 @@ namespace RotationTutorial
     {
         const int mana = 30;
         const int energy = 50;
+        public string Name { get { return "Regeneration"; } }
         /// <summary>
         /// возвращает число затрачиваемых очков маны
         /// </summary>
