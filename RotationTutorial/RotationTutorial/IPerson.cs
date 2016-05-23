@@ -16,12 +16,13 @@ namespace RotationTutorial
         PointClass Health{get;set;}
         PointClass Mana{get;set;}
         PointClass Energy { get; set; }
+        IList<ISkill> ListSkill { get; }
         int Strength { get; set; }
         int Stamina { get; set; }
         int Intellect { get; set; }
         bool Attack(IPerson person);
         void Update();
-        bool Input(IPerson enemy);
+        int? Input(IPerson enemy);
         void Draw(SpriteBatch spriteBatch);
     }
 }

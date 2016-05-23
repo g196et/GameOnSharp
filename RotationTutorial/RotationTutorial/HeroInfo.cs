@@ -12,10 +12,11 @@ using System.IO;
 
 namespace RotationTutorial
 {
-    class HeroInfo: IGame
+    public class HeroInfo: IGame
     {
         enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
         State state = new State();
+        const int constStats = 10;
         const int x = 50;
         const int y = 25;
         const int x2 = 225;
@@ -34,6 +35,8 @@ namespace RotationTutorial
                 {
                     hero.StatPoints -= 1;
                     hero.Intellect += 1;
+                    hero.Mana.Max = hero.Intellect * constStats;
+                    hero.Mana.Current = Hero.Mana.Max;
                 }
             };
             addStamina = new Button(new Rectangle(x2, y*3, 20, 20), "+");
@@ -43,6 +46,8 @@ namespace RotationTutorial
                 {
                     hero.StatPoints -= 1;
                     hero.Stamina += 1;
+                    hero.Energy.Max = hero.Stamina * constStats;
+                    hero.Energy.Current = Hero.Energy.Max;
                 }
             };
             addStrength = new Button(new Rectangle(x2, y, 20, 20), "+");

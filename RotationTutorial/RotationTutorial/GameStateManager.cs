@@ -12,7 +12,7 @@ using System.IO;
 
 namespace RotationTutorial
 {
-    class GameStateManager:Game
+    public class GameStateManager:Game
     {
         const int width = 1280;
         const int height = 800;
@@ -34,7 +34,7 @@ namespace RotationTutorial
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = width;
             graphics.PreferredBackBufferHeight = height;
-            MapState = new MapState(spriteBatch);
+            MapState = new MapState(this);
             FightState = new FightState(Content, graphics);
             CurrentState = MapState;
             MenuState = new MenuState(this);
@@ -84,6 +84,7 @@ namespace RotationTutorial
             {
                 HeroInfo.Hero = FightState.Hero;
                 CurrentState = HeroInfo;
+                FightState.Hero = HeroInfo.Hero;
             }
             else if (state == (int)State.MenuState)
             {
@@ -113,6 +114,13 @@ namespace RotationTutorial
         {
             MapState.Load(reader);
             HeroInfo.Load(reader);
+        }
+        public void NewMapState(int currentMap)
+        {
+            MapState = new MapState(this, currentMap);
+            MapState.Initialize(this);
+            MapState.LoadContent(Content);
+            CurrentState = MapState;
         }
 
     }
