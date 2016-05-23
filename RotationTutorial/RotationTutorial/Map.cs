@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,16 @@ namespace RotationTutorial
 {
     public class Map
     {
-        private List<Tiles> tiles = new List<Tiles>();
+        private List<Tiles> tiles;
         public List<Tiles> MapTiles
         {
             get { return tiles; }
         }
 
-        public Map() { }
+        public Map()
+        {
+            tiles = new List<Tiles>();
+        }
         /// <summary>
         /// Генерация карты
         /// </summary>
@@ -32,9 +36,20 @@ namespace RotationTutorial
                 {
                     int number = int.Parse(str[i]);
                     if (number > 1)
-                        tiles.Add(new Tiles(number, new Rectangle(i * size, num*size, size, size), false));
+                    {
+                        tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), false, false));
+                    }
                     else
-                        tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true));
+                    {
+                        if (number == 0)
+                        {
+                            tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true, true));
+                        }
+                        else
+                        {
+                            tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true,false));
+                        }
+                    }
                 }
                 num += 1;
             }
@@ -51,7 +66,19 @@ namespace RotationTutorial
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tiles tile in tiles)
-                tile.Draw(spriteBatch);
+            { 
+                tile.Draw(spriteBatch); 
+            }
+        }
+
+        public void LoadContent (ContentManager Content)
+        {
+            int i = 0;
+            foreach (Tiles tile in tiles)
+            {
+                tile.LoadContent(Content);
+                i++;
+            }
         }
     }
 }

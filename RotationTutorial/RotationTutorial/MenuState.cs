@@ -12,7 +12,7 @@ using System.IO;
 
 namespace RotationTutorial
 {
-    class MenuState : IGame
+    public class MenuState : IGame
     {
         const int size1 = 100;
         const int size2 = 30;

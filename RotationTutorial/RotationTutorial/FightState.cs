@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    class FightState:IGame
+    public class FightState:IGame
     {
         enum State : int{ MapState=1, FightState, HeroInfo, MenuState}
         enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
@@ -24,7 +24,7 @@ namespace RotationTutorial
         const int skip = 150;
         int yFightPanel;
         
-        int? turn = 0;
+        int? turn = null;
         double counter = 0;
         string txt = "Hero";
         List<string> log;
@@ -80,8 +80,8 @@ namespace RotationTutorial
             Enemy = new Enemy();
             hero = new Hero();
             log = new List<string>();
-            currentPerson = hero;
-            notCurrentPerson = Enemy;
+            currentPerson = Enemy;
+            notCurrentPerson = hero;
             skillDictionary = new Dictionary<string, Texture2D>();
             listRectungle = new List<Rectangle>();
         }
@@ -170,17 +170,17 @@ namespace RotationTutorial
             }
             else
             {
-                if (currentPerson == hero)
+                if (notCurrentPerson == hero)
+                {
+                    txt = "Hero";
+                    currentPerson = hero;
+                    notCurrentPerson = Enemy;                  
+                }
+                else
                 {
                     txt = "Enemy";
                     currentPerson = Enemy;
                     notCurrentPerson = hero;
-                }
-                else
-                {
-                    txt = "Hero";
-                    currentPerson = hero;
-                    notCurrentPerson = Enemy;
                 }
                 turn = 0;
             }
@@ -197,7 +197,8 @@ namespace RotationTutorial
                     hero.Mana.Current = hero.Mana.Max;
                 }
                 counter = 0;
-                turn = 0;
+                turn = null;
+                notCurrentPerson = hero;
                 hero.Energy.Current = hero.Energy.Max;
                 state = State.MapState;
                 return (int)state;
@@ -228,7 +229,7 @@ namespace RotationTutorial
             for (int i = log.Count - 1; i >= 0; i--)
             {
                 spriteBatch.DrawString(MapState.spriteFont, log[i], new Vector2(graphics.PreferredBackBufferWidth / 3,
-                    graphics.PreferredBackBufferHeight / 4 * 3 + forLog * (log.Count-i)), Color.White);
+                    graphics.PreferredBackBufferHeight / 4 * 3 + forLog * (log.Count-i)), Color.Black);
             }
             //Отрисовка скиллов
             spriteBatch.DrawString(MapState.spriteFont, "Q - ", new Vector2(0, yFightPanel), Color.White);
