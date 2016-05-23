@@ -18,6 +18,8 @@ namespace RotationTutorial
         State state = new State();
         const double coefficient34 = 0.75;
         const int forLog = 15;
+        const int size = 75;
+        const int space = 100;
         const int timeDelay = 300;
         const int skip = 150;
         
@@ -29,7 +31,7 @@ namespace RotationTutorial
         ContentManager Content;
         GraphicsDeviceManager graphics;
         public SpriteBatch SpriteBatch { get; set; }
-        Hero hero; public Hero Hero { get { return hero; } }
+        Hero hero; public Hero Hero { get { return hero; } set { hero = value; } }
         public Enemy Enemy { get; set; }
         IPerson currentPerson;
         IPerson notCurrentPerson;
@@ -45,7 +47,13 @@ namespace RotationTutorial
         Texture2D energyBarTexture;
         Texture2D healthBarTexture;
 
-        //public static SpriteFont spriteFront;
+        Dictionary<String, Texture2D> skillDictionary;
+        List<Rectangle> listRectungle;
+
+        //Texture2D fireBallTexture;
+        //Rectangle fireBallRectangle;
+        //Texture2D regenTexture;
+        //Rectangle regenRectangle;
 
         Texture2D backgroundTexture1;
         Texture2D backgroundTexture2;
@@ -72,6 +80,8 @@ namespace RotationTutorial
             log = new List<string>();
             currentPerson = hero;
             notCurrentPerson = Enemy;
+            skillDictionary = new Dictionary<string, Texture2D>();
+            listRectungle = new List<Rectangle>();
         }
 
         /// <summary>
@@ -99,12 +109,24 @@ namespace RotationTutorial
             //Stamina
             energyBarTexture = Content.Load<Texture2D>("energyBarTexture");
             
-            //Enemy
             enemyTexture = Content.Load<Texture2D>("fightEnemy");
             heroTexture = Content.Load<Texture2D>("fightMan");
             hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
             Enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+
             log = new List<string>();
+
+            skillDictionary.Add("Punch", Content.Load<Texture2D>("Punch"));
+            listRectungle.Add(new Rectangle(0, graphics.PreferredBackBufferHeight / 4 * 3,
+                size, size));
+            int i = 1;
+            foreach(ISkill skill in hero.ListSkill)
+            {
+                skillDictionary.Add(skill.Name, Content.Load<Texture2D>(skill.Name));
+                listRectungle.Add(new Rectangle(space * i, graphics.PreferredBackBufferHeight / 4 * 3,
+                    size, size));
+                i++;
+            }
         }
 
         /// <summary>
@@ -198,10 +220,19 @@ namespace RotationTutorial
             spriteBatch.DrawString(MapState.spriteFont, counter.ToString(), new Vector2(450, 70), Color.White);
             hero.Draw(spriteBatch);
             Enemy.Draw(spriteBatch);
+            //Вывод лога
             for (int i = log.Count - 1; i >= 0; i--)
             {
                 spriteBatch.DrawString(MapState.spriteFont, log[i], new Vector2(graphics.PreferredBackBufferWidth / 3,
                     graphics.PreferredBackBufferHeight / 4 * 3 + forLog * (log.Count-i)), Color.White);
+            }
+            //Отрисовка скиллов
+            spriteBatch.Draw(skillDictionary["Punch"], listRectungle[0], Color.White);
+            int j = 1;
+            foreach (ISkill skill in hero.ListSkill)
+            {
+                spriteBatch.Draw(skillDictionary[skill.Name], listRectungle[j], Color.White);
+                j++;
             }
         }
     }

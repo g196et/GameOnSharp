@@ -84,6 +84,7 @@ namespace RotationTutorial
             {
                 HeroInfo.Hero = FightState.Hero;
                 CurrentState = HeroInfo;
+                FightState.Hero = HeroInfo.Hero;
             }
             else if (state == (int)State.MenuState)
             {
