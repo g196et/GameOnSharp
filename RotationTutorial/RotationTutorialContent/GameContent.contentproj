@@ -54,14 +54,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Back1.jpg">
-      <Name>Back1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="SpriteFont1.spritefont">
       <Name>SpriteFont1</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -79,11 +71,6 @@
   <ItemGroup>
     <Compile Include="FightBackground1.png">
       <Name>FightBackground1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="FightBackground.png">
-      <Name>FightBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -172,6 +159,13 @@
     </Compile>
     <Compile Include="ButtonTexture1.png">
       <Name>ButtonTexture1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FightBackground.jpg">
+      <Name>FightBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

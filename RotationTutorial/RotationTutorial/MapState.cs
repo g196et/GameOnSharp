@@ -34,9 +34,6 @@ namespace RotationTutorial
         public MapBot CurrentBot { get { return currentBot; } }
         Camera camera;
 
-        //Background
-        Texture2D backgroundTexture;
-        Vector2 backgroundPosition;
 
         public static SpriteFont spriteFont;
         public static string mapFileName;
@@ -87,9 +84,7 @@ namespace RotationTutorial
             {
                 bot.AddMobMap(map);
             }
-            backgroundTexture = Content.Load<Texture2D>("Back1");
             spriteFont = Content.Load<SpriteFont>("SpriteFont1");
-            backgroundPosition = new Vector2(-950, -500);
         }
 
         /// <summary>

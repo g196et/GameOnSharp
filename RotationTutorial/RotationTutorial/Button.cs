@@ -49,7 +49,7 @@ namespace RotationTutorial
             // Проверяем, находится ли курсор внутри кнопки.
             if (rectangle.Contains(mouseState.X, mouseState.Y))
             {
-                curTexture = textures[1];
+                curTexture = textures[0];
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     // Выполняем действие. 
@@ -63,7 +63,7 @@ namespace RotationTutorial
             }
             else
             {
-                curTexture = textures[0];
+                curTexture = textures[1];
             }
         }
         public void Draw(SpriteBatch spriteBatch)
