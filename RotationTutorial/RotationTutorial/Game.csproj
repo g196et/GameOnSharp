@@ -72,9 +72,12 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Armor.cs" />
     <Compile Include="Button.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="HeroInfo.cs" />
+    <Compile Include="IItem.cs" />
+    <Compile Include="Inventory.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MenuState.cs" />
     <Compile Include="SkillFireBall.cs" />

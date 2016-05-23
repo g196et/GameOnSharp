@@ -28,7 +28,7 @@ namespace RotationTutorial
         const int enemyWidth = 250;
         const int enemyHeight = 400;
         const int skip = 150;
-
+        public Armor Armor { get; set; }
 
         IList<ISkill> listSkill;
         public IList<ISkill> ListSkill { get { return listSkill; } }
@@ -82,6 +82,7 @@ namespace RotationTutorial
             listSkill = new List<ISkill>();
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
+            Armor = new Armor("Shit armor", 0);
         }
 
         /// <summary>
@@ -116,7 +117,15 @@ namespace RotationTutorial
         /// <param name="person">противник</param>
         public bool Attack(IPerson person)
         {
-            person.Health.Current -= Strength;
+            if(person.Armor!=null)
+            {
+                person.Health.Current -= Strength - person.Armor.Defense;
+            }
+            else
+            {
+                person.Health.Current -= Strength;
+            }
+            
             Energy.Current -= consumptionEnergy;
             return true;
         }

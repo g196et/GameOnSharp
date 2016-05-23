@@ -11,26 +11,23 @@ using Microsoft.Xna.Framework.Media;
 
 namespace RotationTutorial
 {
-    public class Weapon:IItem
+    public class Armor:IItem
     {
         string name;
-        Texture2D texture;
-        public Rectangle Rectangle { get; set; }
         public string Name { get { return name; } }
-        int damage;
-        public int Damage
+        public Rectangle Rectangle { get; set; }
+        Texture2D texture;
+        
+        int defense;
+        public int Defense
         {
-            get { return damage; }
-            set { damage = value; }
+            get { return defense; }
+            set { defense = value; }
         }
-        public Weapon(string name,int damage)
+        public Armor(string name,int defense)
         {
             this.name = name;
-            this.damage = damage;
-        }
-        public void LoadContent(ContentManager Content)
-        {
-            texture = Content.Load<Texture2D>("меч2");
+            this.defense = defense;
         }
         public void Draw(SpriteBatch spriteBatch)
         {

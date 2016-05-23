@@ -27,20 +27,21 @@ namespace RotationTutorial
         public FightState FightState { get; set; }
         public HeroInfo HeroInfo { get; set; }
         public MenuState MenuState { get; set; }
+        Hero hero;
 
         public GameStateManager()
         {
+            hero = new Hero();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = width;
             graphics.PreferredBackBufferHeight = height;
-            MapState = new MapState(this);
-            FightState = new FightState(Content, graphics);
+            MapState = new MapState(this,hero);
+            FightState = new FightState(Content, graphics,hero);
             CurrentState = MapState;
             MenuState = new MenuState(this);
-            HeroInfo = new HeroInfo();
-            IsMouseVisible = true;
-            
+            HeroInfo = new HeroInfo(hero);
+            IsMouseVisible = true; 
         }
         protected override void Initialize()
         {
@@ -69,9 +70,12 @@ namespace RotationTutorial
                 this.Exit();
             int state = CurrentState.Update(gameTime);
             if (state == (int)State.MapState)
+            {
                 CurrentState = MapState;
+            }
             else if (state == (int)State.FightState)
             {
+                FightState.Hero = MapState.Hero;
                 if (FightState.Enemy != MapState.CurrentBot.Enemy)
                 {
                     FightState.Enemy = MapState.CurrentBot.Enemy;
@@ -82,9 +86,8 @@ namespace RotationTutorial
             }
             else if (state == (int)State.HeroInfoState)
             {
-                HeroInfo.Hero = FightState.Hero;
+                HeroInfo.Hero = MapState.Hero;
                 CurrentState = HeroInfo;
-                FightState.Hero = HeroInfo.Hero;
             }
             else if (state == (int)State.MenuState)
             {
@@ -108,16 +111,14 @@ namespace RotationTutorial
         public void Save(StreamWriter writer)
         {
             MapState.Save(writer);
-            HeroInfo.Save(writer);
         }
         public void Load(StreamReader reader)
         {
             MapState.Load(reader);
-            HeroInfo.Load(reader);
         }
         public void NewMapState(int currentMap)
         {
-            MapState = new MapState(this, currentMap);
+            MapState = new MapState(this,hero, currentMap);
             MapState.Initialize(this);
             MapState.LoadContent(Content);
             CurrentState = MapState;

@@ -19,9 +19,14 @@ namespace RotationTutorial
         const int position = 10;
         const int constStats = 10;
         const int skip = 150;
+        const int inventorySize=5;
         IList<ISkill> listSkill = new List<ISkill>();
         public IList<ISkill> ListSkill { get { return listSkill; } }
         Weapon weapon;
+        Armor armor;
+        public Armor Armor { get { return armor; } set { armor = value; } }
+        public Inventory Inventory { get; set; }
+
 
         Texture2D texture;
         Rectangle rectangle;
@@ -85,9 +90,13 @@ namespace RotationTutorial
             Health = new PointClass(constStats * Vitality, constStats * Vitality);
             Mana = new PointClass(constStats * Intellect, constStats * Intellect);
             Energy = new PointClass(constStats * Stamina, constStats * Stamina);
-            weapon = new Weapon(5);
+            weapon = new Weapon("test weapon",5);
+            armor = new Armor("test armor", 5);
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
+            Inventory = new Inventory(inventorySize, inventorySize);
+            
+            Inventory.AddItem(weapon);
         }
 
         /// <summary>
@@ -97,7 +106,7 @@ namespace RotationTutorial
         /// <param name="healthBarTexture"></param>
         /// <param name="manaBarTexture"></param>
         /// <param name="energyBarTexture"></param>
-        public void LoadContent(Texture2D heroTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture)
+        public void LoadContent(Texture2D heroTexture,Texture2D healthBarTexture, Texture2D manaBarTexture, Texture2D energyBarTexture,ContentManager Content)
         {
             this.healthBarTexture = healthBarTexture;
             this.manaBarTexture = manaBarTexture;
@@ -112,6 +121,12 @@ namespace RotationTutorial
                 barWidth, barHeight);
             texture = heroTexture;
             rectangle = new Rectangle(heroPositionX, heroPositionY, heroWidth, heroHeight);
+            
+        }
+        public void LoadItems(ContentManager Content)
+        {
+            weapon.LoadContent(Content);
+            Inventory.LoadContent(Content);
         }
 
         /// <summary>
@@ -123,7 +138,14 @@ namespace RotationTutorial
         {
             if (Energy.Current >= consumptionEnergy)
             {
-                person.Health.Current = person.Health.Current - (Strength + weapon.Damage);
+                if (person.Armor != null)
+                {
+                    person.Health.Current = person.Health.Current - (Strength + weapon.Damage - person.Armor.Defense);
+                }
+                else
+                {
+                    person.Health.Current = person.Health.Current - (Strength + weapon.Damage);
+                }
                 Energy.Current -= consumptionEnergy;
                 return true;
             }

@@ -34,6 +34,8 @@ namespace RotationTutorial
         List<string> listMapFileName;
         public static SpriteFont spriteFont;
         public static string mapFileName;
+        Hero hero;
+        public Hero Hero { get { return hero; } set { hero = value; } }
         enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
         State state = new State();
 
@@ -47,8 +49,9 @@ namespace RotationTutorial
         public MapBot CurrentBot { get { return currentBot; } }
 
 
-        public MapState(GameStateManager GSM,int currentMap = 1)
+        public MapState(GameStateManager GSM,Hero hero,int currentMap = 1)
         {
+            this.hero = hero;
             this.GSM = GSM;
             this.currenMap = currentMap;
             listMapFileName = new List<string>();
@@ -58,6 +61,7 @@ namespace RotationTutorial
             }
             listBot = new List<MapBot>();
             map = new Map();
+            hero = new Hero();
         }
 
         /// <summary>
@@ -198,6 +202,7 @@ namespace RotationTutorial
         {
             writer.WriteLine(currenMap);
             mapHero.Save(writer);
+            hero.Save(writer);
             writer.WriteLine(listBot.Count.ToString());
             foreach(MapBot bot in listBot)
             {
@@ -214,6 +219,7 @@ namespace RotationTutorial
             currenMap = int.Parse(reader.ReadLine());
             this.LoadContent(game.Content);
             mapHero.Load(reader);
+            hero.Load(reader);
             int botNum = int.Parse(reader.ReadLine());
             listBot = new List<MapBot>();
             for(int i=0;i<botNum;i++)
