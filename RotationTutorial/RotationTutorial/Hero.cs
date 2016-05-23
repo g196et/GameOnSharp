@@ -12,7 +12,7 @@ using System.IO;
 
 namespace RotationTutorial
 {
-    public class Hero:IPerson
+    class Hero:IPerson
     {
         enum Skill : int { Punch = -1, FireBall = 0, Regeneration = 1 }
         const int consumptionEnergy = 50;
@@ -77,7 +77,7 @@ namespace RotationTutorial
 
         public Hero()
         {
-            Level = new Level(new int[] { 50,150,300 });
+            Level = new Level(new int[] { 50,150 });
             Strength = 2*constStats;
             Stamina = constStats;
             Intellect = constStats;

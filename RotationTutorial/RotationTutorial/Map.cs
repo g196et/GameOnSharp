@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -11,16 +10,13 @@ namespace RotationTutorial
 {
     public class Map
     {
-        private List<Tiles> tiles;
+        private List<Tiles> tiles = new List<Tiles>();
         public List<Tiles> MapTiles
         {
             get { return tiles; }
         }
 
-        public Map()
-        {
-            tiles = new List<Tiles>();
-        }
+        public Map() { }
         /// <summary>
         /// Генерация карты
         /// </summary>
@@ -36,20 +32,9 @@ namespace RotationTutorial
                 {
                     int number = int.Parse(str[i]);
                     if (number > 1)
-                    {
-                        tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), false, false));
-                    }
+                        tiles.Add(new Tiles(number, new Rectangle(i * size, num*size, size, size), false));
                     else
-                    {
-                        if (number == 0)
-                        {
-                            tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true, true));
-                        }
-                        else
-                        {
-                            tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true,false));
-                        }
-                    }
+                        tiles.Add(new Tiles(number, new Rectangle(i * size, num * size, size, size), true));
                 }
                 num += 1;
             }
@@ -66,19 +51,7 @@ namespace RotationTutorial
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tiles tile in tiles)
-            { 
-                tile.Draw(spriteBatch); 
-            }
-        }
-
-        public void LoadContent (ContentManager Content)
-        {
-            int i = 0;
-            foreach (Tiles tile in tiles)
-            {
-                tile.LoadContent(Content);
-                i++;
-            }
+                tile.Draw(spriteBatch);
         }
     }
 }

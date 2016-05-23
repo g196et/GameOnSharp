@@ -15,15 +15,9 @@ namespace RotationTutorial
         Rectangle rectangle;
         bool passability;
         bool mob;
-        bool portal;
-        int tileTextureIndex;
         public bool Passability
         {
             get { return passability; }
-        }
-        public bool Portal
-        {
-            get { return portal; }
         }
         public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } }
         public bool Mob { get { return mob; } set { mob = value; } }
@@ -36,24 +30,18 @@ namespace RotationTutorial
             set { content = value; }
         }
 
-        public Tiles(int tileTextureIndex, Rectangle newRectangle, bool passability, bool portal)//, bool mob)
+        public Tiles(int i, Rectangle newRectangle, bool passability)//, bool mob)
         {
-            this.tileTextureIndex = tileTextureIndex;
+            texture = Content.Load<Texture2D>("Tile" + i);
             this.Rectangle = newRectangle;
             this.passability = passability;
             this.mob = false;
-            this.portal = portal;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, rectangle, Color.White);
             
-        }
-
-        public void LoadContent (ContentManager Content)
-        {
-            texture = Content.Load<Texture2D>("Tile" + tileTextureIndex);
         }
     }
 

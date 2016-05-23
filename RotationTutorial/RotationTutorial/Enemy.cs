@@ -158,10 +158,7 @@ namespace RotationTutorial
                 listSkill[(int)Skill.FireBall].Effect(this, person);
                 return (int)Skill.FireBall;
             }
-            if (Attack(person))
-            {
-                return (int)Skill.Punch;
-            }
+            Attack(person);
             return skip;
         }
 

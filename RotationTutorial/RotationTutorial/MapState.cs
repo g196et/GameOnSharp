@@ -17,47 +17,35 @@ namespace RotationTutorial
     /// </summary>
     public class MapState : IGame
     {
-        const int tileSize = 75;
-        const int mapCount = 2;
-        const string mapName = "map";
-        const string botVector = "botVector";
-        const string botName = "botName";
-        int currenMap;
-        Vector2 spritePosition;
-        Rectangle spriteRectangle;
-        MapHero mapHero;
-        MapBot currentBot;
-        Map map;
-        Game game;
-        Camera camera;
-        IList<MapBot> listBot;
-        List<string> listMapFileName;
-        public static SpriteFont spriteFont;
-        public static string mapFileName;
         enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
         State state = new State();
-
-        GameStateManager GSM;
-
+        const int tileSize = 75;
+        SpriteBatch spriteBatch;
+        public SpriteBatch SpriteBatch { get { return spriteBatch; } set { spriteBatch = value; } }
         public Rectangle SpriteRectangle { get { return spriteRectangle; } }
         public Vector2 SpritePosition { get { return spritePosition; } }
 
+        Vector2 spritePosition;
+        Rectangle spriteRectangle;
+        MapHero mapHero;
+        IList<MapBot> listBot;
         public IList<MapBot> ListBot { get { return listBot; } set { listBot = value; } }
-
+        MapBot currentBot;
         public MapBot CurrentBot { get { return currentBot; } }
+        Camera camera;
 
 
-        public MapState(GameStateManager GSM,int currentMap = 1)
+        public static SpriteFont spriteFont;
+        public static string mapFileName;
+
+        Map map;
+        Game game;
+
+        public MapState(SpriteBatch spriteBatch)
         {
-            this.GSM = GSM;
-            this.currenMap = currentMap;
-            listMapFileName = new List<string>();
-            for (int i = 1; i <= mapCount; i++)
-            {
-                listMapFileName.Add(mapName + i.ToString() + ".txt");
-            }
             listBot = new List<MapBot>();
-            map = new Map();
+            this.spriteBatch = spriteBatch;
+            mapFileName = "map.txt";
         }
 
         /// <summary>
@@ -70,19 +58,12 @@ namespace RotationTutorial
         {
             this.game = game;
             mapHero = new MapHero(new Vector2(tileSize, tileSize));
-            using (StreamReader reader = new StreamReader(botVector + currenMap + ".txt"))
-            {
-                while (!reader.EndOfStream)
-                {
-                    string[] str = reader.ReadLine().Split(' ');
-                    listBot.Add(new MapBot(new Vector2(int.Parse(str[0]) * tileSize, int.Parse(str[1]) * tileSize)));
-                }
-            }
+            listBot.Add(new MapBot(new Vector2(2* tileSize, 2* tileSize)));
+            listBot.Add(new MapBot(new Vector2(3* tileSize, 3* tileSize)));
             camera = new Camera(game.GraphicsDevice.Viewport);
-            using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
-            {
-                map.LoadMap(stream, tileSize);
-            }            
+            map = new Map();
+
+            
         }
 
         /// <summary>
@@ -92,21 +73,13 @@ namespace RotationTutorial
         public void LoadContent(ContentManager Content)
         {
             mapHero.LoadContent(Content, "гг3");
-            using (StreamReader reader = new StreamReader(botName + currenMap + ".txt"))
-            {
-                int i = 0;
-                while (!reader.EndOfStream)
-                {
-                    listBot[i].LoadContent(Content, reader.ReadLine());
-                    i++;
-                }
-            }
+            listBot[0].LoadContent(Content, "зай1");
+            listBot[1].LoadContent(Content, "зай2");
             Tiles.Content = Content;
-            using (StreamReader stream = new StreamReader(listMapFileName[currenMap-1]))
+            using (StreamReader stream = new StreamReader(mapFileName))
             {
                 map.LoadMap(stream, tileSize);
             }
-            map.LoadContent(Content);
             foreach(MapBot bot in listBot)
             {
                 bot.AddMobMap(map);
@@ -149,18 +122,6 @@ namespace RotationTutorial
                     return (int)state;
                 }
             }
-            if (map.GetRectangle(new Point((int)mapHero.Rectangle1.Center.X,
-                        (int)mapHero.Rectangle1.Center.Y)).Portal)
-            {
-                if (currenMap < mapCount)
-                {
-                    GSM.NewMapState(currenMap + 1);
-                }
-                else
-                {
-                    return (int)State.MenuState;
-                }
-            }
             //Заход в инвентарь
             if (Keyboard.GetState().IsKeyDown(Keys.I))
             {
@@ -196,7 +157,7 @@ namespace RotationTutorial
 
         public void Save(StreamWriter writer)
         {
-            writer.WriteLine(currenMap);
+            writer.WriteLine(mapFileName);
             mapHero.Save(writer);
             writer.WriteLine(listBot.Count.ToString());
             foreach(MapBot bot in listBot)
@@ -210,9 +171,7 @@ namespace RotationTutorial
 
         public void Load(StreamReader reader)
         {
-            //ПРОВЕРИТЬ!!!!
-            currenMap = int.Parse(reader.ReadLine());
-            this.LoadContent(game.Content);
+            mapFileName = reader.ReadLine();
             mapHero.Load(reader);
             int botNum = int.Parse(reader.ReadLine());
             listBot = new List<MapBot>();

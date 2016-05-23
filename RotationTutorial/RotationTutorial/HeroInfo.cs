@@ -12,7 +12,7 @@ using System.IO;
 
 namespace RotationTutorial
 {
-    public class HeroInfo: IGame
+    class HeroInfo: IGame
     {
         enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
         State state = new State();

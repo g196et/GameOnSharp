@@ -6,7 +6,7 @@ using System.IO;
 
 namespace RotationTutorial
 {
-    public class Level
+    class Level
     {
         int[] levels;
         int curLevel; 
@@ -26,11 +26,11 @@ namespace RotationTutorial
 
         public bool CheckLevel()
         {
-            if((curExperience>=requiredExperience)&&(curLevel<levels.Length))
+            if((curExperience>=requiredExperience)&&(curLevel+1<levels.Length))
             {
                 curLevel++;
                 curExperience -= requiredExperience;
-                requiredExperience = levels[curLevel-1];
+                requiredExperience = levels[curLevel];
                 return true;
             }
             return false;
