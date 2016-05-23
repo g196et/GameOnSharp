@@ -22,6 +22,7 @@ namespace RotationTutorial
         const int space = 100;
         const int timeDelay = 300;
         const int skip = 150;
+        int yFightPanel;
         
         int? turn = 0;
         double counter = 0;
@@ -65,6 +66,7 @@ namespace RotationTutorial
         {
             this.Content = Content;
             this.graphics = graphics;
+            yFightPanel = graphics.PreferredBackBufferHeight / 4 * 3;
         }
 
         /// <summary>
@@ -116,6 +118,8 @@ namespace RotationTutorial
 
             log = new List<string>();
 
+            listRectungle = new List<Rectangle>();
+            skillDictionary = new Dictionary<string, Texture2D>();
             skillDictionary.Add("Punch", Content.Load<Texture2D>("Punch"));
             listRectungle.Add(new Rectangle(0, graphics.PreferredBackBufferHeight / 4 * 3,
                 size, size));
@@ -227,10 +231,14 @@ namespace RotationTutorial
                     graphics.PreferredBackBufferHeight / 4 * 3 + forLog * (log.Count-i)), Color.White);
             }
             //Отрисовка скиллов
+            spriteBatch.DrawString(MapState.spriteFont, "Q - ", new Vector2(0, yFightPanel), Color.White);
             spriteBatch.Draw(skillDictionary["Punch"], listRectungle[0], Color.White);
             int j = 1;
             foreach (ISkill skill in hero.ListSkill)
             {
+                //Доделать
+                spriteBatch.DrawString(MapState.spriteFont, hero.ListSkill[j-1].Key.ToString(), 
+                    new Vector2(space*j, yFightPanel), Color.White);
                 spriteBatch.Draw(skillDictionary[skill.Name], listRectungle[j], Color.White);
                 j++;
             }

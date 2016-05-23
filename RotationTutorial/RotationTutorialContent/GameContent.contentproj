@@ -83,13 +83,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="fightMan.jpg">
-      <Name>fightMan</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="fightEnemy.png">
       <Name>fightEnemy</Name>
       <Importer>TextureImporter</Importer>
@@ -185,6 +178,13 @@
   <ItemGroup>
     <Compile Include="Punch.png">
       <Name>Punch</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="fightMan.png">
+      <Name>fightMan</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

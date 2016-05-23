@@ -160,7 +160,7 @@ namespace RotationTutorial
                 }
             }
             //Регенерация здоровья
-            if (Keyboard.GetState().IsKeyDown(Keys.W))
+            if (Keyboard.GetState().IsKeyDown(listSkill[(int)Skill.Regeneration].Key))
             {
                 if (listSkill[(int)Skill.Regeneration].Effect(this, enemy))
                 {
@@ -168,7 +168,7 @@ namespace RotationTutorial
                 }
             }
             //Fire ball
-            if (Keyboard.GetState().IsKeyDown(Keys.E))
+            if (Keyboard.GetState().IsKeyDown(listSkill[(int)Skill.FireBall].Key))
             {
                 if (listSkill[(int)Skill.FireBall].Effect(this, enemy))
                 {

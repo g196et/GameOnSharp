@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework.Input;
 
 namespace RotationTutorial
 {
@@ -12,6 +13,8 @@ namespace RotationTutorial
     {
         const int mana = 30;
         const int energy = 50;
+        const Keys key = Keys.W;
+        public Keys Key { get { return key; } }
         public string Name { get { return "Regeneration"; } }
         /// <summary>
         /// возвращает число затрачиваемых очков маны
