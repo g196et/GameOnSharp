@@ -76,7 +76,7 @@ namespace RotationTutorial
         public void LoadContent(ContentManager content)
         {
             hero.LoadItems(content);
-            buttonTexture = content.Load<Texture2D>("ButtonTexture1");
+            buttonTexture = content.Load<Texture2D>("ButtonTexture0");
         }
         public void UnloadContent()
         { }
