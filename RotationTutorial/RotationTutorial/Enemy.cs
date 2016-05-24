@@ -195,10 +195,9 @@ namespace RotationTutorial
 
         public void Save(StreamWriter writer)
         {
-            writer.WriteLine(this.Health + "#" + this.Mana + "#");
+            writer.WriteLine(this.Health + "#" + this.Mana + "#"+this.Energy.Max);
             writer.WriteLine(this.Strength + "#" + this.Stamina + "#" + this.Intellect + "#" + 
                 this.Vitality);
-            //writer.WriteLine(listSkill.Count);
 
         }
         public void Load(StreamReader reader)
@@ -209,6 +208,8 @@ namespace RotationTutorial
             this.Health.Max = int.Parse(line[1]);
             this.Mana.Current = int.Parse(line[2]);
             this.Mana.Max = int.Parse(line[3]);
+            this.Energy.Max = int.Parse(line[4]);
+            this.Energy.Current = this.Energy.Max;
             line = reader.ReadLine().Split(new char[] { '#' }, StringSplitOptions.RemoveEmptyEntries);
             this.Strength = int.Parse(line[0]);
             this.Stamina = int.Parse(line[1]);

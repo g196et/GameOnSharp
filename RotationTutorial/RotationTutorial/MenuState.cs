@@ -14,6 +14,7 @@ namespace RotationTutorial
 {
     public class MenuState : IGame
     {
+        enum State {MenuState=0,MapState=1}
         const int size1 = 100;
         const int size2 = 30;
         Button newGame;
@@ -21,11 +22,14 @@ namespace RotationTutorial
         Button loadGame;
         Button settings;
         Button quitGame;
-        int state = 0;
+        int state;
+        public string Text { get; set; }
         Texture2D buttonTexture;
         GameStateManager manager;
         public MenuState(GameStateManager manager)
         {
+            state = (int)State.MenuState;
+            Text = string.Empty;
             this.manager = manager;
             newGame = new Button(new Rectangle(size1,size1,size1,size2), "New Game");
             saveGame = new Button(new Rectangle(size1,2*size1, size1, size2), "Save Game");
@@ -63,8 +67,16 @@ namespace RotationTutorial
                 using (StreamReader reader = new StreamReader("SaveFile1.txt"))
                 {
                     manager.Load(reader);
-                    state = 1;
+                    state = (int)State.MapState;
                 }
+            };
+            newGame.Action += () =>
+            {
+                manager.NewMapState(1);
+                manager.Hero = new Hero();
+                manager.Hero.LoadItems(manager.Content);
+                manager.MapState.Hero.LoadItems(manager.Content);
+                Text = "";
             };
             
         }
@@ -73,27 +85,36 @@ namespace RotationTutorial
         public void LoadContent(ContentManager content)
         {
             buttonTexture = content.Load<Texture2D>("ButtonTexture1");
+            newGame.LoadContent(content);
+            saveGame.LoadContent(content);
+            loadGame.LoadContent(content);
+            settings.LoadContent(content);
+            quitGame.LoadContent(content);
         }
         public void UnloadContent()
         { }
         public int Update(GameTime gameTime)
         {
-            state = 0;
+            state = (int)State.MenuState;
             newGame.Update(gameTime);
             saveGame.Update(gameTime);
             loadGame.Update(gameTime);
             settings.Update(gameTime);
             quitGame.Update(gameTime);
+            if(Keyboard.GetState().IsKeyDown(Keys.Back))
+            {
+                state = (int)State.MapState;
+            }
             return state;
         }
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(MapState.spriteFont, "You lose!", new Vector2(0, 0), Color.White);
-            spriteBatch.Draw(buttonTexture, newGame.Rectangle, Color.White);
-            spriteBatch.Draw(buttonTexture, saveGame.Rectangle, Color.White);
-            spriteBatch.Draw(buttonTexture, loadGame.Rectangle, Color.White);
-            spriteBatch.Draw(buttonTexture, settings.Rectangle, Color.White);
-            spriteBatch.Draw(buttonTexture, quitGame.Rectangle, Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, Text, new Vector2(0, 0), Color.White);
+            newGame.Draw(spriteBatch);
+            saveGame.Draw(spriteBatch);
+            loadGame.Draw(spriteBatch);
+            settings.Draw(spriteBatch);
+            quitGame.Draw(spriteBatch);
         }
     }
 }

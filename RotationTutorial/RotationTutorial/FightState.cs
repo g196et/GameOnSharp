@@ -51,10 +51,7 @@ namespace RotationTutorial
         Dictionary<String, Texture2D> skillDictionary;
         List<Rectangle> listRectungle;
 
-        //Texture2D fireBallTexture;
-        //Rectangle fireBallRectangle;
-        //Texture2D regenTexture;
-        //Rectangle regenRectangle;
+        GameStateManager GSM;
 
         Texture2D backgroundTexture1;
         Texture2D backgroundTexture2;
@@ -62,8 +59,9 @@ namespace RotationTutorial
         public Vector2 SpritePosition { get { return new Vector2(0,0); } }
         public Rectangle SpriteRectangle { get { return new Rectangle(0, 0, 0, 0); } }
 
-        public FightState(ContentManager Content, GraphicsDeviceManager graphics,Hero hero)
+        public FightState(ContentManager Content, GraphicsDeviceManager graphics,Hero hero,GameStateManager GSM)
         {
+            this.GSM = GSM;
             this.hero = hero;
             this.Content = Content;
             this.graphics = graphics;
@@ -78,7 +76,6 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            //Enemy = new Enemy();
             log = new List<string>();
             currentPerson = Enemy;
             notCurrentPerson = hero;
@@ -102,11 +99,9 @@ namespace RotationTutorial
 
             //Health
             healthBarTexture = Content.Load<Texture2D>("healthBarTexture");
-            
 
             //Mana
-            manaBarTexture = Content.Load<Texture2D>("manaBarTexture");
-            
+            manaBarTexture = Content.Load<Texture2D>("manaBarTexture");            
 
             //Stamina
             energyBarTexture = Content.Load<Texture2D>("energyBarTexture");
@@ -126,7 +121,14 @@ namespace RotationTutorial
             int i = 1;
             foreach(ISkill skill in hero.ListSkill)
             {
-                skillDictionary.Add(skill.Name, Content.Load<Texture2D>(skill.Name));
+                try
+                {
+                    skillDictionary.Add(skill.Name, Content.Load<Texture2D>(skill.Name));
+                }
+                catch
+                {
+                    skillDictionary[skill.Name] = Content.Load<Texture2D>(skill.Name);
+                }
                 listRectungle.Add(new Rectangle(space * i, graphics.PreferredBackBufferHeight / 4 * 3,
                     size, size));
                 i++;
@@ -170,7 +172,7 @@ namespace RotationTutorial
             }
             else
             {
-                if (notCurrentPerson == hero)
+                if (currentPerson != hero)
                 {
                     txt = "Hero";
                     currentPerson = hero;
@@ -199,6 +201,7 @@ namespace RotationTutorial
                 counter = 0;
                 turn = null;
                 notCurrentPerson = hero;
+                currentPerson = Enemy;
                 hero.Energy.Current = hero.Energy.Max;
                 state = State.MapState;
                 return (int)state;
@@ -206,6 +209,7 @@ namespace RotationTutorial
             //Если выйграл Моб
             if (hero.Health.Current <= 0)
             {
+                GSM.MenuState.Text = "You lose";
                 state = State.MenuState;
                 return (int)state;
             }
@@ -217,12 +221,11 @@ namespace RotationTutorial
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime,SpriteBatch spriteBatch) 
+        public void Draw(SpriteBatch spriteBatch) 
         {
             spriteBatch.Draw(backgroundTexture1, backgroundRectangle1, Color.AliceBlue);
             spriteBatch.Draw(backgroundTexture2, backgroundRectangle2, Color.AliceBlue);
             spriteBatch.DrawString(MapState.spriteFont, txt, new Vector2(450, 20), Color.White);
-            spriteBatch.DrawString(MapState.spriteFont, counter.ToString(), new Vector2(450, 70), Color.White);
             hero.Draw(spriteBatch);
             Enemy.Draw(spriteBatch);
             //Вывод лога

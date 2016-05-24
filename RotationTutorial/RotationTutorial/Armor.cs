@@ -17,6 +17,10 @@ namespace RotationTutorial
         public string Name { get { return name; } }
         public Rectangle Rectangle { get; set; }
         Texture2D texture;
+        public void LoadContent(ContentManager Content)
+        {
+            texture = Content.Load<Texture2D>("Shit Armor");
+        }
         
         int defense;
         public int Defense

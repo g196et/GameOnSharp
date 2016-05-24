@@ -36,7 +36,7 @@ namespace RotationTutorial
 
         public void LoadContent(ContentManager Content)
         {
-            textures[0] = Content.Load<Texture2D>("ButtonTexture0");
+            textures[0] = Content.Load<Texture2D>("ButtonTexture2");
             textures[1] = Content.Load<Texture2D>("ButtonTexture1");
             curTexture = textures[0];
         }
@@ -68,8 +68,10 @@ namespace RotationTutorial
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(curTexture,rectangle,Color.White);
-            spriteBatch.DrawString(MapState.spriteFont, text, new Vector2(rectangle.Location.X, rectangle.Location.Y), Color.White);
+            spriteBatch.Draw(curTexture, rectangle, Color.White);
+            spriteBatch.DrawString(MapState.spriteFont, text, new Vector2(rectangle.Location.X, 
+                rectangle.Location.Y), Color.Red);
+
         }
     }
 }

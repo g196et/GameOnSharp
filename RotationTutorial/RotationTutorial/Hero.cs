@@ -95,8 +95,8 @@ namespace RotationTutorial
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
             Inventory = new Inventory(inventorySize, inventorySize);
-            
             Inventory.AddItem(weapon);
+            Inventory.AddItem(armor);
         }
 
         /// <summary>
@@ -126,6 +126,7 @@ namespace RotationTutorial
         public void LoadItems(ContentManager Content)
         {
             weapon.LoadContent(Content);
+            armor.LoadContent(Content);
             Inventory.LoadContent(Content);
         }
 
@@ -221,7 +222,7 @@ namespace RotationTutorial
             writer.WriteLine(this.Strength+"#"+this.Stamina+"#"+this.Intellect+"#"+this.Vitality+"#"+
                 this.StatPoints);
             this.Level.Save(writer);
-            writer.WriteLine(listSkill.Count);
+            //writer.WriteLine(listSkill.Count);
 
         }
         public void Load(StreamReader reader)

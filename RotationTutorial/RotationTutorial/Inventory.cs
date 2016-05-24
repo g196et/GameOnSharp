@@ -44,16 +44,16 @@ namespace RotationTutorial
         public int CellSize { get; set; }
         public void AddItem(IItem item)
         {
-            for (int i = 0; i < X; i++)
+            for (int i = 0; i < Y; i++)
             {
-                for (int j = 0; j < Y; j++)
+                for (int j = 0; j < X; j++)
                 {
-                    if (this[i, j] == null)
+                    if (this[j, i] == null)
                     {
-                        this[i, j] = item;
-                        item.Rectangle = new Rectangle(startX+cellIndent + i * (cellSize + cellIndent)
-                            + itemIndent, nextY + j * (cellSize + cellIndent) + itemIndent, itemSize, 
+                        item.Rectangle = new Rectangle(startX + cellIndent + j * (cellSize + cellIndent)
+                            + itemIndent, nextY + i * (cellSize + cellIndent) + itemIndent, itemSize,
                             itemSize);
+                        this[j, i] = item; 
                         return;
                     }
                 }
@@ -72,9 +72,6 @@ namespace RotationTutorial
                         Color.White);
                     if (this[i, j] != null)
                     {
-                        this[i, j].Rectangle = new Rectangle(startX + cellIndent + i * (cellSize + 
-                            cellIndent) + itemIndent, nextY + j * (cellSize + cellIndent) + itemIndent,
-                            itemSize, itemSize);
                         this[i, j].Draw(spriteBatch);
                     }
                 }

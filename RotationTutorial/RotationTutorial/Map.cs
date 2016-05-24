@@ -28,6 +28,7 @@ namespace RotationTutorial
         /// <param name="size">Размер ячеек</param>
         public void LoadMap(StreamReader reader, int size)
         {
+            RemoveMap();
             int num = 0;
             while(!reader.EndOfStream)
             {               
@@ -53,6 +54,10 @@ namespace RotationTutorial
                 }
                 num += 1;
             }
+        }
+        public void RemoveMap()
+        {
+            tiles.Clear();
         }
 
         public Tiles GetRectangle(Point position)

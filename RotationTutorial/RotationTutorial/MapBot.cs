@@ -66,8 +66,8 @@ namespace RotationTutorial
             this.rectangle.Y = int.Parse(line[1]);
             this.rectangle.Width = int.Parse(line[2]);
             this.rectangle.Height = int.Parse(line[3]);
-            //if (enemy == null)
-            //    enemy = new Enemy();
+            if (enemy == null)
+                enemy = new Enemy(0,0,0,0);
             enemy.Load(reader);
         }
     }

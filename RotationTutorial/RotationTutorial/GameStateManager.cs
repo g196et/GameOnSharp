@@ -18,7 +18,6 @@ namespace RotationTutorial
         const int height = 800;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        //ContentManager contentHelp;
 
         Camera camera;
         enum State : int { MapState = 1, FightState, HeroInfoState, MenuState };
@@ -28,26 +27,29 @@ namespace RotationTutorial
         public HeroInfo HeroInfo { get; set; }
         public MenuState MenuState { get; set; }
         Hero hero;
-        Enemy currentEnemy;
+        public Hero Hero { get { return hero; } set { hero = value; } }
         public GameStateManager()
         {
+            
             hero = new Hero();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             graphics.PreferredBackBufferWidth = width;
             graphics.PreferredBackBufferHeight = height;
             MapState = new MapState(this,hero);
-            FightState = new FightState(Content, graphics,hero);
-            CurrentState = MapState;
+            FightState = new FightState(Content, graphics,hero,this);
             MenuState = new MenuState(this);
             HeroInfo = new HeroInfo(hero);
+            CurrentState = MenuState;
             IsMouseVisible = true; 
         }
         protected override void Initialize()
         {
             MapState.Initialize(this);
-            camera = new Camera(this.GraphicsDevice.Viewport);
+            HeroInfo.Initialize(this);
+            MenuState.Initialize(this);
             FightState.Initialize(this);
+            camera = new Camera(this.GraphicsDevice.Viewport);
             base.Initialize();
         }
 
@@ -71,11 +73,12 @@ namespace RotationTutorial
             int state = CurrentState.Update(gameTime);
             if (state == (int)State.MapState)
             {
+                MapState.Hero = hero;
                 CurrentState = MapState;
             }
             else if (state == (int)State.FightState)
             {
-                FightState.Hero = MapState.Hero;
+                FightState.Hero = hero;
                 if (FightState.Enemy != MapState.CurrentBot.Enemy)
                 {
                     FightState.Enemy = MapState.CurrentBot.Enemy;
@@ -85,7 +88,7 @@ namespace RotationTutorial
             }
             else if (state == (int)State.HeroInfoState)
             {
-                HeroInfo.Hero = MapState.Hero;
+                HeroInfo.Hero = hero;
                 CurrentState = HeroInfo;
             }
             else if (state == (int)State.MenuState)
@@ -103,7 +106,7 @@ namespace RotationTutorial
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null/*,
                 camera.transform*/); 
-            CurrentState.Draw(gameTime,spriteBatch);
+            CurrentState.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

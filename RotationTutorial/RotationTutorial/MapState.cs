@@ -163,6 +163,7 @@ namespace RotationTutorial
                 }
                 else
                 {
+                    GSM.MenuState.Text = "You win!!!";
                     return (int)State.MenuState;
                 }
             }
@@ -186,7 +187,7 @@ namespace RotationTutorial
         /// This is called when the game should draw itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        public void Draw(GameTime gameTime,SpriteBatch spriteBatch) 
+        public void Draw(SpriteBatch spriteBatch) 
         {
             map.Draw(spriteBatch);
             foreach (MapBot bot in listBot)
@@ -216,22 +217,23 @@ namespace RotationTutorial
 
         public void Load(StreamReader reader)
         {
-            //ПРОВЕРИТЬ!!!!
+            listBot.Clear();
             currenMap = int.Parse(reader.ReadLine());
-            this.LoadContent(game.Content);
+
             mapHero.Load(reader);
             hero.Load(reader);
             int botNum = int.Parse(reader.ReadLine());
-            //listBot = new List<MapBot>();
-            //for(int i=0;i<botNum;i++)
-            //{
-            //    MapBot bot = new MapBot(new Vector2(0, 0));
-            //    bot.Load(reader);
-            //    bot.LoadContent(game.Content, reader.ReadLine());
-            //    listBot.Add(bot);
-            //    bot.AddMobMap(map);
-            //    map.GetRectangle(bot.Rectangle.Center).Mob = true;
-            //}
+            listBot = new List<MapBot>();
+            for(int i=0;i<botNum;i++)
+            {
+                MapBot bot = new MapBot(new Vector2(0, 0),0,0,0,0);
+                bot.Load(reader);
+                bot.LoadContent(game.Content, reader.ReadLine());
+                listBot.Add(bot);
+                bot.AddMobMap(map);
+                map.GetRectangle(bot.Rectangle.Center).Mob = true;
+            }
+            this.LoadContent(game.Content);
             string[] line=reader.ReadLine().Split(new string[]{"#",":","{","}","X","Y","Width","Height"},StringSplitOptions.RemoveEmptyEntries);
             this.spritePosition.X = int.Parse(line[0]);
             this.spritePosition.Y = int.Parse(line[1]);

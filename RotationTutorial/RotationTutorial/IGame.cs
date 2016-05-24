@@ -17,6 +17,6 @@ namespace RotationTutorial
         void LoadContent(ContentManager content);
         void UnloadContent();
         int Update(GameTime gameTime);
-        void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        void Draw( SpriteBatch spriteBatch);
     }
 }

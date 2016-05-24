@@ -31,6 +31,16 @@ namespace RotationTutorial
         {
             this.Hero = hero;
             addIntellect = new Button(new Rectangle(x2, y*5, 20, 20), "+");
+            
+            addStamina = new Button(new Rectangle(x2, y*3, 20, 20), "+");
+            
+            addStrength = new Button(new Rectangle(x2, y, 20, 20), "+");
+            
+            addVitality = new Button(new Rectangle(x2, y * 7, 20, 20), "+");
+            
+        }
+        public void Initialize(Game game)
+        {
             addIntellect.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -41,7 +51,6 @@ namespace RotationTutorial
                     hero.Mana.Current = Hero.Mana.Max;
                 }
             };
-            addStamina = new Button(new Rectangle(x2, y*3, 20, 20), "+");
             addStamina.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -51,8 +60,7 @@ namespace RotationTutorial
                     hero.Energy.Max = hero.Stamina * constStats;
                     hero.Energy.Current = Hero.Energy.Max;
                 }
-            };
-            addStrength = new Button(new Rectangle(x2, y, 20, 20), "+");
+            }; 
             addStrength.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -60,8 +68,7 @@ namespace RotationTutorial
                     hero.StatPoints -= 1;
                     hero.Strength += 1;
                 }
-            };
-            addVitality = new Button(new Rectangle(x2, y * 7, 20, 20), "+");
+            }; 
             addVitality.Action += () =>
             {
                 if (hero.StatPoints > 0)
@@ -73,8 +80,6 @@ namespace RotationTutorial
                 }
             };
         }
-        public void Initialize(Game game)
-        {}
         public void LoadContent(ContentManager content)
         {
             hero.LoadItems(content);
@@ -96,7 +101,7 @@ namespace RotationTutorial
             state = State.HeroInfo;
             return (int)state;
         }
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(MapState.spriteFont, "Vitality = " + hero.Vitality,
                 new Vector2(x, y*7), Color.White);
@@ -114,18 +119,13 @@ namespace RotationTutorial
                 hero.Health.Max, new Vector2(x, 13*y), Color.White);
             spriteBatch.DrawString(MapState.spriteFont, "MP = " + hero.Mana.Current + "/"
                 + hero.Mana.Max, new Vector2(x, 15*y), Color.White);
-            spriteBatch.Draw(buttonTexture, addStrength.Rectangle, Color.White);
-            spriteBatch.Draw(buttonTexture, addStamina.Rectangle, Color.White);
-            spriteBatch.Draw(buttonTexture, addIntellect.Rectangle, Color.White);
-            spriteBatch.DrawString(MapState.spriteFont, "+", 
-                new Vector2(addStrength.Rectangle.X,addStrength.Rectangle.Y), Color.White);
-            spriteBatch.DrawString(MapState.spriteFont, "+",
-                new Vector2(addStamina.Rectangle.X, addStamina.Rectangle.Y), Color.White);
-            spriteBatch.DrawString(MapState.spriteFont, "+",
-                new Vector2(addIntellect.Rectangle.X, addIntellect.Rectangle.Y), Color.White);
-            spriteBatch.Draw(buttonTexture, addVitality.Rectangle, Color.White);
-            spriteBatch.DrawString(MapState.spriteFont, "+",
-                new Vector2(addVitality.Rectangle.X, addVitality.Rectangle.Y), Color.White);
+            if (hero.StatPoints > 0)
+            {
+                spriteBatch.Draw(buttonTexture, addStrength.Rectangle, Color.White);
+                spriteBatch.Draw(buttonTexture, addStamina.Rectangle, Color.White);
+                spriteBatch.Draw(buttonTexture, addIntellect.Rectangle, Color.White);
+                spriteBatch.Draw(buttonTexture, addVitality.Rectangle, Color.White);
+            }
             spriteBatch.DrawString(MapState.spriteFont,"Stamina = "+hero.Energy.Max,
                 new Vector2(x, 17*y), Color.White);
             hero.Inventory.Draw(spriteBatch);
