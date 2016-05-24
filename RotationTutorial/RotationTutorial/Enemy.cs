@@ -28,7 +28,7 @@ namespace RotationTutorial
         const int enemyWidth = 250;
         const int enemyHeight = 400;
         const int skip = 150;
-
+        public Armor Armor { get; set; }
 
         IList<ISkill> listSkill;
         public IList<ISkill> ListSkill { get { return listSkill; } }
@@ -70,18 +70,19 @@ namespace RotationTutorial
         Texture2D healthBarTexture;
         Texture2D manaBarTexture;
         Texture2D energyBarTexture;
-        public Enemy()
+        public Enemy(int strength, int stamina, int intellect, int vitality)
         {
-            Strength = 2 * constStats;
-            Stamina = constStats;
-            Intellect = constStats;
-            Vitality = constStats;
+            Strength = strength;
+            Stamina = stamina;
+            Intellect = intellect;
+            Vitality = vitality;
             Health = new PointClass(constStats * Vitality, constStats * Vitality);
             Mana = new PointClass(constStats * Intellect, constStats * Intellect);
             Energy = new PointClass(constStats * Stamina, constStats * Stamina);
             listSkill = new List<ISkill>();
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
+            Armor = new Armor("Shit armor", 0);
         }
 
         /// <summary>
@@ -116,7 +117,15 @@ namespace RotationTutorial
         /// <param name="person">противник</param>
         public bool Attack(IPerson person)
         {
-            person.Health.Current -= Strength;
+            if(person.Armor!=null)
+            {
+                person.Health.Current -= Strength - person.Armor.Defense;
+            }
+            else
+            {
+                person.Health.Current -= Strength;
+            }
+            
             Energy.Current -= consumptionEnergy;
             return true;
         }

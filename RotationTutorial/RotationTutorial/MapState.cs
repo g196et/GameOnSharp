@@ -34,6 +34,8 @@ namespace RotationTutorial
         List<string> listMapFileName;
         public static SpriteFont spriteFont;
         public static string mapFileName;
+        Hero hero;
+        public Hero Hero { get { return hero; } set { hero = value; } }
         enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
         State state = new State();
 
@@ -47,8 +49,9 @@ namespace RotationTutorial
         public MapBot CurrentBot { get { return currentBot; } }
 
 
-        public MapState(GameStateManager GSM,int currentMap = 1)
+        public MapState(GameStateManager GSM,Hero hero,int currentMap = 1)
         {
+            this.hero = hero;
             this.GSM = GSM;
             this.currenMap = currentMap;
             listMapFileName = new List<string>();
@@ -58,6 +61,7 @@ namespace RotationTutorial
             }
             listBot = new List<MapBot>();
             map = new Map();
+            hero = new Hero();
         }
 
         /// <summary>
@@ -75,7 +79,8 @@ namespace RotationTutorial
                 while (!reader.EndOfStream)
                 {
                     string[] str = reader.ReadLine().Split(' ');
-                    listBot.Add(new MapBot(new Vector2(int.Parse(str[0]) * tileSize, int.Parse(str[1]) * tileSize)));
+                    listBot.Add(new MapBot(new Vector2(int.Parse(str[0]) * tileSize, int.Parse(str[1]) * tileSize),
+                        int.Parse(str[2]), int.Parse(str[3]), int.Parse(str[4]), int.Parse(str[5])));
                 }
             }
             camera = new Camera(game.GraphicsDevice.Viewport);
@@ -198,6 +203,7 @@ namespace RotationTutorial
         {
             writer.WriteLine(currenMap);
             mapHero.Save(writer);
+            hero.Save(writer);
             writer.WriteLine(listBot.Count.ToString());
             foreach(MapBot bot in listBot)
             {
@@ -214,17 +220,18 @@ namespace RotationTutorial
             currenMap = int.Parse(reader.ReadLine());
             this.LoadContent(game.Content);
             mapHero.Load(reader);
+            hero.Load(reader);
             int botNum = int.Parse(reader.ReadLine());
-            listBot = new List<MapBot>();
-            for(int i=0;i<botNum;i++)
-            {
-                MapBot bot = new MapBot(new Vector2(0, 0));
-                bot.Load(reader);
-                bot.LoadContent(game.Content, reader.ReadLine());
-                listBot.Add(bot);
-                bot.AddMobMap(map);
-                map.GetRectangle(bot.Rectangle.Center).Mob = true;
-            }
+            //listBot = new List<MapBot>();
+            //for(int i=0;i<botNum;i++)
+            //{
+            //    MapBot bot = new MapBot(new Vector2(0, 0));
+            //    bot.Load(reader);
+            //    bot.LoadContent(game.Content, reader.ReadLine());
+            //    listBot.Add(bot);
+            //    bot.AddMobMap(map);
+            //    map.GetRectangle(bot.Rectangle.Center).Mob = true;
+            //}
             string[] line=reader.ReadLine().Split(new string[]{"#",":","{","}","X","Y","Width","Height"},StringSplitOptions.RemoveEmptyEntries);
             this.spritePosition.X = int.Parse(line[0]);
             this.spritePosition.Y = int.Parse(line[1]);

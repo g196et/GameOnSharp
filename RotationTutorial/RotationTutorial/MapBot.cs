@@ -22,11 +22,11 @@ namespace RotationTutorial
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
         Enemy enemy; public Enemy Enemy { get { return enemy; } }
 
-        public MapBot(Vector2 newPosition)
+        public MapBot(Vector2 newPosition, int strength, int stamina, int intellect, int vitality)
         {
             position = newPosition;
             rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
-            this.enemy = new Enemy();
+            this.enemy = new Enemy(strength, stamina, intellect, vitality);
         }
 
         public void AddMobMap(Map map)
@@ -66,8 +66,8 @@ namespace RotationTutorial
             this.rectangle.Y = int.Parse(line[1]);
             this.rectangle.Width = int.Parse(line[2]);
             this.rectangle.Height = int.Parse(line[3]);
-            if (enemy == null)
-                enemy = new Enemy();
+            //if (enemy == null)
+            //    enemy = new Enemy();
             enemy.Load(reader);
         }
     }

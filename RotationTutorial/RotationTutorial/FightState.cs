@@ -62,8 +62,9 @@ namespace RotationTutorial
         public Vector2 SpritePosition { get { return new Vector2(0,0); } }
         public Rectangle SpriteRectangle { get { return new Rectangle(0, 0, 0, 0); } }
 
-        public FightState(ContentManager Content, GraphicsDeviceManager graphics)
+        public FightState(ContentManager Content, GraphicsDeviceManager graphics,Hero hero)
         {
+            this.hero = hero;
             this.Content = Content;
             this.graphics = graphics;
             yFightPanel = graphics.PreferredBackBufferHeight / 4 * 3;
@@ -77,8 +78,7 @@ namespace RotationTutorial
         /// </summary>
         public void Initialize(Game game)
         {
-            Enemy = new Enemy();
-            hero = new Hero();
+            //Enemy = new Enemy();
             log = new List<string>();
             currentPerson = Enemy;
             notCurrentPerson = hero;
@@ -113,7 +113,7 @@ namespace RotationTutorial
             
             enemyTexture = Content.Load<Texture2D>("fightEnemy");
             heroTexture = Content.Load<Texture2D>("fightMan");
-            hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture);
+            hero.LoadContent(heroTexture, healthBarTexture, manaBarTexture, energyBarTexture, Content);
             Enemy.LoadContent(enemyTexture, healthBarTexture, manaBarTexture, energyBarTexture);
 
             log = new List<string>();

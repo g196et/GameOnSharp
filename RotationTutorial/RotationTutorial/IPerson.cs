@@ -17,6 +17,7 @@ namespace RotationTutorial
         PointClass Mana{get;set;}
         PointClass Energy { get; set; }
         IList<ISkill> ListSkill { get; }
+        Armor Armor { get; set; }
         int Strength { get; set; }
         int Stamina { get; set; }
         int Intellect { get; set; }
