@@ -80,6 +80,8 @@
     <Compile Include="Inventory.cs" />
     <Compile Include="Level.cs" />
     <Compile Include="MenuState.cs" />
+    <Compile Include="SettingsButtons.cs" />
+    <Compile Include="SettingsState.cs" />
     <Compile Include="SkillFireBall.cs" />
     <Compile Include="SkillRegenHealth.cs" />
     <Compile Include="Enemy.cs" />

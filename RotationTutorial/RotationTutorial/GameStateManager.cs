@@ -20,12 +20,13 @@ namespace RotationTutorial
         SpriteBatch spriteBatch;
 
         Camera camera;
-        enum State : int { MapState = 1, FightState, HeroInfoState, MenuState };
+        enum State : int { MapState = 1, FightState, HeroInfoState, MenuState, SettingsState };
         public IGame CurrentState { get; set; }
         public MapState MapState { get; set; }
         public FightState FightState { get; set; }
         public HeroInfo HeroInfo { get; set; }
         public MenuState MenuState { get; set; }
+        public SettingsState SettingsState { get; set; }
         Hero hero;
         public Hero Hero { get { return hero; } set { hero = value; } }
         public GameStateManager()
@@ -40,6 +41,7 @@ namespace RotationTutorial
             FightState = new FightState(Content, graphics,hero,this);
             MenuState = new MenuState(this);
             HeroInfo = new HeroInfo(hero);
+            SettingsState = new SettingsState(graphics);
             CurrentState = MenuState;
             IsMouseVisible = true; 
         }
@@ -49,6 +51,7 @@ namespace RotationTutorial
             HeroInfo.Initialize(this);
             MenuState.Initialize(this);
             FightState.Initialize(this);
+            SettingsState.Initialize(this);
             camera = new Camera(this.GraphicsDevice.Viewport);
             base.Initialize();
         }
@@ -60,6 +63,7 @@ namespace RotationTutorial
             MapState.LoadContent(Content);
             HeroInfo.LoadContent(Content);
             MenuState.LoadContent(Content);
+            SettingsState.LoadContent(Content);
 
         }
         protected override void UnloadContent()
@@ -94,6 +98,10 @@ namespace RotationTutorial
             else if (state == (int)State.MenuState)
             {
                 CurrentState = MenuState;
+            }
+            else if (state==(int)State.SettingsState)
+            {
+                CurrentState = SettingsState;
             }
                 
             base.Update(gameTime);

@@ -11,7 +11,6 @@ namespace RotationTutorial
     public class Tiles
     {
         protected Texture2D texture;
-        protected Texture2D backTexture;
         Rectangle rectangle;
         bool passability;
         bool mob;

@@ -14,7 +14,7 @@ namespace RotationTutorial
 {
     public class MenuState : IGame
     {
-        enum State {MenuState=0,MapState=1}
+        enum State {MenuState=0,MapState=1,SettingsState=5}
         const int size1 = 100;
         const int size2 = 30;
         Button newGame;
@@ -77,6 +77,10 @@ namespace RotationTutorial
                 manager.Hero.LoadItems(manager.Content);
                 manager.MapState.Hero.LoadItems(manager.Content);
                 Text = "";
+            };
+            settings.Action += () =>
+            {
+                state = (int)State.SettingsState;
             };
             
         }
