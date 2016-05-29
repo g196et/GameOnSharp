@@ -126,7 +126,7 @@ namespace RotationTutorial
                 spriteBatch.Draw(buttonTexture, addIntellect.Rectangle, Color.White);
                 spriteBatch.Draw(buttonTexture, addVitality.Rectangle, Color.White);
             }
-            spriteBatch.DrawString(MapState.spriteFont,"Stamina = "+hero.Energy.Max,
+            spriteBatch.DrawString(MapState.spriteFont,"Energy = "+hero.Energy.Max,
                 new Vector2(x, 17*y), Color.White);
             hero.Inventory.Draw(spriteBatch);
         }

@@ -63,7 +63,7 @@ namespace RotationTutorial
         public Tiles GetRectangle(Point position)
         {
             int i = 0;
-            while ((tiles[i].Rectangle.Center != position) && (i< tiles.Count))
+            while ((i+1 < tiles.Count) && (tiles[i].Rectangle.Center != position))
                 i++;
             return tiles[i];
         }

@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.IO;
+using System.Windows.Forms;
 
 namespace RotationTutorial
 {
@@ -72,7 +73,7 @@ namespace RotationTutorial
         }
         protected override void Update(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 this.Exit();
             int state = CurrentState.Update(gameTime);
             if (state == (int)State.MapState)
@@ -132,6 +133,11 @@ namespace RotationTutorial
             MapState.Initialize(this);
             MapState.LoadContent(Content);
             CurrentState = MapState;
+        }
+        public void ExceptionFile(string name)
+        {
+            Form form = new Form1("Не удолось найти файл:" + name);
+            Application.Run(form);
         }
     }
 }

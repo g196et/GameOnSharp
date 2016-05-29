@@ -19,7 +19,7 @@ namespace RotationTutorial
         Texture2D texture;
         public void LoadContent(ContentManager Content)
         {
-            texture = Content.Load<Texture2D>("Shit Armor");
+            texture = Content.Load<Texture2D>("armor");
         }
         
         int defense;

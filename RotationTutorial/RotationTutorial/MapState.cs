@@ -61,7 +61,7 @@ namespace RotationTutorial
             }
             listBot = new List<MapBot>();
             map = new Map();
-            hero = new Hero();
+            //hero = new Hero();
         }
 
         /// <summary>
@@ -74,20 +74,36 @@ namespace RotationTutorial
         {
             this.game = game;
             mapHero = new MapHero(new Vector2(tileSize, tileSize));
-            using (StreamReader reader = new StreamReader(botVector + currenMap + ".txt"))
+            try
             {
-                while (!reader.EndOfStream)
+                using (StreamReader reader = new StreamReader(botVector + currenMap + ".txt"))
                 {
-                    string[] str = reader.ReadLine().Split(' ');
-                    listBot.Add(new MapBot(new Vector2(int.Parse(str[0]) * tileSize, int.Parse(str[1]) * tileSize),
-                        int.Parse(str[2]), int.Parse(str[3]), int.Parse(str[4]), int.Parse(str[5])));
+                    while (!reader.EndOfStream)
+                    {
+                        string[] str = reader.ReadLine().Split(' ');
+                        listBot.Add(new MapBot(new Vector2(int.Parse(str[0]) * tileSize, int.Parse(str[1]) * tileSize),
+                            int.Parse(str[2]), int.Parse(str[3]), int.Parse(str[4]), int.Parse(str[5])));
+                    }
                 }
             }
-            camera = new Camera(game.GraphicsDevice.Viewport);
-            using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
+            catch(IOException)
             {
-                map.LoadMap(stream, tileSize);
-            }            
+                IOException IO = new IOException();
+
+                GSM.ExceptionFile(botVector + currenMap + ".txt");
+            }
+            camera = new Camera(game.GraphicsDevice.Viewport);
+            try
+            {
+                using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
+                {
+                    map.LoadMap(stream, tileSize);
+                }
+            }
+            catch(IOException)
+            {
+                GSM.ExceptionFile(listMapFileName[currenMap - 1]);
+            }
         }
 
         /// <summary>
@@ -97,19 +113,34 @@ namespace RotationTutorial
         public void LoadContent(ContentManager Content)
         {
             mapHero.LoadContent(Content, "гг3");
-            using (StreamReader reader = new StreamReader(botName + currenMap + ".txt"))
+            try
             {
-                int i = 0;
-                while (!reader.EndOfStream)
+                using (StreamReader reader = new StreamReader(botName + currenMap + ".txt"))
                 {
-                    listBot[i].LoadContent(Content, reader.ReadLine());
-                    i++;
+                    int i = 0;
+                    while (!reader.EndOfStream)
+                    {
+                        listBot[i].LoadContent(Content, reader.ReadLine());
+                        i++;
+                    }
                 }
             }
-            Tiles.Content = Content;
-            using (StreamReader stream = new StreamReader(listMapFileName[currenMap-1]))
+            catch(IOException)
             {
-                map.LoadMap(stream, tileSize);
+                IOException IO = new IOException();
+                GSM.ExceptionFile(IO.Message/*botName + currenMap + ".txt"*/);
+            }
+            Tiles.Content = Content;
+            try
+            {
+                using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
+                {
+                    map.LoadMap(stream, tileSize);
+                }
+            }
+            catch(IOException)
+            {
+                GSM.ExceptionFile(listMapFileName[currenMap - 1]);
             }
             map.LoadContent(Content);
             foreach(MapBot bot in listBot)
