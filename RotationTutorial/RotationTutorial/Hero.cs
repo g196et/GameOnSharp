@@ -134,13 +134,13 @@ namespace RotationTutorial
         {
             if (Energy.Current >= consumptionEnergy)
             {
-                if (person.Armor != null)
+                if (weapon != null)
                 {
-                    person.Health.Current = person.Health.Current - (Strength + weapon.Damage - person.Armor.Defense);
+                    person.Health.Current = person.Health.Current - (Strength + weapon.Damage);
                 }
                 else
                 {
-                    person.Health.Current = person.Health.Current - (Strength + weapon.Damage);
+                    person.Health.Current = person.Health.Current - Strength;
                 }
                 Energy.Current -= consumptionEnergy;
                 return true;
