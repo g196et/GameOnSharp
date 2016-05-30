@@ -25,6 +25,7 @@ namespace RotationTutorial
         Weapon weapon;
         Armor armor;
         public Armor Armor { get { return armor; } set { armor = value; } }
+        public Weapon Weapon { get { return weapon; } set { weapon = value; } }
         public Inventory Inventory { get; set; }
 
 
@@ -90,13 +91,9 @@ namespace RotationTutorial
             Health = new PointClass(constStats * Vitality, constStats * Vitality);
             Mana = new PointClass(constStats * Intellect, constStats * Intellect);
             Energy = new PointClass(constStats * Stamina, constStats * Stamina);
-            weapon = new Weapon("test weapon",5);
-            armor = new Armor("test armor", 5);
             listSkill.Add(new SkillRegenHealth());
             listSkill.Add(new SkillFireBall());
             Inventory = new Inventory(inventorySize, inventorySize);
-            Inventory.AddItem(weapon);
-            Inventory.AddItem(armor);
         }
 
         /// <summary>
@@ -125,8 +122,6 @@ namespace RotationTutorial
         }
         public void LoadItems(ContentManager Content)
         {
-            weapon.LoadContent(Content);
-            armor.LoadContent(Content);
             Inventory.LoadContent(Content);
         }
 

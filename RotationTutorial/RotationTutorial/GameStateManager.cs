@@ -125,7 +125,14 @@ namespace RotationTutorial
         }
         public void Load(StreamReader reader)
         {
-            MapState.Load(reader);
+            try
+            {
+                MapState.Load(reader);
+            }
+            catch
+            {
+                this.ExceptionFile("Файл сохранения поврежден");
+            }
         }
         public void NewMapState(int currentMap)
         {
@@ -134,9 +141,9 @@ namespace RotationTutorial
             MapState.LoadContent(Content);
             CurrentState = MapState;
         }
-        public void ExceptionFile(string name)
+        public void ExceptionFile(string message)
         {
-            Form form = new Form1("Не удолось найти файл:" + name);
+            Form form = new Form1(message);
             Application.Run(form);
         }
     }

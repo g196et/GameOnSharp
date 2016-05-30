@@ -27,7 +27,7 @@ namespace RotationTutorial
         {
             state = (int)State.SettingsState;
             List<string> list = new List<string>();
-            list=new string[]{"1366:768","1280:800","640:480"}.ToList<string>();
+            list=new string[]{"1366:768","1280:800","640:480","1920:1080"}.ToList<string>();
             resolutionButton = new SettingsButtons(list, new Rectangle(350, 300, 250, 250));
             accept = new Button(new Rectangle(100, 100, 50, 50), "Accept");
             back = new Button(new Rectangle(100, 200, 50, 50), "Back");

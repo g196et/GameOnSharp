@@ -14,8 +14,10 @@ namespace RotationTutorial
     public class Armor:IItem
     {
         string name;
+        public bool ChangeRectangle { get; set; }
         public string Name { get { return name; } }
-        public Rectangle Rectangle { get; set; }
+        Rectangle rectangle;
+        public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } }
         Texture2D texture;
         public void LoadContent(ContentManager Content)
         {
@@ -32,6 +34,15 @@ namespace RotationTutorial
         {
             this.name = name;
             this.defense = defense;
+        }
+        public void Update()
+        {
+            if (ChangeRectangle)
+            {
+                MouseState ms = Mouse.GetState();
+                rectangle.X = ms.X;
+                rectangle.Y = ms.Y;
+            }
         }
         public void Draw(SpriteBatch spriteBatch)
         {

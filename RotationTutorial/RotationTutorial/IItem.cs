@@ -15,6 +15,9 @@ namespace RotationTutorial
     {
         string Name { get; }
         Rectangle Rectangle { get; set; }
+        bool ChangeRectangle { get; set; }
         void Draw(SpriteBatch spriteBatch);
+        void Update();
+        void LoadContent(ContentManager Content);
     }
 }

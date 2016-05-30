@@ -93,6 +93,9 @@ namespace RotationTutorial
             addStamina.Update(gameTime);
             addStrength.Update(gameTime);
             addVitality.Update(gameTime);
+            hero.Inventory.Update();
+            hero.Armor = hero.Inventory.CurrentArmor;
+            hero.Weapon = hero.Inventory.CurrentWeapon;
             if (Keyboard.GetState().IsKeyDown(Keys.Back))
             {
                 state = State.MapState;

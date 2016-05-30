@@ -61,7 +61,6 @@ namespace RotationTutorial
             }
             listBot = new List<MapBot>();
             map = new Map();
-            //hero = new Hero();
         }
 
         /// <summary>
@@ -85,25 +84,16 @@ namespace RotationTutorial
                             int.Parse(str[2]), int.Parse(str[3]), int.Parse(str[4]), int.Parse(str[5])));
                     }
                 }
-            }
-            catch(IOException)
-            {
-                IOException IO = new IOException();
-
-                GSM.ExceptionFile(botVector + currenMap + ".txt");
-            }
-            camera = new Camera(game.GraphicsDevice.Viewport);
-            try
-            {
                 using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
                 {
                     map.LoadMap(stream, tileSize);
                 }
             }
-            catch(IOException)
+            catch(IOException x)
             {
-                GSM.ExceptionFile(listMapFileName[currenMap - 1]);
+                GSM.ExceptionFile(x.Message);
             }
+            camera = new Camera(game.GraphicsDevice.Viewport);
         }
 
         /// <summary>
@@ -124,30 +114,24 @@ namespace RotationTutorial
                         i++;
                     }
                 }
-            }
-            catch(IOException)
-            {
-                IOException IO = new IOException();
-                GSM.ExceptionFile(IO.Message/*botName + currenMap + ".txt"*/);
-            }
-            Tiles.Content = Content;
-            try
-            {
+                Tiles.Content = Content;
                 using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
                 {
                     map.LoadMap(stream, tileSize);
                 }
+                spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+                map.LoadContent(Content);
             }
-            catch(IOException)
+            catch(IOException x)
             {
-                GSM.ExceptionFile(listMapFileName[currenMap - 1]);
+                GSM.ExceptionFile(x.Message);
             }
-            map.LoadContent(Content);
+            
             foreach(MapBot bot in listBot)
             {
                 bot.AddMobMap(map);
             }
-            spriteFont = Content.Load<SpriteFont>("SpriteFont1");
+            
         }
 
         /// <summary>
@@ -250,7 +234,6 @@ namespace RotationTutorial
         {
             listBot.Clear();
             currenMap = int.Parse(reader.ReadLine());
-
             mapHero.Load(reader);
             hero.Load(reader);
             int botNum = int.Parse(reader.ReadLine());

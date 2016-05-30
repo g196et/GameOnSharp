@@ -15,7 +15,9 @@ namespace RotationTutorial
     {
         string name;
         Texture2D texture;
-        public Rectangle Rectangle { get; set; }
+        Rectangle rectangle;
+        public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } }
+        public bool ChangeRectangle { get; set; }
         public string Name { get { return name; } }
         int damage;
         public int Damage
@@ -27,6 +29,15 @@ namespace RotationTutorial
         {
             this.name = name;
             this.damage = damage;
+        }
+        public void Update()
+        {
+            if(ChangeRectangle)
+            {
+                MouseState ms=Mouse.GetState();
+                rectangle.X = ms.X;
+                rectangle.Y = ms.Y;
+            }
         }
         public void LoadContent(ContentManager Content)
         {
