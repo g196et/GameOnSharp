@@ -114,7 +114,7 @@ namespace RotationTutorial
 
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend,
                 null, null, null, null/*,
-                camera.transform*/); 
+                camera.transform*/);
             CurrentState.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);

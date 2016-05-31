@@ -217,7 +217,6 @@ namespace RotationTutorial
             writer.WriteLine(this.Strength+"#"+this.Stamina+"#"+this.Intellect+"#"+this.Vitality+"#"+
                 this.StatPoints);
             this.Level.Save(writer);
-            //writer.WriteLine(listSkill.Count);
 
         }
         public void Load(StreamReader reader)

@@ -30,15 +30,6 @@ namespace RotationTutorial
             this.name = name;
             this.damage = damage;
         }
-        public void Update()
-        {
-            if(ChangeRectangle)
-            {
-                MouseState ms=Mouse.GetState();
-                rectangle.X = ms.X;
-                rectangle.Y = ms.Y;
-            }
-        }
         public void LoadContent(ContentManager Content)
         {
             texture = Content.Load<Texture2D>("sword1");

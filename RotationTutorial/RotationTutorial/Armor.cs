@@ -35,15 +35,6 @@ namespace RotationTutorial
             this.name = name;
             this.defense = defense;
         }
-        public void Update()
-        {
-            if (ChangeRectangle)
-            {
-                MouseState ms = Mouse.GetState();
-                rectangle.X = ms.X;
-                rectangle.Y = ms.Y;
-            }
-        }
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(texture, Rectangle, Color.White);

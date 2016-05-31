@@ -131,6 +131,23 @@ namespace RotationTutorial
             }
             spriteBatch.DrawString(MapState.spriteFont,"Energy = "+hero.Energy.Max,
                 new Vector2(x, 17*y), Color.White);
+            int Int = 0;
+            if(hero.Weapon!=null)
+            {
+                Int = hero.Weapon.Damage;
+            }
+            spriteBatch.DrawString(MapState.spriteFont, "Damage = " + Int,
+                new Vector2(x, 19 * y), Color.White);
+            if (hero.Armor != null)
+            {
+                Int = hero.Armor.Defense;
+            }
+            else
+            {
+                Int = 0;
+            }
+            spriteBatch.DrawString(MapState.spriteFont, "Defense = " + Int,
+                new Vector2(x, 21 * y), Color.White);
             hero.Inventory.Draw(spriteBatch);
         }
         public void Save(StreamWriter writer)
