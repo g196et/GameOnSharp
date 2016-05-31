@@ -16,27 +16,29 @@ namespace RotationTutorial
     {
         const int tileSize = 75;
         const int halfTileSize = 37;
-        Texture2D texture; 
+        Texture2D texture;
+        string textureFileName;
         public Texture2D Texture { get { return texture; } set { texture = value; } }
         Rectangle rectangle; public Rectangle Rectangle { get { return rectangle; } set { rectangle = value; } } 
         Vector2 position; public Vector2 Position { get { return position; } set { position = value; } }
         Enemy enemy; public Enemy Enemy { get { return enemy; } }
 
-        public MapBot(Vector2 newPosition, int strength, int stamina, int intellect, int vitality)
+        public MapBot(Vector2 newPosition, int strength, int stamina, int intellect, int vitality,string textureFileName)
         {
             position = newPosition;
             rectangle = new Rectangle((int)position.X, (int)position.Y, tileSize, tileSize);
             this.enemy = new Enemy(strength, stamina, intellect, vitality);
+            this.textureFileName = textureFileName;
         }
 
         public void AddMobMap(Map map)
         {
             map.GetRectangle(new Point((int)position.X + halfTileSize, (int)position.Y + halfTileSize)).Mob = true;
         }
-        public void LoadContent(ContentManager Content,string textureName)
+        public void LoadContent(ContentManager Content)
         {
-            texture = Content.Load<Texture2D>(textureName);
-            texture.Name = textureName;
+            texture = Content.Load<Texture2D>(textureFileName);
+            //texture.Name = textureName;
 
         }
 

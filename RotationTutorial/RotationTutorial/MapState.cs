@@ -81,7 +81,7 @@ namespace RotationTutorial
                     {
                         string[] str = reader.ReadLine().Split(' ');
                         listBot.Add(new MapBot(new Vector2(int.Parse(str[0]) * tileSize, int.Parse(str[1]) * tileSize),
-                            int.Parse(str[2]), int.Parse(str[3]), int.Parse(str[4]), int.Parse(str[5])));
+                            int.Parse(str[2]), int.Parse(str[3]), int.Parse(str[4]), int.Parse(str[5]),str[6]));
                     }
                 }
                 using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
@@ -105,14 +105,9 @@ namespace RotationTutorial
             mapHero.LoadContent(Content, "гг3");
             try
             {
-                using (StreamReader reader = new StreamReader(botName + currenMap + ".txt"))
+                foreach(MapBot bot in listBot)
                 {
-                    int i = 0;
-                    while (!reader.EndOfStream)
-                    {
-                        listBot[i].LoadContent(Content, reader.ReadLine());
-                        i++;
-                    }
+                    bot.LoadContent(Content);
                 }
                 Tiles.Content = Content;
                 using (StreamReader stream = new StreamReader(listMapFileName[currenMap - 1]))
@@ -240,9 +235,9 @@ namespace RotationTutorial
             listBot = new List<MapBot>();
             for(int i=0;i<botNum;i++)
             {
-                MapBot bot = new MapBot(new Vector2(0, 0),0,0,0,0);
+                MapBot bot = new MapBot(new Vector2(0, 0),0,0,0,0,string.Empty);
                 bot.Load(reader);
-                bot.LoadContent(game.Content, reader.ReadLine());
+                bot.LoadContent(game.Content);
                 listBot.Add(bot);
                 bot.AddMobMap(map);
                 map.GetRectangle(bot.Rectangle.Center).Mob = true;

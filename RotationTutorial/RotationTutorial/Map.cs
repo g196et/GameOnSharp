@@ -32,7 +32,7 @@ namespace RotationTutorial
             int num = 0;
             while(!reader.EndOfStream)
             {               
-                string[] str = reader.ReadLine().Split(' ');
+                string[] str = reader.ReadLine().Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < str.Length;i++ )
                 {
                     int number = int.Parse(str[i]);
