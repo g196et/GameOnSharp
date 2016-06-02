@@ -29,6 +29,7 @@ namespace RotationTutorial
         public MenuState MenuState { get; set; }
         public SettingsState SettingsState { get; set; }
         Hero hero;
+        Song currentSong;
         public Hero Hero { get { return hero; } set { hero = value; } }
         public GameStateManager()
         {
@@ -65,7 +66,9 @@ namespace RotationTutorial
             HeroInfo.LoadContent(Content);
             MenuState.LoadContent(Content);
             SettingsState.LoadContent(Content);
-
+            currentSong = CurrentState.Song;
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Play(currentSong);
         }
         protected override void UnloadContent()
         {
@@ -80,6 +83,7 @@ namespace RotationTutorial
             {
                 MapState.Hero = hero;
                 CurrentState = MapState;
+                
             }
             else if (state == (int)State.FightState)
             {
@@ -104,7 +108,12 @@ namespace RotationTutorial
             {
                 CurrentState = SettingsState;
             }
-                
+            if(currentSong!=CurrentState.Song)
+            {
+                MediaPlayer.Stop();
+                currentSong = CurrentState.Song;
+                MediaPlayer.Play(currentSong);
+            }
             base.Update(gameTime);
         }
 

@@ -55,7 +55,7 @@ namespace RotationTutorial
 
         Texture2D backgroundTexture1;
         Texture2D backgroundTexture2;
-
+        public Song Song { get; set; }
         public Vector2 SpritePosition { get { return new Vector2(0,0); } }
         public Rectangle SpriteRectangle { get { return new Rectangle(0, 0, 0, 0); } }
 
@@ -133,6 +133,8 @@ namespace RotationTutorial
                     size, size));
                 i++;
             }
+            Song = Content.Load<Song>("song1");
+            
         }
 
         /// <summary>

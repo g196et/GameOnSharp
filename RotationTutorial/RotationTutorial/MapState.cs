@@ -34,6 +34,7 @@ namespace RotationTutorial
         List<string> listMapFileName;
         public static SpriteFont spriteFont;
         public static string mapFileName;
+        public Song Song { get; set; }
         Hero hero;
         public Hero Hero { get { return hero; } set { hero = value; } }
         enum State : int { MapState = 1, FightState, HeroInfo, MenuState }
@@ -126,7 +127,8 @@ namespace RotationTutorial
             {
                 bot.AddMobMap(map);
             }
-            
+            Song = Content.Load<Song>("song");
+            MediaPlayer.Play(Song);
         }
 
         /// <summary>
@@ -190,7 +192,6 @@ namespace RotationTutorial
             }
             state = State.MapState;
             return (int)state;
-           
         }
 
         /// <summary>
