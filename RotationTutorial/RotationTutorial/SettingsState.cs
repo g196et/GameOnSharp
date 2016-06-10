@@ -21,7 +21,9 @@ namespace RotationTutorial
         Button accept;
         Button back;
         SettingsButtons fullscreen;
+        TrackBar volumeBar;
         int state;
+        public Song Song { get; set; }
 
         public SettingsState(GraphicsDeviceManager graphics)
         {
@@ -34,6 +36,7 @@ namespace RotationTutorial
             list=new string[] {"no","yes"}.ToList<string>();
             fullscreen = new SettingsButtons(list,new Rectangle(350,400,250,250));
             this.graphics = graphics;
+            volumeBar = new TrackBar(400, 100, 100, 25);
         }
         
         public void Initialize(Game game)
@@ -71,6 +74,8 @@ namespace RotationTutorial
             back.LoadContent(content);
             resolutionButton.LoadContent(content);
             fullscreen.LoadContent(content);
+            Song = content.Load<Song>("song");
+            volumeBar.LoadContent(content);
         }
 
         public void UnloadContent()
@@ -85,6 +90,7 @@ namespace RotationTutorial
             accept.Update(gameTime);
             back.Update(gameTime);
             fullscreen.Update(gameTime);
+            volumeBar.Update();
             return state;
         }
 
@@ -94,6 +100,8 @@ namespace RotationTutorial
             accept.Draw(spriteBatch);
             back.Draw(spriteBatch);
             fullscreen.Draw(spriteBatch);
+            volumeBar.Draw(spriteBatch);
+            
         }
     }
 }

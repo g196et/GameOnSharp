@@ -27,6 +27,7 @@ namespace RotationTutorial
         Button addIntellect;
         Button addVitality;
         Texture2D buttonTexture;
+        public Song Song { get; set; }
         public HeroInfo(Hero hero)
         {
             this.Hero = hero;
@@ -84,6 +85,7 @@ namespace RotationTutorial
         {
             hero.LoadItems(content);
             buttonTexture = content.Load<Texture2D>("ButtonTexture0");
+            Song = content.Load<Song>("song");
         }
         public void UnloadContent()
         { }

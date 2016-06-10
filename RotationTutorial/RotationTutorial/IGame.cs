@@ -13,6 +13,7 @@ namespace RotationTutorial
 {
     public interface IGame
     {
+        Song Song { get; set; }
         void Initialize(Game game);
         void LoadContent(ContentManager content);
         void UnloadContent();

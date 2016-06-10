@@ -26,6 +26,7 @@ namespace RotationTutorial
         public string Text { get; set; }
         Texture2D buttonTexture;
         GameStateManager manager;
+        public Song Song { get; set; }
         public MenuState(GameStateManager manager)
         {
             state = (int)State.MenuState;
@@ -76,7 +77,7 @@ namespace RotationTutorial
                 manager.Hero = new Hero();
                 manager.Hero.LoadItems(manager.Content);
                 manager.MapState.Hero.LoadItems(manager.Content);
-                Text = "";
+                Text = string.Empty;
             };
             settings.Action += () =>
             {
@@ -94,6 +95,8 @@ namespace RotationTutorial
             loadGame.LoadContent(content);
             settings.LoadContent(content);
             quitGame.LoadContent(content);
+            Song = content.Load<Song>("song");
+            
         }
         public void UnloadContent()
         { }

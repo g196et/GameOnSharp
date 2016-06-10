@@ -13,8 +13,8 @@ namespace RotationTutorial
 {
     class SettingsButtons
     {
-        Button Left { get; set; }
-        Button Right { get; set; }
+        public Button Left { get; set; }
+        public Button Right { get; set; }
         Rectangle rectangle;
         int index;
         List<string> values;
